@@ -18,9 +18,6 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
-    /**
-     * Get ultralight streamable image URL
-     */
     public function getImageUrlAttribute(): string
     {
         if (empty($this->image)) {
@@ -31,6 +28,6 @@ class Category extends Model
             return $this->image;
         }
 
-        return route('media.category', $this->id);
+        return route('media.category', ['id' => $this->id, 'v' => optional($this->updated_at)->timestamp ?? time()]);
     }
 }

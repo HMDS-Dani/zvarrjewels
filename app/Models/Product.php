@@ -40,9 +40,6 @@ class Product extends Model
         return $this->hasMany(Review::class)->where('is_approved', true)->latest();
     }
 
-    /**
-     * Get ultralight streamable image URL
-     */
     public function getImageUrlAttribute(): string
     {
         if (empty($this->image)) {
@@ -53,6 +50,6 @@ class Product extends Model
             return $this->image;
         }
 
-        return route('media.product', $this->id);
+        return route('media.product', ['id' => $this->id, 'v' => optional($this->updated_at)->timestamp ?? time()]);
     }
 }

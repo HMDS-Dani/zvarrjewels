@@ -205,7 +205,8 @@ class StorefrontController extends Controller
 
             return response($binary, 200, [
                 'Content-Type' => $mime,
-                'Cache-Control' => 'public, max-age=604800, immutable',
+                'Cache-Control' => 'no-cache, must-revalidate, max-age=0',
+                'ETag' => md5($product->image),
             ]);
         }
 
@@ -232,7 +233,8 @@ class StorefrontController extends Controller
 
             return response($binary, 200, [
                 'Content-Type' => $mime,
-                'Cache-Control' => 'public, max-age=604800, immutable',
+                'Cache-Control' => 'no-cache, must-revalidate, max-age=0',
+                'ETag' => md5($category->image),
             ]);
         }
 

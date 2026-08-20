@@ -28,7 +28,7 @@
             @csrf
             @method('PUT')
 
-            <!-- Hidden input for client-side processed transparent PNG -->
+            <!-- Hidden input for client-side processed transparent/adjusted PNG -->
             <input type="hidden" name="transparent_image_base64" id="transparent_image_base64">
 
             <!-- 1. Name & Category -->
@@ -490,7 +490,7 @@
     </div>
 </div>
 
-<!-- ZVARR AI Segmentation & Background Removal Engine -->
+<!-- SINGLE UNIFIED CLIENT ENGINE SCRIPT -->
 <script>
     let currentRawImageSource = null;
 
@@ -547,7 +547,6 @@
                     const imgData = ctx.getImageData(0, 0, w, h);
                     const data = imgData.data;
 
-                    // 1. Sample outer border perimeter pixels
                     let totalR = 0, totalG = 0, totalB = 0, sampleCount = 0;
                     const sample = (x, y) => {
                         const idx = (y * w + x) * 4;
@@ -570,7 +569,6 @@
                     const bgG = Math.round(totalG / Math.max(1, sampleCount));
                     const bgB = Math.round(totalB / Math.max(1, sampleCount));
 
-                    // 2. Tolerance for solid / studio gradient backgrounds
                     const threshold = 48;
                     const isBg = (idx) => {
                         const r = data[idx];
@@ -582,7 +580,6 @@
                         return dist < threshold;
                     };
 
-                    // 3. Flood-fill from borders inward only (preserves diamond sparkles & inner metals)
                     const visited = new Uint8Array(w * h);
                     const queue = [];
 
@@ -606,7 +603,7 @@
                         const cy = Math.floor(curr / w);
                         const cIdx = curr * 4;
 
-                        data[cIdx + 3] = 0; // Cut background
+                        data[cIdx + 3] = 0;
 
                         if (cx > 0) {
                             const left = curr - 1;
@@ -626,7 +623,6 @@
                         }
                     }
 
-                    // 4. Edge Anti-Aliasing Feathering
                     for (let y = 1; y < h - 1; y++) {
                         for (let x = 1; x < w - 1; x++) {
                             const pos = y * w + x;
@@ -741,6 +737,330 @@
     }
     window.restoreOriginalPhoto = restoreOriginalPhoto;
 
+    // STUDIO PHOTO EDITOR LOGIC
+    let studioState = {
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+        warmth: 0,
+        activeFilter: 'normal',
+        rotation: 0,
+        flipH: 1,
+        cropRatio: 'original',
+        originalSrc: ''
+    };
+
+    const filterPresets = {
+        normal: { b: 100, c: 100, s: 100, w: 0, extra: '' },
+        gold: { b: 105, c: 112, s: 130, w: 25, extra: 'sepia(25%)' },
+        diamond: { b: 108, c: 120, s: 95, w: 0, extra: 'hue-rotate(185deg)' },
+        rose: { b: 105, c: 110, s: 125, w: 15, extra: 'hue-rotate(335deg)' },
+        studio: { b: 112, c: 118, s: 108, w: 0, extra: '' },
+        vivid: { b: 104, c: 122, s: 145, w: 0, extra: '' },
+        vintage: { b: 100, c: 108, s: 85, w: 40, extra: 'sepia(45%)' },
+        noir: { b: 106, c: 135, s: 0, w: 0, extra: 'grayscale(100%)' }
+    };
+
+    function switchStudioTab(tab) {
+        ['adjust', 'filters', 'crop'].forEach(t => {
+            const btn = document.getElementById(`tab-btn-${t}`);
+            const panel = document.getElementById(`tab-panel-${t}`);
+            if (t === tab) {
+                if (btn) {
+                    btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow';
+                }
+                if (panel) panel.classList.remove('hidden');
+            } else {
+                if (btn) {
+                    btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white';
+                }
+                if (panel) panel.classList.add('hidden');
+            }
+        });
+    }
+
+    function openStudioModal() {
+        const previewImg = document.getElementById('live-transparent-preview');
+        const studioPreview = document.getElementById('studio-preview-img');
+        if (!previewImg || !previewImg.src) return;
+
+        studioState.originalSrc = previewImg.src;
+        studioPreview.src = previewImg.src;
+        
+        document.getElementById('studio-modal').classList.remove('hidden');
+        document.getElementById('studio-modal').classList.add('flex');
+        
+        applyStudioLiveFilters();
+    }
+
+    function closeStudioModal() {
+        document.getElementById('studio-modal').classList.add('hidden');
+        document.getElementById('studio-modal').classList.remove('flex');
+    }
+
+    function applyStudioLiveFilters() {
+        const b = document.getElementById('slider-brightness')?.value || studioState.brightness;
+        const c = document.getElementById('slider-contrast')?.value || studioState.contrast;
+        const s = document.getElementById('slider-saturation')?.value || studioState.saturation;
+        const w = document.getElementById('slider-warmth')?.value || studioState.warmth;
+
+        studioState.brightness = b;
+        studioState.contrast = c;
+        studioState.saturation = s;
+        studioState.warmth = w;
+
+        if (document.getElementById('val-brightness')) document.getElementById('val-brightness').textContent = `${b}%`;
+        if (document.getElementById('val-contrast')) document.getElementById('val-contrast').textContent = `${c}%`;
+        if (document.getElementById('val-saturation')) document.getElementById('val-saturation').textContent = `${s}%`;
+        if (document.getElementById('val-warmth')) document.getElementById('val-warmth').textContent = `${w}%`;
+
+        const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
+        let filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+        if (w > 0) {
+            filterString += ` sepia(${w}%)`;
+        }
+        if (preset.extra) {
+            filterString += ` ${preset.extra}`;
+        }
+
+        const studioImg = document.getElementById('studio-preview-img');
+        if (studioImg) {
+            studioImg.style.filter = filterString;
+            studioImg.style.transform = `rotate(${studioState.rotation}deg) scaleX(${studioState.flipH})`;
+        }
+
+        if (document.getElementById('studio-rotation-label')) {
+            document.getElementById('studio-rotation-label').textContent = `${studioState.rotation}°${studioState.flipH === -1 ? ' (Flipped)' : ''}`;
+        }
+    }
+
+    function applyPresetFilter(filterKey) {
+        studioState.activeFilter = filterKey;
+        const preset = filterPresets[filterKey] || filterPresets.normal;
+
+        const sb = document.getElementById('slider-brightness');
+        const sc = document.getElementById('slider-contrast');
+        const ss = document.getElementById('slider-saturation');
+        const sw = document.getElementById('slider-warmth');
+        if (sb) sb.value = preset.b;
+        if (sc) sc.value = preset.c;
+        if (ss) ss.value = preset.s;
+        if (sw) sw.value = preset.w;
+
+        document.querySelectorAll('.filter-preset-card').forEach(card => {
+            card.className = 'filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition';
+        });
+
+        const activeCard = document.getElementById(`filter-card-${filterKey}`);
+        if (activeCard) {
+            activeCard.className = 'filter-preset-card p-2 rounded-xl border-2 border-amber-400 bg-amber-400/10 text-center flex flex-col items-center gap-1 transition';
+        }
+
+        applyStudioLiveFilters();
+    }
+
+    function setCropRatio(ratio) {
+        studioState.cropRatio = ratio;
+        const cropBox = document.getElementById('studio-crop-box');
+        const label = document.getElementById('studio-crop-label');
+
+        document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+            btn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]';
+        });
+
+        const activeBtn = document.getElementById(`crop-ratio-${ratio.replace(':', '-')}`);
+        if (activeBtn) {
+            activeBtn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]';
+        }
+
+        if (label) {
+            label.textContent = ratio === 'original' ? 'Original Ratio' : `${ratio} Ratio`;
+        }
+
+        if (cropBox) {
+            if (ratio === '1:1') {
+                cropBox.style.aspectRatio = '1 / 1';
+                cropBox.style.width = '200px';
+            } else if (ratio === '4:5') {
+                cropBox.style.aspectRatio = '4 / 5';
+                cropBox.style.width = '180px';
+            } else if (ratio === '4:3') {
+                cropBox.style.aspectRatio = '4 / 3';
+                cropBox.style.width = '240px';
+            } else if (ratio === '16:9') {
+                cropBox.style.aspectRatio = '16 / 9';
+                cropBox.style.width = '260px';
+            } else {
+                cropBox.style.aspectRatio = 'auto';
+                cropBox.style.width = 'auto';
+            }
+        }
+    }
+
+    function rotateStudioImage(deg) {
+        studioState.rotation = (studioState.rotation + deg + 360) % 360;
+        applyStudioLiveFilters();
+    }
+
+    function flipStudioImage() {
+        studioState.flipH = studioState.flipH === 1 ? -1 : 1;
+        applyStudioLiveFilters();
+    }
+
+    function resetStudioSliders() {
+        const sb = document.getElementById('slider-brightness');
+        const sc = document.getElementById('slider-contrast');
+        const ss = document.getElementById('slider-saturation');
+        const sw = document.getElementById('slider-warmth');
+        if (sb) sb.value = 100;
+        if (sc) sc.value = 100;
+        if (ss) ss.value = 100;
+        if (sw) sw.value = 0;
+        applyStudioLiveFilters();
+    }
+
+    function resetCropOrientation() {
+        studioState.rotation = 0;
+        studioState.flipH = 1;
+        setCropRatio('original');
+        applyStudioLiveFilters();
+    }
+
+    function resetStudioComplete() {
+        applyPresetFilter('normal');
+        resetStudioSliders();
+        resetCropOrientation();
+        const studioPreview = document.getElementById('studio-preview-img');
+        if (studioState.originalSrc && studioPreview) {
+            studioPreview.src = studioState.originalSrc;
+        }
+    }
+
+    function applyBakeAdjustments() {
+        const studioImg = document.getElementById('studio-preview-img');
+        if (!studioImg) return;
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const nw = studioImg.naturalWidth || studioImg.width || 800;
+        const nh = studioImg.naturalHeight || studioImg.height || 800;
+
+        const isRotated90 = studioState.rotation === 90 || studioState.rotation === 270;
+        const baseW = isRotated90 ? nh : nw;
+        const baseH = isRotated90 ? nw : nh;
+
+        let targetW = baseW;
+        let targetH = baseH;
+
+        if (studioState.cropRatio === '1:1') {
+            const minDim = Math.min(baseW, baseH);
+            targetW = minDim;
+            targetH = minDim;
+        } else if (studioState.cropRatio === '4:5') {
+            if (baseW / baseH > 4 / 5) {
+                targetW = Math.round(baseH * (4 / 5));
+                targetH = baseH;
+            } else {
+                targetW = baseW;
+                targetH = Math.round(baseW * (5 / 4));
+            }
+        } else if (studioState.cropRatio === '4:3') {
+            if (baseW / baseH > 4 / 3) {
+                targetW = Math.round(baseH * (4 / 3));
+                targetH = baseH;
+            } else {
+                targetW = baseW;
+                targetH = Math.round(baseW * (3 / 4));
+            }
+        } else if (studioState.cropRatio === '16:9') {
+            if (baseW / baseH > 16 / 9) {
+                targetW = Math.round(baseH * (16 / 9));
+                targetH = baseH;
+            } else {
+                targetW = baseW;
+                targetH = Math.round(baseW * (9 / 16));
+            }
+        }
+
+        canvas.width = targetW;
+        canvas.height = targetH;
+
+        ctx.save();
+        
+        const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
+        let filterString = `brightness(${studioState.brightness}%) contrast(${studioState.contrast}%) saturate(${studioState.saturation}%)`;
+        if (studioState.warmth > 0) {
+            filterString += ` sepia(${studioState.warmth}%)`;
+        }
+        if (preset.extra) {
+            filterString += ` ${preset.extra}`;
+        }
+        ctx.filter = filterString;
+
+        ctx.translate(targetW / 2, targetH / 2);
+        ctx.rotate((studioState.rotation * Math.PI) / 180);
+        ctx.scale(studioState.flipH, 1);
+
+        ctx.drawImage(studioImg, -nw / 2, -nh / 2, nw, nh);
+        ctx.restore();
+
+        const bakedPng = canvas.toDataURL('image/png');
+        
+        const hiddenBase64Input = document.getElementById('transparent_image_base64');
+        const livePreview = document.getElementById('live-transparent-preview');
+        
+        if (hiddenBase64Input) hiddenBase64Input.value = bakedPng;
+        if (livePreview) livePreview.src = bakedPng;
+
+        closeStudioModal();
+    }
+
+    // CUSTOM CATEGORY SELECT DROPDOWN LOGIC
+    function toggleCategoryMenu() {
+        const menu = document.getElementById('category-options-menu');
+        const chevron = document.getElementById('category-chevron');
+        if (!menu) return;
+        const isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+            menu.classList.remove('hidden');
+            if (chevron) chevron.classList.add('rotate-180');
+        } else {
+            menu.classList.add('hidden');
+            if (chevron) chevron.classList.remove('rotate-180');
+        }
+    }
+
+    function selectCategoryOption(id, name) {
+        const select = document.getElementById('real_category_select');
+        const label = document.getElementById('category-selected-label');
+        const menu = document.getElementById('category-options-menu');
+        const chevron = document.getElementById('category-chevron');
+
+        if (select) {
+            select.value = id;
+            select.dispatchEvent(new Event('change'));
+        }
+
+        if (label) {
+            label.innerHTML = `<i class="fa-solid fa-gem text-amber-400 text-xs"></i> <span class="text-white font-semibold">${name}</span>`;
+        }
+
+        document.querySelectorAll('.category-option-item').forEach(item => {
+            const check = item.querySelector('.checkmark-icon');
+            if (item.getAttribute('data-id') === String(id)) {
+                item.classList.add('bg-amber-400/15', 'text-amber-300', 'font-bold');
+                if (check) check.classList.remove('hidden');
+            } else {
+                item.classList.remove('bg-amber-400/15', 'text-amber-300', 'font-bold');
+                if (check) check.classList.add('hidden');
+            }
+        });
+
+        if (menu) menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const fileInput = document.getElementById('input_image_file');
         const urlInput = document.getElementById('input_image_url');
@@ -767,353 +1087,28 @@
         if (revertBtn) {
             revertBtn.addEventListener('click', restoreOriginalPhoto);
         }
-    });
-</script>
 
-<!-- Interactive Photo Studio Editor Engine -->
-<script>
-let studioState = {
-    brightness: 100,
-    contrast: 100,
-    saturation: 100,
-    warmth: 0,
-    activeFilter: 'normal',
-    rotation: 0,
-    flipH: 1,
-    cropRatio: 'original',
-    originalSrc: ''
-};
+        ['slider-brightness', 'slider-contrast', 'slider-saturation', 'slider-warmth'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', applyStudioLiveFilters);
+        });
 
-const filterPresets = {
-    normal: { b: 100, c: 100, s: 100, w: 0, extra: '' },
-    gold: { b: 105, c: 112, s: 130, w: 25, extra: 'sepia(25%)' },
-    diamond: { b: 108, c: 120, s: 95, w: 0, extra: 'hue-rotate(185deg)' },
-    rose: { b: 105, c: 110, s: 125, w: 15, extra: 'hue-rotate(335deg)' },
-    studio: { b: 112, c: 118, s: 108, w: 0, extra: '' },
-    vivid: { b: 104, c: 122, s: 145, w: 0, extra: '' },
-    vintage: { b: 100, c: 108, s: 85, w: 40, extra: 'sepia(45%)' },
-    noir: { b: 106, c: 135, s: 0, w: 0, extra: 'grayscale(100%)' }
-};
-
-function switchStudioTab(tab) {
-    ['adjust', 'filters', 'crop'].forEach(t => {
-        const btn = document.getElementById(`tab-btn-${t}`);
-        const panel = document.getElementById(`tab-panel-${t}`);
-        if (t === tab) {
-            if (btn) {
-                btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow';
+        const select = document.getElementById('real_category_select');
+        if (select && select.value) {
+            const selectedOpt = select.options[select.selectedIndex];
+            if (selectedOpt && selectedOpt.value) {
+                selectCategoryOption(selectedOpt.value, selectedOpt.text.trim());
             }
-            if (panel) panel.classList.remove('hidden');
-        } else {
-            if (btn) {
-                btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white';
-            }
-            if (panel) panel.classList.add('hidden');
         }
     });
-}
 
-function openStudioModal() {
-    const previewImg = document.getElementById('live-transparent-preview');
-    const studioPreview = document.getElementById('studio-preview-img');
-    if (!previewImg || !previewImg.src) return;
-
-    studioState.originalSrc = previewImg.src;
-    studioPreview.src = previewImg.src;
-    
-    document.getElementById('studio-modal').classList.remove('hidden');
-    document.getElementById('studio-modal').classList.add('flex');
-    
-    applyStudioLiveFilters();
-}
-
-function closeStudioModal() {
-    document.getElementById('studio-modal').classList.add('hidden');
-    document.getElementById('studio-modal').classList.remove('flex');
-}
-
-function applyStudioLiveFilters() {
-    const b = document.getElementById('slider-brightness')?.value || studioState.brightness;
-    const c = document.getElementById('slider-contrast')?.value || studioState.contrast;
-    const s = document.getElementById('slider-saturation')?.value || studioState.saturation;
-    const w = document.getElementById('slider-warmth')?.value || studioState.warmth;
-
-    studioState.brightness = b;
-    studioState.contrast = c;
-    studioState.saturation = s;
-    studioState.warmth = w;
-
-    if (document.getElementById('val-brightness')) document.getElementById('val-brightness').textContent = `${b}%`;
-    if (document.getElementById('val-contrast')) document.getElementById('val-contrast').textContent = `${c}%`;
-    if (document.getElementById('val-saturation')) document.getElementById('val-saturation').textContent = `${s}%`;
-    if (document.getElementById('val-warmth')) document.getElementById('val-warmth').textContent = `${w}%`;
-
-    const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
-    let filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
-    if (w > 0) {
-        filterString += ` sepia(${w}%)`;
-    }
-    if (preset.extra) {
-        filterString += ` ${preset.extra}`;
-    }
-
-    const studioImg = document.getElementById('studio-preview-img');
-    if (studioImg) {
-        studioImg.style.filter = filterString;
-        studioImg.style.transform = `rotate(${studioState.rotation}deg) scaleX(${studioState.flipH})`;
-    }
-
-    if (document.getElementById('studio-rotation-label')) {
-        document.getElementById('studio-rotation-label').textContent = `${studioState.rotation}°${studioState.flipH === -1 ? ' (Flipped)' : ''}`;
-    }
-}
-
-function applyPresetFilter(filterKey) {
-    studioState.activeFilter = filterKey;
-    const preset = filterPresets[filterKey] || filterPresets.normal;
-
-    document.getElementById('slider-brightness').value = preset.b;
-    document.getElementById('slider-contrast').value = preset.c;
-    document.getElementById('slider-saturation').value = preset.s;
-    document.getElementById('slider-warmth').value = preset.w;
-
-    document.querySelectorAll('.filter-preset-card').forEach(card => {
-        card.className = 'filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition';
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('custom-category-dropdown');
+        const menu = document.getElementById('category-options-menu');
+        const chevron = document.getElementById('category-chevron');
+        if (dropdown && !dropdown.contains(e.target) && menu && !menu.classList.contains('hidden')) {
+            menu.classList.add('hidden');
+            if (chevron) chevron.classList.remove('rotate-180');
+        }
     });
-
-    const activeCard = document.getElementById(`filter-card-${filterKey}`);
-    if (activeCard) {
-        activeCard.className = 'filter-preset-card p-2 rounded-xl border-2 border-amber-400 bg-amber-400/10 text-center flex flex-col items-center gap-1 transition';
-    }
-
-    applyStudioLiveFilters();
-}
-
-function setCropRatio(ratio) {
-    studioState.cropRatio = ratio;
-    const cropBox = document.getElementById('studio-crop-box');
-    const label = document.getElementById('studio-crop-label');
-
-    document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
-        btn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]';
-    });
-
-    const activeBtn = document.getElementById(`crop-ratio-${ratio.replace(':', '-')}`);
-    if (activeBtn) {
-        activeBtn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]';
-    }
-
-    if (label) {
-        label.textContent = ratio === 'original' ? 'Original Ratio' : `${ratio} Ratio`;
-    }
-
-    if (cropBox) {
-        if (ratio === '1:1') {
-            cropBox.style.aspectRatio = '1 / 1';
-            cropBox.style.width = '200px';
-        } else if (ratio === '4:5') {
-            cropBox.style.aspectRatio = '4 / 5';
-            cropBox.style.width = '180px';
-        } else if (ratio === '4:3') {
-            cropBox.style.aspectRatio = '4 / 3';
-            cropBox.style.width = '240px';
-        } else if (ratio === '16:9') {
-            cropBox.style.aspectRatio = '16 / 9';
-            cropBox.style.width = '260px';
-        } else {
-            cropBox.style.aspectRatio = 'auto';
-            cropBox.style.width = 'auto';
-        }
-    }
-}
-
-function rotateStudioImage(deg) {
-    studioState.rotation = (studioState.rotation + deg + 360) % 360;
-    applyStudioLiveFilters();
-}
-
-function flipStudioImage() {
-    studioState.flipH = studioState.flipH === 1 ? -1 : 1;
-    applyStudioLiveFilters();
-}
-
-function resetStudioSliders() {
-    document.getElementById('slider-brightness').value = 100;
-    document.getElementById('slider-contrast').value = 100;
-    document.getElementById('slider-saturation').value = 100;
-    document.getElementById('slider-warmth').value = 0;
-    applyStudioLiveFilters();
-}
-
-function resetCropOrientation() {
-    studioState.rotation = 0;
-    studioState.flipH = 1;
-    setCropRatio('original');
-    applyStudioLiveFilters();
-}
-
-function resetStudioComplete() {
-    applyPresetFilter('normal');
-    resetStudioSliders();
-    resetCropOrientation();
-    const studioPreview = document.getElementById('studio-preview-img');
-    if (studioState.originalSrc && studioPreview) {
-        studioPreview.src = studioState.originalSrc;
-    }
-}
-
-['slider-brightness', 'slider-contrast', 'slider-saturation', 'slider-warmth'].forEach(id => {
-    document.getElementById(id)?.addEventListener('input', applyStudioLiveFilters);
-});
-
-function applyBakeAdjustments() {
-    const studioImg = document.getElementById('studio-preview-img');
-    if (!studioImg) return;
-
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    const nw = studioImg.naturalWidth || studioImg.width || 800;
-    const nh = studioImg.naturalHeight || studioImg.height || 800;
-
-    const isRotated90 = studioState.rotation === 90 || studioState.rotation === 270;
-    const baseW = isRotated90 ? nh : nw;
-    const baseH = isRotated90 ? nw : nh;
-
-    let targetW = baseW;
-    let targetH = baseH;
-
-    if (studioState.cropRatio === '1:1') {
-        const minDim = Math.min(baseW, baseH);
-        targetW = minDim;
-        targetH = minDim;
-    } else if (studioState.cropRatio === '4:5') {
-        if (baseW / baseH > 4 / 5) {
-            targetW = Math.round(baseH * (4 / 5));
-            targetH = baseH;
-        } else {
-            targetW = baseW;
-            targetH = Math.round(baseW * (5 / 4));
-        }
-    } else if (studioState.cropRatio === '4:3') {
-        if (baseW / baseH > 4 / 3) {
-            targetW = Math.round(baseH * (4 / 3));
-            targetH = baseH;
-        } else {
-            targetW = baseW;
-            targetH = Math.round(baseW * (3 / 4));
-        }
-    } else if (studioState.cropRatio === '16:9') {
-        if (baseW / baseH > 16 / 9) {
-            targetW = Math.round(baseH * (16 / 9));
-            targetH = baseH;
-        } else {
-            targetW = baseW;
-            targetH = Math.round(baseW * (9 / 16));
-        }
-    }
-
-    canvas.width = targetW;
-    canvas.height = targetH;
-
-    ctx.save();
-    
-    // Build filter string
-    const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
-    let filterString = `brightness(${studioState.brightness}%) contrast(${studioState.contrast}%) saturate(${studioState.saturation}%)`;
-    if (studioState.warmth > 0) {
-        filterString += ` sepia(${studioState.warmth}%)`;
-    }
-    if (preset.extra) {
-        filterString += ` ${preset.extra}`;
-    }
-    ctx.filter = filterString;
-
-    ctx.translate(targetW / 2, targetH / 2);
-    ctx.rotate((studioState.rotation * Math.PI) / 180);
-    ctx.scale(studioState.flipH, 1);
-
-    ctx.drawImage(studioImg, -nw / 2, -nh / 2, nw, nh);
-    ctx.restore();
-
-    const bakedPng = canvas.toDataURL('image/png');
-    
-    const hiddenBase64Input = document.getElementById('transparent_image_base64');
-    const livePreview = document.getElementById('live-transparent-preview');
-    
-    if (hiddenBase64Input) hiddenBase64Input.value = bakedPng;
-    if (livePreview) livePreview.src = bakedPng;
-
-    closeStudioModal();
-}
 </script>
-
-// CUSTOM CATEGORY SELECT DROPDOWN LOGIC
-function toggleCategoryMenu() {
-    const menu = document.getElementById('category-options-menu');
-    const chevron = document.getElementById('category-chevron');
-    if (!menu) return;
-    const isHidden = menu.classList.contains('hidden');
-    if (isHidden) {
-        menu.classList.remove('hidden');
-        if (chevron) chevron.classList.add('rotate-180');
-    } else {
-        menu.classList.add('hidden');
-        if (chevron) chevron.classList.remove('rotate-180');
-    }
-}
-
-function selectCategoryOption(id, name) {
-    const select = document.getElementById('real_category_select');
-    const label = document.getElementById('category-selected-label');
-    const menu = document.getElementById('category-options-menu');
-    const chevron = document.getElementById('category-chevron');
-
-    if (select) {
-        select.value = id;
-        select.dispatchEvent(new Event('change'));
-    }
-
-    if (label) {
-        label.innerHTML = `<i class="fa-solid fa-gem text-amber-400 text-xs"></i> <span class="text-white font-semibold">${name}</span>`;
-    }
-
-    document.querySelectorAll('.category-option-item').forEach(item => {
-        const check = item.querySelector('.checkmark-icon');
-        if (item.getAttribute('data-id') === String(id)) {
-            item.classList.add('bg-amber-400/15', 'text-amber-300', 'font-bold');
-            if (check) check.classList.remove('hidden');
-        } else {
-            item.classList.remove('bg-amber-400/15', 'text-amber-300', 'font-bold');
-            if (check) check.classList.add('hidden');
-        }
-    });
-
-    if (menu) menu.classList.add('hidden');
-    if (chevron) chevron.classList.remove('rotate-180');
-}
-
-// Init selected category if present on load
-document.addEventListener('DOMContentLoaded', () => {
-    const select = document.getElementById('real_category_select');
-    if (select && select.value) {
-        const selectedOpt = select.options[select.selectedIndex];
-        if (selectedOpt && selectedOpt.value) {
-            selectCategoryOption(selectedOpt.value, selectedOpt.text.trim());
-        }
-    }
-});
-
-// Close dropdown on outside click
-document.addEventListener('click', (e) => {
-    const dropdown = document.getElementById('custom-category-dropdown');
-    const menu = document.getElementById('category-options-menu');
-    const chevron = document.getElementById('category-chevron');
-    if (dropdown && !dropdown.contains(e.target) && menu && !menu.classList.contains('hidden')) {
-        menu.classList.add('hidden');
-        if (chevron) chevron.classList.remove('rotate-180');
-    }
-});
-</script>
-
 @endsection
