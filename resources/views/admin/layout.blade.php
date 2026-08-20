@@ -402,7 +402,7 @@
 
             <!-- Center Floating Add Action Button -->
             <a href="{{ route('admin.products.create') }}" 
-                class="-mt-7 bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 text-slate-950 w-13 h-13 rounded-2xl shadow-xl shadow-amber-500/30 flex items-center justify-center font-bold border-2 border-[#0a0a12] active:scale-95 transition transform">
+                class="-mt-7 bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 text-slate-950 w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl shadow-xl shadow-amber-500/30 flex items-center justify-center font-bold border-2 border-[#0a0a12] active:scale-95 transition transform">
                 <i class="fa-solid fa-plus text-lg"></i>
             </a>
 
@@ -413,8 +413,8 @@
             </a>
 
             <button type="button" onclick="toggleMobileDrawer()" 
-                class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl text-stone-400">
-                <i class="fa-solid fa-grid-2 text-base"></i>
+                class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl text-stone-400 hover:text-amber-300">
+                <i class="fa-solid fa-bars-staggered text-base"></i>
                 <span class="text-[9px] uppercase tracking-wider">Menu</span>
             </button>
         </nav>

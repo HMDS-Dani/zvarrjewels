@@ -131,17 +131,19 @@
                     <tbody class="divide-y divide-white/5">
                         @forelse($recentProducts as $product)
                             <tr class="hover:bg-white/[0.02] transition">
-                                <td class="py-3.5 px-4 flex items-center gap-3">
-                                    @if($product->image)
-                                        <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-11 h-11 rounded-xl object-cover border border-amber-400/20 shadow-md">
-                                    @else
-                                        <div class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400">
-                                            <i class="fa-solid fa-gem text-xs"></i>
+                                <td class="py-3.5 px-4">
+                                    <div class="flex items-center gap-3">
+                                        @if($product->image)
+                                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] rounded-xl object-cover border border-amber-400/20 shadow-md flex-shrink-0">
+                                        @else
+                                            <div class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400 flex-shrink-0">
+                                                <i class="fa-solid fa-gem text-xs"></i>
+                                            </div>
+                                        @endif
+                                        <div class="min-w-0">
+                                            <p class="font-bold text-white text-xs sm:text-sm truncate max-w-xs">{{ $product->name }}</p>
+                                            <p class="text-[10px] text-stone-400 font-mono">{{ $product->material ?? 'Fine Jewellery' }}</p>
                                         </div>
-                                    @endif
-                                    <div>
-                                        <p class="font-bold text-white text-xs sm:text-sm">{{ $product->name }}</p>
-                                        <p class="text-[10px] text-stone-400">{{ $product->material ?? 'Fine Jewellery' }}</p>
                                     </div>
                                 </td>
                                 <td class="py-3.5 px-4">
@@ -149,7 +151,7 @@
                                         {{ $product->category->name ?? 'Vault' }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-4 font-bold text-amber-300 text-xs sm:text-sm">
+                                <td class="py-3.5 px-4 font-bold text-amber-300 text-xs sm:text-sm font-cinzel">
                                     Rs. {{ number_format($product->price, 0) }}
                                 </td>
                                 <td class="py-3.5 px-4">
@@ -178,15 +180,15 @@
                     <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 min-w-0">
                             @if($product->image)
-                                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-12 h-12 rounded-xl object-cover border border-amber-400/20 flex-shrink-0">
+                                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-xl object-cover border border-amber-400/20 flex-shrink-0">
                             @else
-                                <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400 flex-shrink-0">
+                                <div class="w-12 h-12 min-w-[48px] min-h-[48px] rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400 flex-shrink-0">
                                     <i class="fa-solid fa-gem text-xs"></i>
                                 </div>
                             @endif
                             <div class="min-w-0">
                                 <p class="font-bold text-white text-xs truncate">{{ $product->name }}</p>
-                                <p class="text-[10px] text-amber-300 font-bold mt-0.5">Rs. {{ number_format($product->price, 0) }}</p>
+                                <p class="text-[10px] text-amber-300 font-bold mt-0.5 font-cinzel">Rs. {{ number_format($product->price, 0) }}</p>
                                 <span class="text-[9px] text-stone-400">{{ $product->category->name ?? 'Vault' }} • {{ $product->stock }} left</span>
                             </div>
                         </div>

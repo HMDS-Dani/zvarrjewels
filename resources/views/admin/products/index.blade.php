@@ -63,12 +63,12 @@
             <div class="glass-card-luxury p-4 rounded-3xl space-y-3.5 relative overflow-hidden">
                 <div class="flex items-start gap-3.5">
                     
-                    <!-- Thumbnail with Subtle Ambient Glow -->
-                    <div class="w-18 h-18 rounded-2xl bg-[#12121a] border border-amber-400/20 flex items-center justify-center p-2 flex-shrink-0 relative overflow-hidden shadow-lg">
+                    <!-- Fixed Dimensions Thumbnail -->
+                    <div class="w-16 h-16 min-w-[64px] min-h-[64px] max-w-[64px] max-h-[64px] rounded-2xl bg-[#0e0e14] border border-amber-400/20 flex items-center justify-center p-1 flex-shrink-0 relative overflow-hidden shadow-md">
                         @if($product->image)
-                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="max-h-full max-w-full object-contain relative z-10 drop-shadow-md">
+                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover rounded-xl">
                         @else
-                            <i class="fa-solid fa-gem text-stone-600 text-xl"></i>
+                            <i class="fa-solid fa-gem text-stone-500 text-xl"></i>
                         @endif
                     </div>
 
@@ -163,34 +163,36 @@
                     @forelse($products as $product)
                         <tr class="hover:bg-white/[0.02] transition">
                             <!-- Image + Name -->
-                            <td class="py-4 px-4 flex items-center gap-3.5">
-                                <div class="w-13 h-13 rounded-2xl bg-[#12121a] border border-amber-400/20 flex items-center justify-center p-1.5 flex-shrink-0 relative overflow-hidden shadow-md">
-                                    @if($product->image)
-                                        <img src="{{ $product->image }}" alt="{{ $product->name }}" class="max-h-full max-w-full object-contain">
-                                    @else
-                                        <i class="fa-solid fa-gem text-stone-500 text-xs"></i>
-                                    @endif
-                                </div>
-                                <div>
-                                    <p class="font-bold text-white text-sm leading-snug">{{ $product->name }}</p>
-                                    <p class="text-[10px] text-stone-400 font-mono">slug: {{ $product->slug }}</p>
+                            <td class="py-3 px-4">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-xl bg-[#0e0e14] border border-amber-400/20 flex items-center justify-center p-1 flex-shrink-0 relative overflow-hidden shadow-md">
+                                        @if($product->image)
+                                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover rounded-lg">
+                                        @else
+                                            <i class="fa-solid fa-gem text-stone-500 text-sm"></i>
+                                        @endif
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="font-bold text-white text-sm leading-snug truncate max-w-xs">{{ $product->name }}</p>
+                                        <p class="text-[10px] text-stone-400 font-mono">slug: {{ $product->slug }}</p>
+                                    </div>
                                 </div>
                             </td>
 
                             <!-- Category -->
-                            <td class="py-4 px-4">
+                            <td class="py-3 px-4">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-300 border border-amber-400/30">
                                     {{ $product->category->name }}
                                 </span>
                             </td>
 
                             <!-- Material -->
-                            <td class="py-4 px-4 text-xs font-medium text-stone-300">
+                            <td class="py-3 px-4 text-xs font-medium text-stone-300">
                                 {{ $product->material ?? '24K Gold Plated' }}
                             </td>
 
                             <!-- Price -->
-                            <td class="py-4 px-4">
+                            <td class="py-3 px-4">
                                 <div class="font-bold text-amber-300 font-cinzel text-sm">
                                     Rs. {{ number_format($product->price, 0) }}
                                 </div>
@@ -202,7 +204,7 @@
                             </td>
 
                             <!-- Stock Badge -->
-                            <td class="py-4 px-4">
+                            <td class="py-3 px-4">
                                 @if($product->stock > 5)
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                                         {{ $product->stock }} in stock
@@ -219,7 +221,7 @@
                             </td>
 
                             <!-- Featured Star -->
-                            <td class="py-4 px-4 text-center">
+                            <td class="py-3 px-4 text-center">
                                 @if($product->is_featured)
                                     <span class="text-amber-400 text-sm drop-shadow-md" title="Featured Spotlight">
                                         <i class="fa-solid fa-star"></i>
@@ -232,7 +234,7 @@
                             </td>
 
                             <!-- Actions -->
-                            <td class="py-4 px-4 text-right">
+                            <td class="py-3 px-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ route('shop.product', $product->slug) }}" target="_blank"
                                         title="View Live Boutique"

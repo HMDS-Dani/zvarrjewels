@@ -98,9 +98,9 @@
                         
                         <div class="flex items-start gap-3.5">
                             @if($category->image)
-                                <img src="{{ $category->image }}" alt="{{ $category->name }}" class="w-14 h-14 rounded-2xl object-cover border border-amber-400/20 flex-shrink-0 bg-black/40 shadow-md">
+                                <img src="{{ $category->image }}" alt="{{ $category->name }}" class="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-2xl object-cover border border-amber-400/20 flex-shrink-0 bg-black/40 shadow-md">
                             @else
-                                <div class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400 flex-shrink-0">
+                                <div class="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400 flex-shrink-0">
                                     <i class="fa-solid fa-tag text-lg"></i>
                                 </div>
                             @endif
