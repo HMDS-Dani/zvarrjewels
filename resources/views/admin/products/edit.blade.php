@@ -153,41 +153,16 @@
                     @endif
                 </div>
 
-                <!-- Mode Selector -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label id="label-mode-ai" class="flex items-start gap-3 p-4 rounded-2xl border-2 border-amber-400 bg-amber-400/10 cursor-pointer transition shadow-lg shadow-amber-500/5">
-                        <input type="radio" name="bg_mode" value="ai" checked class="mt-0.5 text-amber-500 focus:ring-amber-400">
-                        <div>
-                            <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                                <span>AI Background Remover</span>
-                            </div>
-                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Auto removes image background for a clean dark look.</p>
-                        </div>
-                    </label>
-
-                    <label id="label-mode-direct" class="flex items-start gap-3 p-4 rounded-2xl border-2 border-white/10 hover:border-white/20 bg-white/[0.02] cursor-pointer transition">
-                        <input type="radio" name="bg_mode" value="direct" class="mt-0.5 text-amber-500 focus:ring-amber-400">
-                        <div>
-                            <div class="text-xs font-bold text-stone-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-image text-stone-400"></i>
-                                <span>Direct Upload (Keep Original Photo)</span>
-                            </div>
-                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Displays photo directly without background removal.</p>
-                        </div>
-                    </label>
-                </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                     <div>
-                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option A: Direct Image Web URL</label>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option A: Image URL</label>
                         <input type="url" id="input_image_url" name="image_url" value="{{ old('image_url') }}"
                             placeholder="https://images.unsplash.com/photo-..."
                             class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option B: Upload New File</label>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option B: Upload File</label>
                         <input type="file" id="input_image_file" name="image_file" accept="image/*"
                             class="w-full px-4 py-2.5 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-stone-300 file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-400 file:text-slate-950 hover:file:bg-amber-300 cursor-pointer">
                     </div>
@@ -198,7 +173,7 @@
                     <div class="flex items-center justify-between text-xs text-amber-300 font-semibold">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
-                            <span id="ai-status-text">Removing image background...</span>
+                            <span id="ai-status-text">Removing background with AI...</span>
                         </span>
                         <span id="ai-percentage" class="text-amber-400 font-mono">Running</span>
                     </div>
@@ -207,15 +182,36 @@
                     </div>
                 </div>
 
-                <!-- Live Preview on Website's Dark Card Background with Edit Studio Button -->
+                <!-- Live Preview on Website's Dark Card Background with Manual Remove BG Button -->
                 <div id="preview-wrapper" class="{{ $product->image ? '' : 'hidden' }} pt-4 border-t border-slate-800/80 space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                        <span class="text-xs font-bold text-slate-300">Live Website Dark Card Preview:</span>
-                        <button type="button" onclick="openStudioModal()" 
-                            class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-sliders"></i>
-                            <span>Adjust Lighting</span>
-                        </button>
+                        <span class="text-xs font-bold text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-eye text-amber-400 text-xs"></i>
+                            <span>Live Card Preview:</span>
+                        </span>
+
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <!-- 1. Remove Background Button -->
+                            <button type="button" id="btn-remove-bg" onclick="triggerManualBackgroundRemoval()" 
+                                class="px-3.5 py-2 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 text-amber-300 border border-amber-400/40 text-xs font-bold flex items-center gap-1.5 transition shadow-md shadow-amber-500/10 active:scale-95">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xs"></i>
+                                <span id="btn-remove-bg-text">Remove Background</span>
+                            </button>
+
+                            <!-- 2. Restore Original Photo Button -->
+                            <button type="button" id="btn-revert-bg" onclick="restoreOriginalPhoto()" 
+                                class="hidden px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-rotate-left text-stone-400 text-xs"></i>
+                                <span>Restore Original</span>
+                            </button>
+
+                            <!-- 3. Adjust Lighting Button -->
+                            <button type="button" onclick="openStudioModal()" 
+                                class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-sliders text-amber-400 text-xs"></i>
+                                <span>Adjust Lighting</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="card-preview-podium" class="flex items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] shadow-2xl min-h-[220px] sm:min-h-[260px] relative overflow-hidden">
@@ -360,27 +356,7 @@
     const submitBtn = document.getElementById('submit-btn');
 
     // Mode Radio Buttons
-    const modeRadios = document.querySelectorAll('input[name="bg_mode"]');
-    const labelAi = document.getElementById('label-mode-ai');
-    const labelDirect = document.getElementById('label-mode-direct');
-
-    modeRadios.forEach(r => {
-        r.addEventListener('change', () => {
-            if (r.value === 'ai') {
-                labelAi.classList.add('border-amber-500', 'bg-amber-500/10');
-                labelAi.classList.remove('border-slate-700', 'bg-slate-900');
-                labelDirect.classList.remove('border-amber-500', 'bg-amber-500/10');
-                labelDirect.classList.add('border-slate-700', 'bg-slate-900');
-            } else {
-                labelDirect.classList.add('border-amber-500', 'bg-amber-500/10');
-                labelDirect.classList.remove('border-slate-700', 'bg-slate-900');
-                labelAi.classList.remove('border-amber-500', 'bg-amber-500/10');
-                labelAi.classList.add('border-slate-700', 'bg-slate-900');
-            }
-            if (fileInput.files[0]) handleSource(fileInput.files[0]);
-            else if (urlInput.value) handleSource(urlInput.value);
-        });
-    });
+    let currentRawImageSource = null;
 
     // Intelligent Noise Speck & Halo Cleaner
     function cleanAlphaNoise(blob) {
@@ -468,32 +444,42 @@
         });
     }
 
-    async function handleSource(imageSource) {
+    function handleSource(imageSource) {
         if (!imageSource) return;
+        currentRawImageSource = imageSource;
+        hiddenBase64Input.value = '';
 
-        const isAiMode = document.querySelector('input[name="bg_mode"]:checked')?.value === 'ai';
+        if (typeof imageSource === 'string') {
+            previewImg.src = imageSource;
+        } else {
+            previewImg.src = URL.createObjectURL(imageSource);
+        }
 
-        if (!isAiMode) {
-            loadingBar.classList.add('hidden');
-            hiddenBase64Input.value = '';
-            if (typeof imageSource === 'string') {
-                previewImg.src = imageSource;
-            } else {
-                previewImg.src = URL.createObjectURL(imageSource);
-            }
-            previewWrapper.classList.remove('hidden');
-            if (submitBtn) submitBtn.disabled = false;
+        previewWrapper.classList.remove('hidden');
+        document.getElementById('btn-revert-bg').classList.add('hidden');
+        document.getElementById('btn-remove-bg-text').textContent = 'Remove Background';
+        if (submitBtn) submitBtn.disabled = false;
+    }
+
+    async function triggerManualBackgroundRemoval() {
+        const source = currentRawImageSource || previewImg.src;
+        if (!source) {
+            alert('Please select an image file or enter an image URL first.');
             return;
         }
 
+        const removeBgBtn = document.getElementById('btn-remove-bg');
+        const removeBgText = document.getElementById('btn-remove-bg-text');
+        const revertBtn = document.getElementById('btn-revert-bg');
+
         loadingBar.classList.remove('hidden');
-        previewWrapper.classList.add('hidden');
+        removeBgBtn.disabled = true;
         if (submitBtn) submitBtn.disabled = true;
 
-        statusText.textContent = 'ZVARR AI is segmenting jewelry & eliminating noise...';
+        statusText.textContent = 'ZVARR AI is segmenting jewelry & eliminating background...';
 
         try {
-            const rawBlob = await removeBackground(imageSource, {
+            const rawBlob = await removeBackground(source, {
                 model: 'medium',
                 output: {
                     format: 'image/png',
@@ -506,13 +492,30 @@
             hiddenBase64Input.value = cleanedPng;
             previewImg.src = cleanedPng;
             loadingBar.classList.add('hidden');
-            previewWrapper.classList.remove('hidden');
+            removeBgBtn.disabled = false;
+            removeBgText.textContent = 'Background Removed ✓';
+            revertBtn.classList.remove('hidden');
             if (submitBtn) submitBtn.disabled = false;
 
         } catch (error) {
             console.warn('AI fallback to canvas segmentation:', error);
-            fallbackCanvasProcessor(imageSource);
+            fallbackCanvasProcessor(source);
         }
+    }
+
+    function restoreOriginalPhoto() {
+        hiddenBase64Input.value = '';
+        if (currentRawImageSource) {
+            if (typeof currentRawImageSource === 'string') {
+                previewImg.src = currentRawImageSource;
+            } else {
+                previewImg.src = URL.createObjectURL(currentRawImageSource);
+            }
+        } else {
+            previewImg.src = "{{ $product->image_url }}";
+        }
+        document.getElementById('btn-revert-bg').classList.add('hidden');
+        document.getElementById('btn-remove-bg-text').textContent = 'Remove Background';
     }
 
     function fallbackCanvasProcessor(src) {
@@ -541,7 +544,9 @@
             hiddenBase64Input.value = transparentPng;
             previewImg.src = transparentPng;
             loadingBar.classList.add('hidden');
-            previewWrapper.classList.remove('hidden');
+            document.getElementById('btn-remove-bg').disabled = false;
+            document.getElementById('btn-remove-bg-text').textContent = 'Background Removed ✓';
+            document.getElementById('btn-revert-bg').classList.remove('hidden');
             if (submitBtn) submitBtn.disabled = false;
         };
         if (typeof src === 'string') img.src = src;
