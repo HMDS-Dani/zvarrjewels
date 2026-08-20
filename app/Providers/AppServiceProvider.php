@@ -27,8 +27,12 @@ class AppServiceProvider extends ServiceProvider
         // Share live store contact & social media settings across all shop storefront views
         View::composer('shop.*', function ($view) {
             $settings = [];
-            if (Schema::hasTable('settings')) {
-                $settings = Setting::getAll();
+            try {
+                if (Schema::hasTable('settings')) {
+                    $settings = Setting::getAll();
+                }
+            } catch (\Throwable $e) {
+                $settings = [];
             }
             $view->with('storeSettings', $settings);
         });
