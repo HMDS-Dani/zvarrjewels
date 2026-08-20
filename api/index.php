@@ -25,5 +25,15 @@ if (! getenv('APP_KEY') && ! isset($_ENV['APP_KEY'])) {
     $_ENV['APP_KEY'] = 'base64:H9WwMWCk1nLWN1+8QKMeZ5JGzVpCALfVKzWM9myh33E=';
 }
 
-// Forward all incoming Vercel Serverless requests to the Laravel public entrypoint
-require __DIR__.'/../public/index.php';
+try {
+    // Forward all incoming Vercel Serverless requests to the Laravel public entrypoint
+    require __DIR__.'/../public/index.php';
+} catch (\Throwable $e) {
+    http_response_code(500);
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "ZVARR Vercel Serverless Error Diagnostics:\n\n";
+    echo "Message: ".$e->getMessage()."\n";
+    echo "File: ".$e->getFile().":".$e->getLine()."\n\n";
+    echo "Stack Trace:\n".$e->getTraceAsString();
+}
+
