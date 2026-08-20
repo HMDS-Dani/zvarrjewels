@@ -14,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL']) || (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'production')) {
+            $this->app->useStoragePath('/tmp/storage');
+        }
     }
 
     /**
