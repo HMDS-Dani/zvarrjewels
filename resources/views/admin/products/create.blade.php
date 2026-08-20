@@ -42,15 +42,44 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
                         Category <span class="text-amber-400">*</span>
                     </label>
-                    <select name="category_id" required
-                        class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-                        <option value="">Select Category</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
-                            </option>
-                        @endforeach
-                    </select>
+
+                    <!-- Custom Luxury Dark Dropdown -->
+                    <div class="relative" id="custom-category-dropdown">
+                        <!-- Hidden select for form submit / validation -->
+                        <select name="category_id" id="real_category_select" class="hidden" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <!-- Custom Trigger Button -->
+                        <button type="button" id="category-trigger-btn" onclick="toggleCategoryMenu()"
+                            class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 hover:border-amber-400/40 rounded-2xl text-xs sm:text-sm text-left flex items-center justify-between transition group focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400">
+                            <span id="category-selected-label" class="text-stone-400 flex items-center gap-2 truncate">
+                                <i class="fa-solid fa-tags text-amber-400/60 text-xs"></i>
+                                <span>Select Category</span>
+                            </span>
+                            <i id="category-chevron" class="fa-solid fa-chevron-down text-stone-500 group-hover:text-amber-400 text-xs transition transform duration-200"></i>
+                        </button>
+
+                        <!-- Custom Dark Luxury Dropdown Menu -->
+                        <div id="category-options-menu" class="hidden absolute left-0 right-0 top-full mt-2 z-50 bg-[#0d0d14] border border-amber-400/30 rounded-2xl p-1.5 shadow-2xl shadow-black/95 backdrop-blur-2xl max-h-64 overflow-y-auto space-y-1 divide-y divide-white/5">
+                            @foreach($categories as $cat)
+                                <div onclick="selectCategoryOption('{{ $cat->id }}', '{{ addslashes($cat->name) }}')"
+                                    class="category-option-item flex items-center justify-between px-3.5 py-3 rounded-xl cursor-pointer hover:bg-amber-400/10 hover:text-amber-300 text-stone-200 text-xs sm:text-sm transition {{ old('category_id') == $cat->id ? 'bg-amber-400/15 text-amber-300 font-bold' : '' }}"
+                                    data-id="{{ $cat->id }}">
+                                    <span class="flex items-center gap-2.5 truncate">
+                                        <span class="w-2 h-2 rounded-full bg-amber-400/60 flex-shrink-0"></span>
+                                        <span class="truncate">{{ $cat->name }}</span>
+                                    </span>
+                                    <i class="fa-solid fa-check text-amber-400 text-xs {{ old('category_id') == $cat->id ? '' : 'hidden' }} checkmark-icon"></i>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -571,6 +600,73 @@ function applyBakeAdjustments() {
 
     closeStudioModal();
 }
+
+// CUSTOM CATEGORY SELECT DROPDOWN LOGIC
+function toggleCategoryMenu() {
+    const menu = document.getElementById('category-options-menu');
+    const chevron = document.getElementById('category-chevron');
+    if (!menu) return;
+    const isHidden = menu.classList.contains('hidden');
+    if (isHidden) {
+        menu.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+    } else {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+    }
+}
+
+function selectCategoryOption(id, name) {
+    const select = document.getElementById('real_category_select');
+    const label = document.getElementById('category-selected-label');
+    const menu = document.getElementById('category-options-menu');
+    const chevron = document.getElementById('category-chevron');
+
+    if (select) {
+        select.value = id;
+        select.dispatchEvent(new Event('change'));
+    }
+
+    if (label) {
+        label.innerHTML = `<i class="fa-solid fa-gem text-amber-400 text-xs"></i> <span class="text-white font-semibold">${name}</span>`;
+    }
+
+    document.querySelectorAll('.category-option-item').forEach(item => {
+        const check = item.querySelector('.checkmark-icon');
+        if (item.getAttribute('data-id') === String(id)) {
+            item.classList.add('bg-amber-400/15', 'text-amber-300', 'font-bold');
+            if (check) check.classList.remove('hidden');
+        } else {
+            item.classList.remove('bg-amber-400/15', 'text-amber-300', 'font-bold');
+            if (check) check.classList.add('hidden');
+        }
+    });
+
+    if (menu) menu.classList.add('hidden');
+    if (chevron) chevron.classList.remove('rotate-180');
+}
+
+// Init selected category if present on load
+document.addEventListener('DOMContentLoaded', () => {
+    const select = document.getElementById('real_category_select');
+    if (select && select.value) {
+        const selectedOpt = select.options[select.selectedIndex];
+        if (selectedOpt && selectedOpt.value) {
+            selectCategoryOption(selectedOpt.value, selectedOpt.text.trim());
+        }
+    }
+});
+
+// Close dropdown on outside click
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('custom-category-dropdown');
+    const menu = document.getElementById('category-options-menu');
+    const chevron = document.getElementById('category-chevron');
+    if (dropdown && !dropdown.contains(e.target) && menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+    }
+});
 </script>
 
 @endsection

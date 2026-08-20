@@ -23,9 +23,9 @@
             <div class="flex items-center gap-2.5">
                 <!-- Category Select -->
                 <select name="category_id" class="flex-1 sm:flex-none py-3 px-4 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-                    <option value="">All Categories</option>
+                    <option value="" class="bg-[#0d0d14] text-stone-300">All Categories</option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+                        <option value="{{ $cat->id }}" class="bg-[#0d0d14] text-stone-200" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
                             {{ $cat->name }}
                         </option>
                     @endforeach
