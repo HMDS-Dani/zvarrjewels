@@ -19,6 +19,15 @@ foreach ($storageDirs as $dir) {
     }
 }
 
+// Copy pre-discovered packages manifest to writable /tmp
+$bundledPackages = __DIR__.'/../bootstrap/cache/packages.php';
+if (file_exists($bundledPackages)) {
+    @copy($bundledPackages, '/tmp/packages.php');
+}
+
+putenv('APP_PACKAGES_CACHE=/tmp/packages.php');
+$_ENV['APP_PACKAGES_CACHE'] = '/tmp/packages.php';
+
 // Redirect storage paths to /tmp
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
