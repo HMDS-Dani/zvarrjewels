@@ -129,7 +129,10 @@ class AdminProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if (! $product) {
+            return redirect()->route('admin.products.index')->with('error', 'Product not found.');
+        }
         $categories = Category::all();
 
         return view('admin.products.edit', compact('product', 'categories'));
@@ -140,7 +143,10 @@ class AdminProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if (! $product) {
+            return redirect()->route('admin.products.index')->with('error', 'Product not found.');
+        }
 
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
@@ -150,8 +156,8 @@ class AdminProductController extends Controller
             'discount_price' => 'nullable|numeric|lt:price',
             'stock' => 'required|integer|min:0',
             'material' => 'required|string|max:255',
-            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
-            'image_url' => 'nullable|url',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'image_url' => 'nullable|string',
             'transparent_image_base64' => 'nullable|string',
             'is_featured' => 'nullable|boolean',
         ]);
@@ -180,7 +186,7 @@ class AdminProductController extends Controller
             'is_featured' => $request->boolean('is_featured'),
         ]);
 
-        return redirect()->route('admin.products.index')->with('success', 'Jewellery item updated with transparent background successfully!');
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 
     /**
@@ -188,9 +194,11 @@ class AdminProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        $product = Product::find($id);
+        if ($product) {
+            $product->delete();
+        }
 
-        return redirect()->route('admin.products.index')->with('success', 'Jewellery item deleted from inventory.');
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 }

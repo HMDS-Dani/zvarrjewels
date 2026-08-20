@@ -54,13 +54,16 @@ class AdminCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::find($id);
+        if (! $category) {
+            return redirect()->back()->with('error', 'Category not found.');
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
-            'image' => 'nullable|url',
+            'image' => 'nullable|string',
         ]);
 
         $imagePath = $category->image;
@@ -96,8 +99,10 @@ class AdminCategoryController extends Controller
 
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
+        $category = Category::find($id);
+        if ($category) {
+            $category->delete();
+        }
 
         return redirect()->back()->with('success', 'Category deleted successfully.');
     }
