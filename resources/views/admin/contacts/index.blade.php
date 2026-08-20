@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
-@section('title', 'Store Contacts & Social Media')
-@section('header_title', 'Maison Identity & Social Concierge')
+@section('title', 'Store Contacts & Settings')
+@section('header_title', 'Store Contacts & Settings')
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6">
@@ -14,7 +14,7 @@
                 <h3 class="font-cinzel font-bold text-lg sm:text-xl text-white">Live Store Contacts & Social Links</h3>
             </div>
             <p class="text-xs text-stone-400">
-                Configure real-time WhatsApp order numbers, social media handles, and customer care lines.
+                Configure real-time WhatsApp order numbers, social media handles, and customer support contacts.
             </p>
         </div>
 
@@ -39,8 +39,8 @@
                         <i class="fa-brands fa-whatsapp"></i>
                     </div>
                     <div>
-                        <h4 class="font-cinzel font-bold text-base text-white">WhatsApp 1-Click Ordering</h4>
-                        <p class="text-xs text-stone-400">Direct concierge checkout and instant bridal assistance</p>
+                        <h4 class="font-cinzel font-bold text-base text-white">WhatsApp Order Number</h4>
+                        <p class="text-xs text-stone-400">Primary channel for 1-click orders and customer inquiries</p>
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@
                         <i class="fa-solid fa-share-nodes"></i>
                     </div>
                     <div>
-                        <h4 class="font-cinzel font-bold text-base text-white">Social Media Showcase</h4>
+                        <h4 class="font-cinzel font-bold text-base text-white">Social Media Links</h4>
                         <p class="text-xs text-stone-400">Leave blank to automatically hide any link from the footer</p>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                 <!-- TikTok -->
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2 flex items-center justify-between">
-                        <span>TikTok Showcase URL</span>
+                        <span>TikTok Profile URL</span>
                         @if(!empty($settings['tiktok_url']))
                             <a href="{{ $settings['tiktok_url'] }}" target="_blank" class="text-[10.5px] text-amber-300 hover:underline">Test Link <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>
                         @endif
@@ -158,14 +158,14 @@
                         <i class="fa-solid fa-headset"></i>
                     </div>
                     <div>
-                        <h4 class="font-cinzel font-bold text-base text-white">Maison Concierge Care</h4>
-                        <p class="text-xs text-stone-400">Direct phone line & support inbox</p>
+                        <h4 class="font-cinzel font-bold text-base text-white">Customer Support Contacts</h4>
+                        <p class="text-xs text-stone-400">Direct phone line & support email</p>
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Direct Phone Line
+                        Phone Number
                     </label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-amber-400">
@@ -179,21 +179,21 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Official Concierge Email
+                        Support Email Address
                     </label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-amber-400">
                             <i class="fa-solid fa-envelope text-xs"></i>
                         </span>
-                        <input type="email" name="email" value="{{ $settings['email'] ?? 'concierge@zvarrjewels.pk' }}"
-                            placeholder="concierge@zvarrjewels.pk"
+                        <input type="email" name="email" value="{{ $settings['email'] ?? 'support@zvarrjewels.pk' }}"
+                            placeholder="support@zvarrjewels.pk"
                             class="w-full pl-11 pr-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Physical Boutique Address
+                        Store City / Address
                     </label>
                     <input type="text" name="address" value="{{ $settings['address'] ?? 'Karachi, Pakistan' }}"
                         placeholder="e.g. Karachi, Pakistan"
@@ -203,8 +203,8 @@
 
             <!-- 4. LIVE PREVIEW BADGES & SAVE BUTTON -->
             <div class="glass-card-luxury p-5 sm:p-7 rounded-3xl space-y-4">
-                <h4 class="font-cinzel font-bold text-base text-white mb-1">Active Channels Radar</h4>
-                <p class="text-xs text-stone-400 mb-3">Live channels currently visible on your boutique</p>
+                <h4 class="font-cinzel font-bold text-base text-white mb-1">Active Channels Status</h4>
+                <p class="text-xs text-stone-400 mb-3">Live channels currently visible on your store</p>
 
                 <div class="flex flex-wrap gap-2 text-xs">
                     @if(!empty($settings['whatsapp_number']))
@@ -232,7 +232,7 @@
                 <button type="submit"
                     class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-xl shadow-amber-500/25 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 mt-4">
                     <i class="fa-solid fa-floppy-disk text-sm"></i>
-                    <span>Save All Maison Settings</span>
+                    <span>Save Settings</span>
                 </button>
             </div>
 

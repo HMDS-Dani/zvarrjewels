@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
-@section('title', 'Collections & Categories')
-@section('header_title', 'Jewellery Collections & Categories')
+@section('title', 'Categories')
+@section('header_title', 'Categories')
 
 @section('content')
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
@@ -14,7 +14,7 @@
                     <i class="fa-solid fa-plus"></i>
                 </div>
                 <div>
-                    <h3 class="font-cinzel font-bold text-base text-white">Create Collection</h3>
+                    <h3 class="font-cinzel font-bold text-base text-white">Add Category</h3>
                     <p class="text-[10px] text-stone-400">Rings, Bridal Sets, Necklaces, etc.</p>
                 </div>
             </div>
@@ -24,24 +24,24 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Collection Name <span class="text-amber-400">*</span>
+                        Category Name <span class="text-amber-400">*</span>
                     </label>
-                    <input type="text" name="name" required placeholder="e.g. Royal Solitaire Rings"
+                    <input type="text" name="name" required placeholder="e.g. Bridal Rings"
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Collection Tagline / Story
+                        Description
                     </label>
-                    <textarea name="description" rows="2" placeholder="Brief romantic description of this jewellery collection..."
+                    <textarea name="description" rows="2" placeholder="Brief description of this category..."
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none"></textarea>
                 </div>
 
                 <!-- Cover Image (Dual: Device Upload or Web URL) -->
                 <div class="space-y-3 pt-1">
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">
-                        Collection Cover Photograph
+                        Category Image
                     </label>
 
                     <!-- Device File Upload -->
@@ -73,7 +73,7 @@
                 <button type="submit"
                     class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 mt-2">
                     <i class="fa-solid fa-plus text-xs"></i>
-                    <span>Save Collection</span>
+                    <span>Save Category</span>
                 </button>
             </form>
         </div>
@@ -84,8 +84,8 @@
         <div class="glass-card-luxury p-5 sm:p-7 rounded-3xl space-y-5">
             <div class="flex items-center justify-between border-b border-white/5 pb-4">
                 <div>
-                    <h3 class="font-cinzel font-bold text-base sm:text-lg text-white">Active Maison Collections</h3>
-                    <p class="text-xs text-stone-400">Categories live on the boutique catalog</p>
+                    <h3 class="font-cinzel font-bold text-base sm:text-lg text-white">Active Categories</h3>
+                    <p class="text-xs text-stone-400">All categories active on your store</p>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-amber-400/10 text-amber-300 border border-amber-400/30 text-xs font-bold font-mono">
                     {{ $categories->count() }} Total

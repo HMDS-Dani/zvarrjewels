@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
-@section('title', 'Edit Jewellery')
-@section('header_title', 'Edit Jewellery Item')
+@section('title', 'Edit Product')
+@section('header_title', 'Edit Product')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
@@ -10,7 +10,7 @@
     <div>
         <a href="{{ route('admin.products.index') }}" class="text-xs font-bold text-stone-400 hover:text-amber-300 flex items-center gap-2 transition group">
             <i class="fa-solid fa-arrow-left text-[11px] group-hover:-translate-x-1 transition transform"></i>
-            <span>Back to Jewellery Inventory</span>
+            <span>Back to Products</span>
         </a>
     </div>
 
@@ -19,7 +19,7 @@
         <div class="mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
                 <h2 class="font-cinzel font-bold text-lg sm:text-xl text-white">Edit: {{ $product->name }}</h2>
-                <p class="text-xs text-stone-400 mt-1">Refine specifications and bespoke catalogue imagery for this piece.</p>
+                <p class="text-xs text-stone-400 mt-1">Update specifications and photos for this item.</p>
             </div>
             <span class="text-xs text-amber-400 font-mono px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 self-start sm:self-auto">ID: #{{ $product->id }}</span>
         </div>
@@ -35,7 +35,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Jewellery Title <span class="text-amber-400">*</span>
+                        Product Name <span class="text-amber-400">*</span>
                     </label>
                     <input type="text" name="name" value="{{ old('name', $product->name) }}" required
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
@@ -43,7 +43,7 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Collection <span class="text-amber-400">*</span>
+                        Category <span class="text-amber-400">*</span>
                     </label>
                     <select name="category_id" required
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
@@ -79,7 +79,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Regular Boutique Price (PKR) <span class="text-amber-400">*</span>
+                        Price (PKR) <span class="text-amber-400">*</span>
                     </label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-amber-400 text-xs font-bold font-cinzel">Rs.</span>
@@ -90,7 +90,7 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Discounted VIP Price (Optional)
+                        Discount Price (Optional)
                     </label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-stone-500 text-xs font-bold font-cinzel">Rs.</span>
@@ -103,7 +103,7 @@
             <!-- 4. Description -->
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                    Maison Description & Specifications
+                    Product Description
                 </label>
                 <textarea name="description" rows="3"
                     class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none">{{ old('description', $product->description) }}</textarea>
@@ -114,11 +114,11 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-camera-retro"></i>
-                        <span>Jewellery Imagery & Stage Mode</span>
+                        <span>Product Image & Upload Mode</span>
                     </h4>
                     @if($product->image)
                         <span class="text-xs text-emerald-400 flex items-center gap-1">
-                            <i class="fa-solid fa-check"></i> Current Piece Saved
+                            <i class="fa-solid fa-check"></i> Image Saved
                         </span>
                     @endif
                 </div>
@@ -130,9 +130,9 @@
                         <div>
                             <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                                <span>ZVARR Stage Background Remover</span>
+                                <span>AI Background Remover</span>
                             </div>
-                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Crystal clear silhouette on Maison Obsidian Stage.</p>
+                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Auto removes image background for a clean dark look.</p>
                         </div>
                     </label>
 
@@ -143,7 +143,7 @@
                                 <i class="fa-solid fa-image text-stone-400"></i>
                                 <span>Direct Upload (Keep Original Photo)</span>
                             </div>
-                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Displays photo directly without background extraction.</p>
+                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Displays photo directly without background removal.</p>
                         </div>
                     </label>
                 </div>
@@ -168,7 +168,7 @@
                     <div class="flex items-center justify-between text-xs text-amber-300 font-semibold">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
-                            <span id="ai-status-text">ZVARR AI is segmenting jewelry & eliminating noise...</span>
+                            <span id="ai-status-text">Removing image background...</span>
                         </span>
                         <span id="ai-percentage" class="text-amber-400 font-mono">Running</span>
                     </div>
@@ -177,20 +177,20 @@
                     </div>
                 </div>
 
-                <!-- Current / Live Transparent Preview (Mobile-Spaced) -->
-                <div id="preview-wrapper" class="pt-4 border-t border-slate-800/80 space-y-3">
+                <!-- Live Preview on Website's Dark Card Background with Edit Studio Button -->
+                <div id="preview-wrapper" class="hidden pt-4 border-t border-slate-800/80 space-y-3">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                         <span class="text-xs font-bold text-slate-300">Live Website Dark Card Preview:</span>
                         <button type="button" onclick="openStudioModal()" 
                             class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-sliders"></i>
-                            <span>Enhance & Edit Jewelry</span>
+                            <span>Adjust Lighting</span>
                         </button>
                     </div>
 
                     <div id="card-preview-podium" class="flex items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] shadow-2xl min-h-[220px] sm:min-h-[260px] relative overflow-hidden">
                         <div id="spotlight-aura" class="absolute w-36 sm:w-44 h-36 sm:h-44 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-                        <img id="live-transparent-preview" src="{{ $product->image ?? '' }}" alt="Transparent Preview" 
+                        <img id="live-transparent-preview" src="" alt="Transparent Preview" 
                             class="max-h-48 sm:max-h-56 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]">
                     </div>
                 </div>
@@ -202,7 +202,7 @@
                 <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}
                     class="w-4 h-4 rounded text-amber-400 focus:ring-amber-400 border-white/20 bg-black/60 flex-shrink-0">
                 <label for="is_featured" class="text-xs font-semibold text-stone-200 cursor-pointer">
-                    Feature on Boutique Homepage Spotlight Showcase
+                    Show as Featured Product on Homepage
                 </label>
             </div>
 
@@ -214,7 +214,7 @@
                 <button type="submit" id="submit-btn"
                     class="py-3.5 px-8 bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-check text-xs"></i> 
-                    <span>Update Jewellery Record</span>
+                    <span>Update Product</span>
                 </button>
             </div>
 

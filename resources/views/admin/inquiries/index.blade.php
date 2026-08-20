@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
-@section('title', 'VIP Inquiries & Messages')
-@section('header_title', 'Client Inquiries & Concierge Messages')
+@section('title', 'Customer Inquiries')
+@section('header_title', 'Customer Inquiries')
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6">
@@ -11,10 +11,10 @@
         <div>
             <div class="flex items-center gap-2.5 mb-1">
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-                <h3 class="font-cinzel font-bold text-lg sm:text-xl text-white">Concierge Inquiries Desk</h3>
+                <h3 class="font-cinzel font-bold text-lg sm:text-xl text-white">Customer Messages & Inquiries</h3>
             </div>
             <p class="text-xs text-stone-400">
-                Customer requests, custom bridal bespoke inquiries, and boutique messages.
+                Customer questions, order requests, and messages submitted through your website.
             </p>
         </div>
 

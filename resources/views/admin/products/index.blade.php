@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Jewellery Vault')
-@section('header_title', 'Jewellery Inventory Vault')
+@section('title', 'Products')
+@section('header_title', 'Products')
 
 @section('content')
 <div class="space-y-6">
 
-    <!-- TOP FILTER BAR (LUXURY GLASS CONTROLS) -->
+    <!-- TOP FILTER BAR -->
     <div class="glass-card-luxury p-4 sm:p-6 rounded-3xl space-y-4">
         <form method="GET" action="{{ route('admin.products.index') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             
@@ -16,14 +16,14 @@
                     <i class="fa-solid fa-magnifying-glass text-xs"></i>
                 </div>
                 <input type="text" name="search" value="{{ request('search') }}" 
-                    placeholder="Search jewel name, gold carat, diamond, platinum..." 
+                    placeholder="Search product name, gold karat, diamond, material..." 
                     class="w-full pl-10 pr-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
             </div>
 
             <div class="flex items-center gap-2.5">
                 <!-- Category Select -->
                 <select name="category_id" class="flex-1 sm:flex-none py-3 px-4 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-                    <option value="">All Collections</option>
+                    <option value="">All Categories</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
                             {{ $cat->name }}
@@ -47,12 +47,12 @@
 
         <div class="flex items-center justify-between pt-3 border-t border-white/5">
             <span class="text-xs text-stone-400">
-                Catalog: <span class="font-bold text-amber-300">{{ $products->total() }}</span> unique jewels
+                Total Products: <span class="font-bold text-amber-300">{{ $products->total() }}</span> items
             </span>
             <a href="{{ route('admin.products.create') }}" 
                 class="px-4 sm:px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2">
                 <i class="fa-solid fa-plus text-[11px]"></i>
-                <span>Add Jewellery</span>
+                <span>Add Product</span>
             </a>
         </div>
     </div>

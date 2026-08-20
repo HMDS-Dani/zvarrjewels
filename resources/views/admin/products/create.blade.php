@@ -1,7 +1,7 @@
 @extends('admin.layout')
 
-@section('title', 'Add New Jewellery')
-@section('header_title', 'Add New Jewellery Item')
+@section('title', 'Add Product')
+@section('header_title', 'Add Product')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
@@ -10,15 +10,15 @@
     <div>
         <a href="{{ route('admin.products.index') }}" class="text-xs font-bold text-stone-400 hover:text-amber-300 flex items-center gap-2 transition group">
             <i class="fa-solid fa-arrow-left text-[11px] group-hover:-translate-x-1 transition transform"></i>
-            <span>Back to Jewellery Inventory</span>
+            <span>Back to Products</span>
         </a>
     </div>
 
     <!-- Main Form Card -->
     <div class="glass-card-luxury p-5 sm:p-8 rounded-3xl space-y-6">
         <div class="mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-white/5">
-            <h2 class="font-cinzel font-bold text-lg sm:text-xl text-white">Bespoke Jewellery Specifications</h2>
-            <p class="text-xs text-stone-400 mt-1">Register new creations into the Maison vault. ZVARR AI automatically isolates jewels for high-end catalog presentation.</p>
+            <h2 class="font-cinzel font-bold text-lg sm:text-xl text-white">Product Details</h2>
+            <p class="text-xs text-stone-400 mt-1">Enter product details and photos to add it to your online store.</p>
         </div>
 
         <form id="product-form" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5 sm:space-y-6">
@@ -31,20 +31,20 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Jewellery Title <span class="text-amber-400">*</span>
+                        Product Name <span class="text-amber-400">*</span>
                     </label>
                     <input type="text" name="name" value="{{ old('name') }}" required
-                        placeholder="e.g. Royal 24K Gold Solitaire Ring"
+                        placeholder="e.g. 24K Gold Solitaire Ring"
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Collection <span class="text-amber-400">*</span>
+                        Category <span class="text-amber-400">*</span>
                     </label>
                     <select name="category_id" required
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-                        <option value="">Select Collection</option>
+                        <option value="">Select Category</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
                                 {{ $cat->name }}
@@ -78,7 +78,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Regular Boutique Price (PKR) <span class="text-amber-400">*</span>
+                        Price (PKR) <span class="text-amber-400">*</span>
                     </label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-amber-400 text-xs font-bold font-cinzel">Rs.</span>
@@ -90,7 +90,7 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Discounted VIP Price (Optional)
+                        Discount Price (Optional)
                     </label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-stone-500 text-xs font-bold font-cinzel">Rs.</span>
@@ -104,10 +104,10 @@
             <!-- 4. Description -->
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                    Maison Description & Specifications
+                    Product Description
                 </label>
                 <textarea name="description" rows="3"
-                    placeholder="Provide details about diamond clarity, gold karat purity, certifications, weight..."
+                    placeholder="Enter details about diamond clarity, gold karat, certifications, weight..."
                     class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none">{{ old('description') }}</textarea>
             </div>
 
@@ -116,7 +116,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-camera-retro"></i>
-                        <span>Jewellery Imagery & Stage Mode</span>
+                        <span>Product Image & Upload Mode</span>
                     </h4>
                 </div>
 
@@ -127,9 +127,9 @@
                         <div>
                             <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                                <span>ZVARR Stage Background Remover</span>
+                                <span>AI Background Remover</span>
                             </div>
-                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Crystal clear silhouette on Maison Obsidian Stage.</p>
+                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Auto removes image background for a clean dark look.</p>
                         </div>
                     </label>
 
@@ -140,21 +140,21 @@
                                 <i class="fa-solid fa-image text-stone-400"></i>
                                 <span>Direct Upload (Keep Original Photo)</span>
                             </div>
-                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Displays photo directly without background extraction.</p>
+                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Displays photo directly without background removal.</p>
                         </div>
                     </label>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                     <div>
-                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option A: Direct Image Web URL</label>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option A: Image URL</label>
                         <input type="url" id="input_image_url" name="image_url" value="{{ old('image_url') }}"
                             placeholder="https://images.unsplash.com/photo-..."
                             class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option B: Upload File (PNG, JPG, WebP)</label>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option B: Upload File</label>
                         <input type="file" id="input_image_file" name="image_file" accept="image/*"
                             class="w-full px-4 py-2.5 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-stone-300 file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-400 file:text-slate-950 hover:file:bg-amber-300 cursor-pointer">
                     </div>
@@ -165,7 +165,7 @@
                     <div class="flex items-center justify-between text-xs text-amber-300 font-semibold">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
-                            <span id="ai-status-text">ZVARR AI is segmenting jewelry & eliminating noise...</span>
+                            <span id="ai-status-text">Removing image background...</span>
                         </span>
                         <span id="ai-percentage" class="text-amber-400 font-mono">Running</span>
                     </div>
@@ -181,7 +181,7 @@
                         <button type="button" onclick="openStudioModal()" 
                             class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-sliders"></i>
-                            <span>Enhance & Edit Jewelry</span>
+                            <span>Adjust Lighting</span>
                         </button>
                     </div>
 
@@ -199,7 +199,7 @@
                 <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', true) ? 'checked' : '' }}
                     class="w-4 h-4 rounded text-amber-400 focus:ring-amber-400 border-white/20 bg-black/60 flex-shrink-0">
                 <label for="is_featured" class="text-xs font-semibold text-stone-200 cursor-pointer">
-                    Feature on Boutique Homepage Spotlight Showcase
+                    Show as Featured Product on Homepage
                 </label>
             </div>
 
@@ -211,7 +211,7 @@
                 <button type="submit" id="submit-btn"
                     class="py-3.5 px-8 bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-plus text-xs"></i> 
-                    <span>Save & Publish Creation</span>
+                    <span>Save Product</span>
                 </button>
             </div>
 
