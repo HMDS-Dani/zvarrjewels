@@ -118,41 +118,27 @@
     <!-- DESKTOP SIDEBAR (STICKY LUXURY NAVIGATION) -->
     <aside class="w-72 bg-[#09090f]/95 backdrop-blur-2xl border-r border-amber-400/15 flex-col justify-between hidden md:flex min-h-screen sticky top-0 z-40">
         <div>
-            <!-- Brand Logo -->
-            <div class="h-24 flex items-center px-6 border-b border-white/5 bg-gradient-to-b from-amber-950/20 to-transparent gap-3 select-none">
-                <!-- Royal Diamond Star Insignia -->
-                <div class="relative w-9 h-9 flex items-center justify-center flex-shrink-0">
-                    <div class="absolute inset-0 bg-amber-400/20 rounded-full blur-md"></div>
-                    <svg class="w-full h-full relative z-10 drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="admGold1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#FFF5D1" />
-                                <stop offset="35%" stop-color="#E8C265" />
-                                <stop offset="70%" stop-color="#AA7C11" />
-                                <stop offset="100%" stop-color="#F5E6B4" />
-                            </linearGradient>
-                            <linearGradient id="admGold2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#FBF5DF" />
-                                <stop offset="50%" stop-color="#D4AF37" />
-                                <stop offset="100%" stop-color="#855E09" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M24 3L44 24L24 45L4 24L24 3Z" stroke="url(#admGold1)" stroke-width="1.8" stroke-linejoin="round" fill="none" />
-                        <path d="M24 9L38 24L24 39L10 24L24 9Z" stroke="url(#admGold2)" stroke-width="0.9" stroke-dasharray="2.5 1.5" fill="none" opacity="0.75" />
-                        <line x1="24" y1="3" x2="24" y2="45" stroke="url(#admGold1)" stroke-width="0.9" opacity="0.75"/>
-                        <line x1="4" y1="24" x2="44" y2="24" stroke="url(#admGold1)" stroke-width="0.9" opacity="0.75"/>
-                        <path d="M24 15L26.8 21.2L33 24L26.8 26.8L24 33L21.2 26.8L15 24L21.2 21.2L24 15Z" fill="url(#admGold1)" />
-                        <circle cx="24" cy="24" r="1.8" fill="#FFFFFF" />
-                    </svg>
+            <!-- Brand Logo (Exact Reference Luxury Jewelry Maison Design) -->
+            <div class="h-28 flex flex-col items-center justify-center px-6 border-b border-white/5 bg-gradient-to-b from-amber-950/20 to-transparent select-none text-center">
+                <!-- Top Star Accent -->
+                <span class="text-amber-300 text-[8px] leading-none mb-0.5 animate-pulse">✦</span>
+                
+                <!-- Main Serif Wordmark -->
+                <span class="font-cinzel font-semibold text-xl tracking-[0.28em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)]">
+                    ZVARR
+                </span>
+                
+                <!-- Center Hairline Divider with Diamond Rhombus -->
+                <div class="flex items-center justify-center w-full max-w-[130px] my-1 relative">
+                    <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
+                    <span class="text-[7px] text-amber-300 px-1 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.8)]">◆</span>
+                    <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                 </div>
-                <div class="flex flex-col">
-                    <span class="font-cinzel font-black text-lg tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_10px_rgba(245,158,11,0.35)]">
-                        ZVARR
-                    </span>
-                    <span class="text-[8px] uppercase font-bold tracking-[0.38em] text-stone-400 block mt-0.5">
-                        BY ZAIYAL • CRM
-                    </span>
-                </div>
+                
+                <!-- Subtitle Tagline -->
+                <span class="text-[7.5px] uppercase font-bold tracking-[0.45em] text-[#E8C265] leading-none pl-[0.45em]">
+                    BY ZAIYAL • CRM
+                </span>
             </div>
 
             <!-- Navigation Links -->
@@ -286,27 +272,26 @@
             <div class="w-72 bg-[#09090f] border-r border-amber-400/20 h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl">
                 <div>
                     <div class="flex items-center justify-between pb-6 border-b border-white/5 mb-6">
-                        <div class="flex items-center gap-2.5">
-                            <!-- Royal Diamond Star Insignia -->
-                            <div class="relative w-8 h-8 flex items-center justify-center flex-shrink-0">
-                                <div class="absolute inset-0 bg-amber-400/20 rounded-full blur-md"></div>
-                                <svg class="w-full h-full relative z-10 drop-shadow-[0_2px_6px_rgba(245,158,11,0.4)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M24 3L44 24L24 45L4 24L24 3Z" stroke="url(#admGold1)" stroke-width="1.8" stroke-linejoin="round" fill="none" />
-                                    <path d="M24 9L38 24L24 39L10 24L24 9Z" stroke="url(#admGold2)" stroke-width="0.9" stroke-dasharray="2.5 1.5" fill="none" opacity="0.75" />
-                                    <line x1="24" y1="3" x2="24" y2="45" stroke="url(#admGold1)" stroke-width="0.9" opacity="0.75"/>
-                                    <line x1="4" y1="24" x2="44" y2="24" stroke="url(#admGold1)" stroke-width="0.9" opacity="0.75"/>
-                                    <path d="M24 15L26.8 21.2L33 24L26.8 26.8L24 33L21.2 26.8L15 24L21.2 21.2L24 15Z" fill="url(#admGold1)" />
-                                    <circle cx="24" cy="24" r="1.8" fill="#FFFFFF" />
-                                </svg>
+                        <div class="flex flex-col items-start select-none">
+                            <!-- Top Star Accent -->
+                            <span class="text-amber-300 text-[8px] leading-none mb-0.5 animate-pulse">✦</span>
+                            
+                            <!-- Main Serif Wordmark -->
+                            <span class="font-cinzel font-semibold text-lg tracking-[0.28em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] drop-shadow-[0_2px_8px_rgba(217,119,6,0.4)]">
+                                ZVARR
+                            </span>
+                            
+                            <!-- Center Hairline Divider with Diamond Rhombus -->
+                            <div class="flex items-center justify-center w-full max-w-[115px] my-1 relative">
+                                <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
+                                <span class="text-[6.5px] text-amber-300 px-1 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.8)]">◆</span>
+                                <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                             </div>
-                            <div class="flex flex-col">
-                                <span class="font-cinzel font-black text-base tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_8px_rgba(245,158,11,0.35)]">
-                                    ZVARR
-                                </span>
-                                <span class="text-[7.5px] uppercase font-bold tracking-[0.38em] text-stone-400 block mt-0.5">
-                                    BY ZAIYAL • CRM
-                                </span>
-                            </div>
+                            
+                            <!-- Subtitle Tagline -->
+                            <span class="text-[7px] uppercase font-bold tracking-[0.42em] text-[#E8C265] leading-none pl-[0.42em]">
+                                BY ZAIYAL • CRM
+                            </span>
                         </div>
                         <button type="button" onclick="toggleMobileDrawer()" class="w-9 h-9 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10">
                             <i class="fa-solid fa-xmark"></i>

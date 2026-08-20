@@ -95,56 +95,27 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
                 
-                <!-- Brand Logo (VIP Luxury Jewelry Crest & Wordmark) -->
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group py-1 select-none flex-shrink-0">
-                    <!-- Royal Diamond Star Insignia -->
-                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center flex-shrink-0">
-                        <div class="absolute inset-0 bg-amber-400/25 rounded-full blur-md group-hover:bg-amber-400/40 transition duration-500"></div>
-                        <svg class="w-full h-full relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6 drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="navGold1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#FFF5D1" />
-                                    <stop offset="35%" stop-color="#E8C265" />
-                                    <stop offset="70%" stop-color="#AA7C11" />
-                                    <stop offset="100%" stop-color="#F5E6B4" />
-                                </linearGradient>
-                                <linearGradient id="navGold2" x1="100%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#FBF5DF" />
-                                    <stop offset="50%" stop-color="#D4AF37" />
-                                    <stop offset="100%" stop-color="#855E09" />
-                                </linearGradient>
-                            </defs>
-                            <!-- Outer Faceted Diamond / Rhombus Frame -->
-                            <path d="M24 3L44 24L24 45L4 24L24 3Z" stroke="url(#navGold1)" stroke-width="1.8" stroke-linejoin="round" fill="none" />
-                            <!-- Inner Geometry -->
-                            <path d="M24 9L38 24L24 39L10 24L24 9Z" stroke="url(#navGold2)" stroke-width="0.9" stroke-dasharray="2.5 1.5" fill="none" opacity="0.75" />
-                            <!-- Facet Grid Lines -->
-                            <line x1="24" y1="3" x2="24" y2="45" stroke="url(#navGold1)" stroke-width="0.9" opacity="0.75"/>
-                            <line x1="4" y1="24" x2="44" y2="24" stroke="url(#navGold1)" stroke-width="0.9" opacity="0.75"/>
-                            <line x1="10" y1="10" x2="38" y2="38" stroke="url(#navGold2)" stroke-width="0.6" opacity="0.45"/>
-                            <line x1="38" y1="10" x2="10" y2="38" stroke="url(#navGold2)" stroke-width="0.6" opacity="0.45"/>
-                            <!-- Central 8-Point Star Diamond -->
-                            <path d="M24 15L26.8 21.2L33 24L26.8 26.8L24 33L21.2 26.8L15 24L21.2 21.2L24 15Z" fill="url(#navGold1)" />
-                            <circle cx="24" cy="24" r="1.8" fill="#FFFFFF" />
-                        </svg>
+                <!-- Brand Logo (Exact Reference Luxury Jewelry Maison Design) -->
+                <a href="{{ route('home') }}" class="flex flex-col items-center justify-center group py-0.5 select-none text-center flex-shrink-0">
+                    <!-- Top Star Accent -->
+                    <span class="text-amber-300 text-[8px] sm:text-[9px] leading-none mb-0.5 transition-transform duration-300 group-hover:scale-125 drop-shadow-[0_0_6px_rgba(234,179,8,0.9)] animate-pulse">✦</span>
+                    
+                    <!-- Main Serif Wordmark -->
+                    <span class="font-cinzel font-semibold text-xl sm:text-2xl tracking-[0.28em] sm:tracking-[0.32em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] sm:pl-[0.32em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)] group-hover:brightness-110 transition-all duration-300">
+                        ZVARR
+                    </span>
+                    
+                    <!-- Center Hairline Divider with Diamond Rhombus -->
+                    <div class="flex items-center justify-center w-full max-w-[130px] sm:max-w-[145px] my-1 sm:my-1.5 relative">
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
+                        <span class="text-[7px] sm:text-[8px] text-amber-300 px-1 leading-none drop-shadow-[0_0_5px_rgba(245,158,11,0.9)]">◆</span>
+                        <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                     </div>
-
-                    <!-- Typography Wordmark -->
-                    <div class="flex flex-col">
-                        <div class="flex items-center gap-1 leading-none">
-                            <span class="font-cinzel font-black text-xl sm:text-2xl tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 group-hover:from-white group-hover:to-amber-300 transition-all duration-300 drop-shadow-[0_2px_10px_rgba(245,158,11,0.35)]">
-                                ZVARR
-                            </span>
-                            <span class="text-amber-400 text-[8px] sm:text-[9px] -mt-2 animate-pulse">✦</span>
-                        </div>
-                        <div class="flex items-center gap-1.5 mt-1">
-                            <span class="h-[0.5px] w-2 bg-gradient-to-r from-transparent to-amber-400/70"></span>
-                            <span class="text-[7.5px] sm:text-[8px] uppercase font-bold tracking-[0.38em] text-stone-400 group-hover:text-amber-300 transition-colors duration-300">
-                                BY ZAIYAL
-                            </span>
-                            <span class="h-[0.5px] w-2 bg-gradient-to-l from-transparent to-amber-400/70"></span>
-                        </div>
-                    </div>
+                    
+                    <!-- Subtitle Tagline -->
+                    <span class="text-[8px] sm:text-[9px] uppercase font-bold tracking-[0.45em] sm:tracking-[0.52em] text-[#E8C265] group-hover:text-amber-100 transition-colors duration-300 leading-none pl-[0.45em] sm:pl-[0.52em]">
+                        BY ZAIYAL
+                    </span>
                 </a>
 
                 <!-- Desktop Navigation Links -->
@@ -310,36 +281,26 @@
                 
                 <!-- Col 1: Brand Info (4 cols) -->
                 <div class="lg:col-span-4 space-y-3.5 sm:space-y-4">
-                    <a href="{{ route('home') }}" class="inline-flex items-center gap-3 group select-none">
-                        <!-- Royal Diamond Star Insignia -->
-                        <div class="relative w-10 h-10 flex items-center justify-center flex-shrink-0">
-                            <div class="absolute inset-0 bg-amber-400/20 rounded-full blur-md group-hover:bg-amber-400/35 transition duration-500"></div>
-                            <svg class="w-full h-full relative z-10 transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M24 3L44 24L24 45L4 24L24 3Z" stroke="url(#navGold1)" stroke-width="1.8" stroke-linejoin="round" fill="none" />
-                                <path d="M24 9L38 24L24 39L10 24L24 9Z" stroke="url(#navGold2)" stroke-width="0.9" stroke-dasharray="2.5 1.5" fill="none" opacity="0.75" />
-                                <line x1="24" y1="3" x2="24" y2="45" stroke="url(#navGold1)" stroke-width="0.9" opacity="0.75"/>
-                                <line x1="4" y1="24" x2="44" y2="24" stroke="url(#navGold1)" stroke-width="0.9" opacity="0.75"/>
-                                <line x1="10" y1="10" x2="38" y2="38" stroke="url(#navGold2)" stroke-width="0.6" opacity="0.45"/>
-                                <line x1="38" y1="10" x2="10" y2="38" stroke="url(#navGold2)" stroke-width="0.6" opacity="0.45"/>
-                                <path d="M24 15L26.8 21.2L33 24L26.8 26.8L24 33L21.2 26.8L15 24L21.2 21.2L24 15Z" fill="url(#navGold1)" />
-                                <circle cx="24" cy="24" r="1.8" fill="#FFFFFF" />
-                            </svg>
+                    <a href="{{ route('home') }}" class="inline-flex flex-col items-start group select-none">
+                        <!-- Top Star Accent -->
+                        <span class="text-amber-300 text-[8px] sm:text-[9px] leading-none mb-0.5 transition-transform duration-300 group-hover:scale-125 drop-shadow-[0_0_6px_rgba(234,179,8,0.9)] animate-pulse">✦</span>
+                        
+                        <!-- Main Serif Wordmark -->
+                        <span class="font-cinzel font-semibold text-2xl tracking-[0.28em] sm:tracking-[0.32em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] sm:pl-[0.32em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)] group-hover:brightness-110 transition-all duration-300">
+                            ZVARR
+                        </span>
+                        
+                        <!-- Center Hairline Divider with Diamond Rhombus -->
+                        <div class="flex items-center justify-center w-full max-w-[145px] my-1.5 relative">
+                            <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
+                            <span class="text-[8px] text-amber-300 px-1 leading-none drop-shadow-[0_0_5px_rgba(245,158,11,0.9)]">◆</span>
+                            <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                         </div>
-                        <div class="flex flex-col">
-                            <div class="flex items-center gap-1 leading-none">
-                                <span class="font-cinzel font-black text-2xl tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 group-hover:from-white group-hover:to-amber-300 transition-all duration-300 drop-shadow-[0_2px_12px_rgba(245,158,11,0.35)]">
-                                    ZVARR
-                                </span>
-                                <span class="text-amber-400 text-[9px] -mt-2 animate-pulse">✦</span>
-                            </div>
-                            <div class="flex items-center gap-1.5 mt-1">
-                                <span class="h-[0.5px] w-2 bg-gradient-to-r from-transparent to-amber-400/70"></span>
-                                <span class="text-[8px] uppercase font-bold tracking-[0.38em] text-stone-400 group-hover:text-amber-300 transition-colors duration-300">
-                                    BY ZAIYAL
-                                </span>
-                                <span class="h-[0.5px] w-2 bg-gradient-to-l from-transparent to-amber-400/70"></span>
-                            </div>
-                        </div>
+                        
+                        <!-- Subtitle Tagline -->
+                        <span class="text-[9px] uppercase font-bold tracking-[0.45em] sm:tracking-[0.52em] text-[#E8C265] group-hover:text-amber-100 transition-colors duration-300 leading-none pl-[0.45em] sm:pl-[0.52em]">
+                            BY ZAIYAL
+                        </span>
                     </a>
 
                     <p class="text-xs text-stone-400 leading-relaxed font-light max-w-sm sm:max-w-md">
@@ -489,29 +450,29 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
 
-            <!-- Brand Header -->
-            <div class="text-center mb-6 space-y-2">
-                <!-- Royal Diamond Star Insignia -->
-                <div class="relative w-11 h-11 mx-auto flex items-center justify-center flex-shrink-0">
-                    <div class="absolute inset-0 bg-amber-400/25 rounded-full blur-md"></div>
-                    <svg class="w-full h-full relative z-10 drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M24 3L44 24L24 45L4 24L24 3Z" stroke="url(#navGold1)" stroke-width="1.8" stroke-linejoin="round" fill="none" />
-                        <path d="M24 9L38 24L24 39L10 24L24 9Z" stroke="url(#navGold2)" stroke-width="0.9" stroke-dasharray="2.5 1.5" fill="none" opacity="0.75" />
-                        <line x1="24" y1="3" x2="24" y2="45" stroke="url(#navGold1)" stroke-width="0.9" opacity="0.75"/>
-                        <line x1="4" y1="24" x2="44" y2="24" stroke="url(#navGold1)" stroke-width="0.9" opacity="0.75"/>
-                        <path d="M24 15L26.8 21.2L33 24L26.8 26.8L24 33L21.2 26.8L15 24L21.2 21.2L24 15Z" fill="url(#navGold1)" />
-                        <circle cx="24" cy="24" r="1.8" fill="#FFFFFF" />
-                    </svg>
+            <!-- Brand Header (Reference Luxury Design) -->
+            <div class="text-center mb-6 space-y-1.5 flex flex-col items-center">
+                <!-- Top Star Accent -->
+                <span class="text-amber-300 text-[9px] leading-none mb-0.5 animate-pulse">✦</span>
+                
+                <!-- Main Serif Wordmark -->
+                <span class="font-cinzel font-semibold text-2xl tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.3em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)]">
+                    ZVARR
+                </span>
+                
+                <!-- Center Hairline Divider with Diamond Rhombus -->
+                <div class="flex items-center justify-center w-full max-w-[145px] my-1 relative">
+                    <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
+                    <span class="text-[7px] text-amber-300 px-1 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.8)]">◆</span>
+                    <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                 </div>
-                <div>
-                    <span class="font-cinzel font-black text-2xl tracking-[0.24em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_10px_rgba(245,158,11,0.35)]">
-                        ZVARR
-                    </span>
-                    <span class="text-[8.5px] uppercase font-bold tracking-[0.44em] text-stone-400 block mt-0.5">
-                        BY ZAIYAL
-                    </span>
-                </div>
-                <h3 class="text-xl font-serif-luxury font-normal text-white pt-1">Vault Access</h3>
+                
+                <!-- Subtitle Tagline -->
+                <span class="text-[8.5px] uppercase font-bold tracking-[0.48em] text-[#E8C265] leading-none pl-[0.48em]">
+                    BY ZAIYAL
+                </span>
+
+                <h3 class="text-xl font-serif-luxury font-normal text-white pt-2">Vault Access</h3>
                 <p class="text-[11px] text-stone-400 font-light">Exclusive access to bespoke jewelry & order tracking</p>
             </div>
 
