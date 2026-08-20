@@ -5,8 +5,6 @@ $storageDirs = [
     '/tmp/storage',
     '/tmp/storage/app',
     '/tmp/storage/app/public',
-    '/tmp/storage/bootstrap',
-    '/tmp/storage/bootstrap/cache',
     '/tmp/storage/framework',
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
@@ -21,23 +19,7 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// Redirect all Laravel caches to writable /tmp partition
-$bootstrapCache = '/tmp/storage/bootstrap/cache';
-putenv("APP_CONFIG_CACHE={$bootstrapCache}/config.php");
-$_ENV['APP_CONFIG_CACHE'] = "{$bootstrapCache}/config.php";
-
-putenv("APP_EVENTS_CACHE={$bootstrapCache}/events.php");
-$_ENV['APP_EVENTS_CACHE'] = "{$bootstrapCache}/events.php";
-
-putenv("APP_PACKAGES_CACHE={$bootstrapCache}/packages.php");
-$_ENV['APP_PACKAGES_CACHE'] = "{$bootstrapCache}/packages.php";
-
-putenv("APP_ROUTES_CACHE={$bootstrapCache}/routes.php");
-$_ENV['APP_ROUTES_CACHE'] = "{$bootstrapCache}/routes.php";
-
-putenv("APP_SERVICES_CACHE={$bootstrapCache}/services.php");
-$_ENV['APP_SERVICES_CACHE'] = "{$bootstrapCache}/services.php";
-
+// Redirect storage paths to /tmp
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
 
