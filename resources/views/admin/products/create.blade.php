@@ -201,11 +201,11 @@
                                 <span>Restore Original</span>
                             </button>
 
-                            <!-- 3. Adjust Lighting Button -->
+                            <!-- 3. Adjust Button -->
                             <button type="button" onclick="openStudioModal()" 
-                                class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
+                                class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
                                 <i class="fa-solid fa-sliders text-amber-400 text-xs"></i>
-                                <span>Adjust Lighting</span>
+                                <span>Adjust</span>
                             </button>
                         </div>
                     </div>
@@ -213,7 +213,7 @@
                     <div id="card-preview-podium" class="flex items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] shadow-2xl min-h-[220px] sm:min-h-[260px] relative overflow-hidden">
                         <div id="spotlight-aura" class="absolute w-36 sm:w-44 h-36 sm:h-44 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
                         <img id="live-transparent-preview" src="" alt="Transparent Preview" 
-                            class="max-h-48 sm:max-h-56 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]">
+                            class="max-h-48 sm:max-h-56 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)] transition-all duration-300">
                     </div>
                 </div>
 
@@ -246,78 +246,219 @@
 </div>
 
 <!-- INTERACTIVE IMAGE EDIT STUDIO MODAL -->
-<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-xl z-50 items-center justify-center p-4">
-    <div class="glass-card-luxury p-6 sm:p-8 rounded-3xl max-w-2xl w-full shadow-2xl relative space-y-5 border border-amber-400/30">
+<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-xl z-50 items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="glass-card-luxury p-5 sm:p-7 rounded-3xl max-w-3xl w-full shadow-2xl relative space-y-4 border border-amber-400/30 my-auto">
         
         <!-- Header -->
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3.5">
             <div>
-                <h3 class="text-lg font-bold text-white font-cinzel flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-white font-cinzel flex items-center gap-2">
                     <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                    <span>Jewellery Polish & Lighting Studio</span>
+                    <span>Photo Edit & Studio Tools</span>
                 </h3>
-                <p class="text-xs text-stone-400 mt-0.5">Refine brilliance, metal warmth, and card stage aura.</p>
+                <p class="text-xs text-stone-400 mt-0.5">Fine-tune lighting, apply luxury filters, crop and rotate image.</p>
             </div>
-            <button type="button" onclick="closeStudioModal()" class="w-8 h-8 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10">
+            <button type="button" onclick="closeStudioModal()" class="w-8 h-8 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10 transition">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
-        <!-- Studio Body -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        <!-- Studio Body Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
             
-            <!-- Left: Live Podium Canvas Preview (7 cols) -->
-            <div class="md:col-span-7 flex items-center justify-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] min-h-[220px] relative overflow-hidden">
-                <div id="modal-spotlight-aura" class="absolute w-36 h-36 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
-                <img id="studio-preview-img" src="" alt="Editing" 
-                    class="max-h-48 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]">
+            <!-- Left: Live Canvas Viewport (6 cols) -->
+            <div class="md:col-span-6 flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] min-h-[240px] sm:min-h-[280px] relative overflow-hidden w-full">
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+                    <i class="fa-solid fa-gem text-7xl text-amber-400"></i>
+                </div>
+                
+                <div id="studio-crop-box" class="relative max-w-full flex items-center justify-center overflow-hidden rounded-xl border border-amber-400/20 transition-all duration-300">
+                    <img id="studio-preview-img" src="" alt="Editing" 
+                        class="max-h-52 sm:max-h-60 max-w-full object-contain relative z-10 drop-shadow-[0_15px_30px_rgba(0,0,0,0.95)] transition-all duration-200">
+                </div>
+
+                <div class="mt-3 flex items-center gap-2 text-[10px] text-stone-400">
+                    <span id="studio-crop-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">Original Ratio</span>
+                    <span id="studio-rotation-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">0°</span>
+                </div>
             </div>
 
-            <!-- Right: Sliders & Controls (5 cols) -->
-            <div class="md:col-span-5 space-y-4 text-xs">
+            <!-- Right: Tabs & Controls (6 cols) -->
+            <div class="md:col-span-6 space-y-3.5">
                 
-                <!-- Brightness -->
-                <div>
-                    <div class="flex justify-between text-slate-300 mb-1 font-semibold">
-                        <span>✨ Sparkle Brightness</span>
-                        <span id="val-brightness">105%</span>
-                    </div>
-                    <input type="range" id="slider-brightness" min="70" max="150" value="105" 
-                        class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                <!-- Tool Tabs Navigation -->
+                <div class="flex items-center gap-1.5 p-1 bg-black/50 rounded-2xl border border-white/10 text-xs">
+                    <button type="button" id="tab-btn-adjust" onclick="switchStudioTab('adjust')" 
+                        class="flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Adjust</span>
+                    </button>
+                    <button type="button" id="tab-btn-filters" onclick="switchStudioTab('filters')" 
+                        class="flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Filters</span>
+                    </button>
+                    <button type="button" id="tab-btn-crop" onclick="switchStudioTab('crop')" 
+                        class="flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white">
+                        <i class="fa-solid fa-crop"></i>
+                        <span>Crop & Rotate</span>
+                    </button>
                 </div>
 
-                <!-- Contrast -->
-                <div>
-                    <div class="flex justify-between text-slate-300 mb-1 font-semibold">
-                        <span>💎 Clarity & Contrast</span>
-                        <span id="val-contrast">110%</span>
+                <!-- TAB 1: FINE TUNE ADJUSTMENTS -->
+                <div id="tab-panel-adjust" class="space-y-3 text-xs">
+                    <!-- Brightness -->
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                            <span>✨ Sparkle Brightness</span>
+                            <span id="val-brightness" class="font-mono text-amber-400">100%</span>
+                        </div>
+                        <input type="range" id="slider-brightness" min="70" max="150" value="100" 
+                            class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
                     </div>
-                    <input type="range" id="slider-contrast" min="80" max="160" value="110" 
-                        class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+
+                    <!-- Contrast -->
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                            <span>💎 Clarity & Contrast</span>
+                            <span id="val-contrast" class="font-mono text-amber-400">100%</span>
+                        </div>
+                        <input type="range" id="slider-contrast" min="70" max="150" value="100" 
+                            class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Saturation / Vibrance -->
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                            <span>👑 Metal Vibrance</span>
+                            <span id="val-saturation" class="font-mono text-amber-400">100%</span>
+                        </div>
+                        <input type="range" id="slider-saturation" min="50" max="160" value="100" 
+                            class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Warmth / Sepia -->
+                    <div>
+                        <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                            <span>🌡️ Golden Warmth</span>
+                            <span id="val-warmth" class="font-mono text-amber-400">0%</span>
+                        </div>
+                        <input type="range" id="slider-warmth" min="0" max="80" value="0" 
+                            class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                    </div>
+
+                    <div class="pt-1 flex justify-end">
+                        <button type="button" onclick="resetStudioSliders()" class="text-[11px] text-stone-400 hover:text-amber-400 underline decoration-stone-600">
+                            Reset Sliders to 100%
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Saturation / Gold Vibrance -->
-                <div>
-                    <div class="flex justify-between text-slate-300 mb-1 font-semibold">
-                        <span>👑 Metal Vibrance</span>
-                        <span id="val-saturation">108%</span>
-                    </div>
-                    <input type="range" id="slider-saturation" min="50" max="160" value="108" 
-                        class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                <!-- TAB 2: LUXURY FILTER PRESETS -->
+                <div id="tab-panel-filters" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <!-- Filter Cards -->
+                    <button type="button" onclick="applyPresetFilter('normal')" id="filter-card-normal"
+                        class="filter-preset-card p-2 rounded-xl border-2 border-amber-400 bg-amber-400/10 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">✨</span>
+                        <span class="font-bold text-[11px] text-white">Original</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('gold')" id="filter-card-gold"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">👑</span>
+                        <span class="font-bold text-[11px] text-white">Royal Gold</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('diamond')" id="filter-card-diamond"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">💎</span>
+                        <span class="font-bold text-[11px] text-white">Diamond Cool</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('rose')" id="filter-card-rose"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">🌸</span>
+                        <span class="font-bold text-[11px] text-white">Rose Ruby</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('studio')" id="filter-card-studio"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">📸</span>
+                        <span class="font-bold text-[11px] text-white">Studio Lux</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('vivid')" id="filter-card-vivid"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">⚡</span>
+                        <span class="font-bold text-[11px] text-white">Vivid Pop</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('vintage')" id="filter-card-vintage"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">🎞️</span>
+                        <span class="font-bold text-[11px] text-white">Vintage Glam</span>
+                    </button>
+
+                    <button type="button" onclick="applyPresetFilter('noir')" id="filter-card-noir"
+                        class="filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition">
+                        <span class="text-base">🎬</span>
+                        <span class="font-bold text-[11px] text-white">Noir Silver</span>
+                    </button>
                 </div>
 
-                <!-- Card Spotlight Aura Color Presets -->
-                <div class="pt-1 border-t border-slate-800">
-                    <label class="block text-[11px] font-bold uppercase text-slate-400 mb-2">Card Spotlight Glow:</label>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="setSpotlightAura('rgba(245, 158, 11, 0.25)')" title="Royal Warm Gold"
-                            class="w-7 h-7 rounded-full bg-amber-500 border-2 border-white/40 hover:scale-110 transition shadow"></button>
-                        <button type="button" onclick="setSpotlightAura('rgba(56, 189, 248, 0.25)')" title="Diamond Crystal Blue"
-                            class="w-7 h-7 rounded-full bg-sky-400 border-2 border-white/20 hover:scale-110 transition shadow"></button>
-                        <button type="button" onclick="setSpotlightAura('rgba(244, 63, 94, 0.25)')" title="Rose Gold Ruby"
-                            class="w-7 h-7 rounded-full bg-rose-500 border-2 border-white/20 hover:scale-110 transition shadow"></button>
-                        <button type="button" onclick="setSpotlightAura('rgba(255, 255, 255, 0.15)')" title="Pure Platinum"
-                            class="w-7 h-7 rounded-full bg-slate-100 border-2 border-white/20 hover:scale-110 transition shadow"></button>
+                <!-- TAB 3: CROP & ROTATE TOOLS -->
+                <div id="tab-panel-crop" class="hidden space-y-3.5 text-xs">
+                    <!-- Aspect Ratio Presets -->
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1.5 tracking-wider">Crop Aspect Ratio:</label>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <button type="button" onclick="setCropRatio('original')" id="crop-ratio-original"
+                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]">
+                                Original
+                            </button>
+                            <button type="button" onclick="setCropRatio('1:1')" id="crop-ratio-1-1"
+                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                1:1 Square
+                            </button>
+                            <button type="button" onclick="setCropRatio('4:5')" id="crop-ratio-4-5"
+                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                4:5 Portrait
+                            </button>
+                            <button type="button" onclick="setCropRatio('4:3')" id="crop-ratio-4-3"
+                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                4:3 Standard
+                            </button>
+                            <button type="button" onclick="setCropRatio('16:9')" id="crop-ratio-16-9"
+                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                16:9 Banner
+                            </button>
+                            <button type="button" onclick="resetCropOrientation()"
+                                class="py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-400 hover:text-rose-300 border border-white/10 transition text-[11px]">
+                                Reset All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Rotation & Flip Controls -->
+                    <div class="pt-2 border-t border-white/10">
+                        <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1.5 tracking-wider">Orientation & Flip:</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button type="button" onclick="rotateStudioImage(-90)" 
+                                class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-rotate-left text-amber-400"></i>
+                                <span>-90° Left</span>
+                            </button>
+                            <button type="button" onclick="rotateStudioImage(90)" 
+                                class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-rotate-right text-amber-400"></i>
+                                <span>+90° Right</span>
+                            </button>
+                            <button type="button" onclick="flipStudioImage()" 
+                                class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-arrows-left-right text-amber-400"></i>
+                                <span>Flip H</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -325,14 +466,21 @@
 
         </div>
 
-        <!-- Actions -->
-        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-            <button type="button" onclick="closeStudioModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">
-                Done & Keep
+        <!-- Footer Actions -->
+        <div class="flex items-center justify-between gap-3 pt-3.5 border-t border-white/10">
+            <button type="button" onclick="resetStudioComplete()" class="px-4 py-2.5 rounded-xl text-stone-400 hover:text-rose-300 text-xs font-semibold flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-arrow-rotate-left text-xs"></i>
+                <span>Reset Original</span>
             </button>
-            <button type="button" onclick="applyBakeAdjustments()" class="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-600 hover:opacity-95 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20">
-                Apply & Save Polish
-            </button>
+            <div class="flex items-center gap-2.5">
+                <button type="button" onclick="closeStudioModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition">
+                    Cancel
+                </button>
+                <button type="button" onclick="applyBakeAdjustments()" class="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-600 hover:opacity-95 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20 transition transform active:scale-95 flex items-center gap-1.5">
+                    <i class="fa-solid fa-check text-xs"></i>
+                    <span>Apply & Save</span>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -616,18 +764,60 @@
     });
 </script>
 
-<!-- Interactive Studio Polish Script -->
+<!-- Interactive Photo Studio Editor Engine -->
 <script>
-let currentAuraColor = 'rgba(245, 158, 11, 0.2)';
+let studioState = {
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    warmth: 0,
+    activeFilter: 'normal',
+    rotation: 0,
+    flipH: 1,
+    cropRatio: 'original',
+    originalSrc: ''
+};
+
+const filterPresets = {
+    normal: { b: 100, c: 100, s: 100, w: 0, extra: '' },
+    gold: { b: 105, c: 112, s: 130, w: 25, extra: 'sepia(25%)' },
+    diamond: { b: 108, c: 120, s: 95, w: 0, extra: 'hue-rotate(185deg)' },
+    rose: { b: 105, c: 110, s: 125, w: 15, extra: 'hue-rotate(335deg)' },
+    studio: { b: 112, c: 118, s: 108, w: 0, extra: '' },
+    vivid: { b: 104, c: 122, s: 145, w: 0, extra: '' },
+    vintage: { b: 100, c: 108, s: 85, w: 40, extra: 'sepia(45%)' },
+    noir: { b: 106, c: 135, s: 0, w: 0, extra: 'grayscale(100%)' }
+};
+
+function switchStudioTab(tab) {
+    ['adjust', 'filters', 'crop'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const panel = document.getElementById(`tab-panel-${t}`);
+        if (t === tab) {
+            if (btn) {
+                btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow';
+            }
+            if (panel) panel.classList.remove('hidden');
+        } else {
+            if (btn) {
+                btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white';
+            }
+            if (panel) panel.classList.add('hidden');
+        }
+    });
+}
 
 function openStudioModal() {
     const previewImg = document.getElementById('live-transparent-preview');
     const studioPreview = document.getElementById('studio-preview-img');
-    if (!previewImg.src) return;
+    if (!previewImg || !previewImg.src) return;
 
+    studioState.originalSrc = previewImg.src;
     studioPreview.src = previewImg.src;
+    
     document.getElementById('studio-modal').classList.remove('hidden');
     document.getElementById('studio-modal').classList.add('flex');
+    
     applyStudioLiveFilters();
 }
 
@@ -636,49 +826,221 @@ function closeStudioModal() {
     document.getElementById('studio-modal').classList.remove('flex');
 }
 
-function setSpotlightAura(color) {
-    currentAuraColor = color;
-    document.getElementById('modal-spotlight-aura').style.backgroundColor = color;
-    document.getElementById('spotlight-aura').style.backgroundColor = color;
-}
-
 function applyStudioLiveFilters() {
-    const b = document.getElementById('slider-brightness').value;
-    const c = document.getElementById('slider-contrast').value;
-    const s = document.getElementById('slider-saturation').value;
+    const b = document.getElementById('slider-brightness')?.value || studioState.brightness;
+    const c = document.getElementById('slider-contrast')?.value || studioState.contrast;
+    const s = document.getElementById('slider-saturation')?.value || studioState.saturation;
+    const w = document.getElementById('slider-warmth')?.value || studioState.warmth;
 
-    document.getElementById('val-brightness').textContent = `${b}%`;
-    document.getElementById('val-contrast').textContent = `${c}%`;
-    document.getElementById('val-saturation').textContent = `${s}%`;
+    studioState.brightness = b;
+    studioState.contrast = c;
+    studioState.saturation = s;
+    studioState.warmth = w;
 
-    const filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
-    document.getElementById('studio-preview-img').style.filter = filterString;
+    if (document.getElementById('val-brightness')) document.getElementById('val-brightness').textContent = `${b}%`;
+    if (document.getElementById('val-contrast')) document.getElementById('val-contrast').textContent = `${c}%`;
+    if (document.getElementById('val-saturation')) document.getElementById('val-saturation').textContent = `${s}%`;
+    if (document.getElementById('val-warmth')) document.getElementById('val-warmth').textContent = `${w}%`;
+
+    const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
+    let filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+    if (w > 0) {
+        filterString += ` sepia(${w}%)`;
+    }
+    if (preset.extra) {
+        filterString += ` ${preset.extra}`;
+    }
+
+    const studioImg = document.getElementById('studio-preview-img');
+    if (studioImg) {
+        studioImg.style.filter = filterString;
+        studioImg.style.transform = `rotate(${studioState.rotation}deg) scaleX(${studioState.flipH})`;
+    }
+
+    if (document.getElementById('studio-rotation-label')) {
+        document.getElementById('studio-rotation-label').textContent = `${studioState.rotation}°${studioState.flipH === -1 ? ' (Flipped)' : ''}`;
+    }
 }
 
-['slider-brightness', 'slider-contrast', 'slider-saturation'].forEach(id => {
-    document.getElementById(id).addEventListener('input', applyStudioLiveFilters);
+function applyPresetFilter(filterKey) {
+    studioState.activeFilter = filterKey;
+    const preset = filterPresets[filterKey] || filterPresets.normal;
+
+    document.getElementById('slider-brightness').value = preset.b;
+    document.getElementById('slider-contrast').value = preset.c;
+    document.getElementById('slider-saturation').value = preset.s;
+    document.getElementById('slider-warmth').value = preset.w;
+
+    document.querySelectorAll('.filter-preset-card').forEach(card => {
+        card.className = 'filter-preset-card p-2 rounded-xl border border-white/10 bg-white/5 hover:border-amber-400/50 text-center flex flex-col items-center gap-1 transition';
+    });
+
+    const activeCard = document.getElementById(`filter-card-${filterKey}`);
+    if (activeCard) {
+        activeCard.className = 'filter-preset-card p-2 rounded-xl border-2 border-amber-400 bg-amber-400/10 text-center flex flex-col items-center gap-1 transition';
+    }
+
+    applyStudioLiveFilters();
+}
+
+function setCropRatio(ratio) {
+    studioState.cropRatio = ratio;
+    const cropBox = document.getElementById('studio-crop-box');
+    const label = document.getElementById('studio-crop-label');
+
+    document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
+        btn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]';
+    });
+
+    const activeBtn = document.getElementById(`crop-ratio-${ratio.replace(':', '-')}`);
+    if (activeBtn) {
+        activeBtn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]';
+    }
+
+    if (label) {
+        label.textContent = ratio === 'original' ? 'Original Ratio' : `${ratio} Ratio`;
+    }
+
+    if (cropBox) {
+        if (ratio === '1:1') {
+            cropBox.style.aspectRatio = '1 / 1';
+            cropBox.style.width = '200px';
+        } else if (ratio === '4:5') {
+            cropBox.style.aspectRatio = '4 / 5';
+            cropBox.style.width = '180px';
+        } else if (ratio === '4:3') {
+            cropBox.style.aspectRatio = '4 / 3';
+            cropBox.style.width = '240px';
+        } else if (ratio === '16:9') {
+            cropBox.style.aspectRatio = '16 / 9';
+            cropBox.style.width = '260px';
+        } else {
+            cropBox.style.aspectRatio = 'auto';
+            cropBox.style.width = 'auto';
+        }
+    }
+}
+
+function rotateStudioImage(deg) {
+    studioState.rotation = (studioState.rotation + deg + 360) % 360;
+    applyStudioLiveFilters();
+}
+
+function flipStudioImage() {
+    studioState.flipH = studioState.flipH === 1 ? -1 : 1;
+    applyStudioLiveFilters();
+}
+
+function resetStudioSliders() {
+    document.getElementById('slider-brightness').value = 100;
+    document.getElementById('slider-contrast').value = 100;
+    document.getElementById('slider-saturation').value = 100;
+    document.getElementById('slider-warmth').value = 0;
+    applyStudioLiveFilters();
+}
+
+function resetCropOrientation() {
+    studioState.rotation = 0;
+    studioState.flipH = 1;
+    setCropRatio('original');
+    applyStudioLiveFilters();
+}
+
+function resetStudioComplete() {
+    applyPresetFilter('normal');
+    resetStudioSliders();
+    resetCropOrientation();
+    const studioPreview = document.getElementById('studio-preview-img');
+    if (studioState.originalSrc && studioPreview) {
+        studioPreview.src = studioState.originalSrc;
+    }
+}
+
+['slider-brightness', 'slider-contrast', 'slider-saturation', 'slider-warmth'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', applyStudioLiveFilters);
 });
 
 function applyBakeAdjustments() {
     const studioImg = document.getElementById('studio-preview-img');
-    const b = document.getElementById('slider-brightness').value;
-    const c = document.getElementById('slider-contrast').value;
-    const s = document.getElementById('slider-saturation').value;
+    if (!studioImg) return;
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = studioImg.naturalWidth || studioImg.width;
-    canvas.height = studioImg.naturalHeight || studioImg.height;
 
-    ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
-    ctx.drawImage(studioImg, 0, 0, canvas.width, canvas.height);
+    const nw = studioImg.naturalWidth || studioImg.width || 800;
+    const nh = studioImg.naturalHeight || studioImg.height || 800;
+
+    const isRotated90 = studioState.rotation === 90 || studioState.rotation === 270;
+    const baseW = isRotated90 ? nh : nw;
+    const baseH = isRotated90 ? nw : nh;
+
+    let targetW = baseW;
+    let targetH = baseH;
+
+    if (studioState.cropRatio === '1:1') {
+        const minDim = Math.min(baseW, baseH);
+        targetW = minDim;
+        targetH = minDim;
+    } else if (studioState.cropRatio === '4:5') {
+        if (baseW / baseH > 4 / 5) {
+            targetW = Math.round(baseH * (4 / 5));
+            targetH = baseH;
+        } else {
+            targetW = baseW;
+            targetH = Math.round(baseW * (5 / 4));
+        }
+    } else if (studioState.cropRatio === '4:3') {
+        if (baseW / baseH > 4 / 3) {
+            targetW = Math.round(baseH * (4 / 3));
+            targetH = baseH;
+        } else {
+            targetW = baseW;
+            targetH = Math.round(baseW * (3 / 4));
+        }
+    } else if (studioState.cropRatio === '16:9') {
+        if (baseW / baseH > 16 / 9) {
+            targetW = Math.round(baseH * (16 / 9));
+            targetH = baseH;
+        } else {
+            targetW = baseW;
+            targetH = Math.round(baseW * (9 / 16));
+        }
+    }
+
+    canvas.width = targetW;
+    canvas.height = targetH;
+
+    ctx.save();
+    
+    // Build filter string
+    const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
+    let filterString = `brightness(${studioState.brightness}%) contrast(${studioState.contrast}%) saturate(${studioState.saturation}%)`;
+    if (studioState.warmth > 0) {
+        filterString += ` sepia(${studioState.warmth}%)`;
+    }
+    if (preset.extra) {
+        filterString += ` ${preset.extra}`;
+    }
+    ctx.filter = filterString;
+
+    ctx.translate(targetW / 2, targetH / 2);
+    ctx.rotate((studioState.rotation * Math.PI) / 180);
+    ctx.scale(studioState.flipH, 1);
+
+    ctx.drawImage(studioImg, -nw / 2, -nh / 2, nw, nh);
+    ctx.restore();
 
     const bakedPng = canvas.toDataURL('image/png');
-    document.getElementById('transparent_image_base64').value = bakedPng;
-    document.getElementById('live-transparent-preview').src = bakedPng;
+    
+    const hiddenBase64Input = document.getElementById('transparent_image_base64');
+    const livePreview = document.getElementById('live-transparent-preview');
+    
+    if (hiddenBase64Input) hiddenBase64Input.value = bakedPng;
+    if (livePreview) livePreview.src = bakedPng;
 
     closeStudioModal();
 }
+</script>
 
 // CUSTOM CATEGORY SELECT DROPDOWN LOGIC
 function toggleCategoryMenu() {
