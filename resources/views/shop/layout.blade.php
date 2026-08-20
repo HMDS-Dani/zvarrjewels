@@ -95,25 +95,25 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
                 
-                <!-- Brand Logo (Exact Reference Luxury Jewelry Maison Design) -->
-                <a href="{{ route('home') }}" class="flex flex-col items-center justify-center group py-0.5 select-none text-center flex-shrink-0">
+                <!-- Brand Logo (Exact Reference Luxury Jewelry Maison Design - Compact & Sleek) -->
+                <a href="{{ route('home') }}" class="flex flex-col items-center justify-center group select-none text-center flex-shrink-0">
                     <!-- Top Star Accent -->
-                    <span class="text-amber-300 text-[8px] sm:text-[9px] leading-none mb-0.5 transition-transform duration-300 group-hover:scale-125 drop-shadow-[0_0_6px_rgba(234,179,8,0.9)] animate-pulse">✦</span>
+                    <span class="text-amber-300 text-[6.5px] sm:text-[7.5px] leading-none mb-[1px] transition-transform duration-300 group-hover:scale-125 drop-shadow-[0_0_4px_rgba(234,179,8,0.9)] animate-pulse">✦</span>
                     
                     <!-- Main Serif Wordmark -->
-                    <span class="font-cinzel font-semibold text-xl sm:text-2xl tracking-[0.28em] sm:tracking-[0.32em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] sm:pl-[0.32em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)] group-hover:brightness-110 transition-all duration-300">
+                    <span class="font-cinzel font-semibold text-base sm:text-lg tracking-[0.24em] sm:tracking-[0.28em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.24em] sm:pl-[0.28em] drop-shadow-[0_2px_8px_rgba(217,119,6,0.4)] group-hover:brightness-110 transition-all duration-300">
                         ZVARR
                     </span>
                     
                     <!-- Center Hairline Divider with Diamond Rhombus -->
-                    <div class="flex items-center justify-center w-full max-w-[130px] sm:max-w-[145px] my-1 sm:my-1.5 relative">
+                    <div class="flex items-center justify-center w-full max-w-[95px] sm:max-w-[110px] my-[2px] sm:my-[3px] relative">
                         <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
-                        <span class="text-[7px] sm:text-[8px] text-amber-300 px-1 leading-none drop-shadow-[0_0_5px_rgba(245,158,11,0.9)]">◆</span>
+                        <span class="text-[5px] sm:text-[6px] text-amber-300 px-0.5 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.9)]">◆</span>
                         <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                     </div>
                     
                     <!-- Subtitle Tagline -->
-                    <span class="text-[8px] sm:text-[9px] uppercase font-bold tracking-[0.45em] sm:tracking-[0.52em] text-[#E8C265] group-hover:text-amber-100 transition-colors duration-300 leading-none pl-[0.45em] sm:pl-[0.52em]">
+                    <span class="text-[6.5px] sm:text-[7.5px] uppercase font-bold tracking-[0.42em] sm:tracking-[0.46em] text-[#E8C265] group-hover:text-amber-100 transition-colors duration-300 leading-none pl-[0.42em] sm:pl-[0.46em]">
                         BY ZAIYAL
                     </span>
                 </a>
@@ -283,22 +283,22 @@
                 <div class="lg:col-span-4 space-y-3.5 sm:space-y-4">
                     <a href="{{ route('home') }}" class="inline-flex flex-col items-start group select-none">
                         <!-- Top Star Accent -->
-                        <span class="text-amber-300 text-[8px] sm:text-[9px] leading-none mb-0.5 transition-transform duration-300 group-hover:scale-125 drop-shadow-[0_0_6px_rgba(234,179,8,0.9)] animate-pulse">✦</span>
+                        <span class="text-amber-300 text-[7px] leading-none mb-[1px] transition-transform duration-300 group-hover:scale-125 drop-shadow-[0_0_4px_rgba(234,179,8,0.9)] animate-pulse">✦</span>
                         
                         <!-- Main Serif Wordmark -->
-                        <span class="font-cinzel font-semibold text-2xl tracking-[0.28em] sm:tracking-[0.32em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] sm:pl-[0.32em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)] group-hover:brightness-110 transition-all duration-300">
+                        <span class="font-cinzel font-semibold text-xl tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.26em] drop-shadow-[0_2px_8px_rgba(217,119,6,0.4)] group-hover:brightness-110 transition-all duration-300">
                             ZVARR
                         </span>
                         
                         <!-- Center Hairline Divider with Diamond Rhombus -->
-                        <div class="flex items-center justify-center w-full max-w-[145px] my-1.5 relative">
+                        <div class="flex items-center justify-center w-full max-w-[115px] my-1 relative">
                             <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
-                            <span class="text-[8px] text-amber-300 px-1 leading-none drop-shadow-[0_0_5px_rgba(245,158,11,0.9)]">◆</span>
+                            <span class="text-[6px] text-amber-300 px-0.5 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.9)]">◆</span>
                             <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                         </div>
                         
                         <!-- Subtitle Tagline -->
-                        <span class="text-[9px] uppercase font-bold tracking-[0.45em] sm:tracking-[0.52em] text-[#E8C265] group-hover:text-amber-100 transition-colors duration-300 leading-none pl-[0.45em] sm:pl-[0.52em]">
+                        <span class="text-[7.5px] uppercase font-bold tracking-[0.44em] text-[#E8C265] group-hover:text-amber-100 transition-colors duration-300 leading-none pl-[0.44em]">
                             BY ZAIYAL
                         </span>
                     </a>

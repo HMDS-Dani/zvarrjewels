@@ -118,25 +118,25 @@
     <!-- DESKTOP SIDEBAR (STICKY LUXURY NAVIGATION) -->
     <aside class="w-72 bg-[#09090f]/95 backdrop-blur-2xl border-r border-amber-400/15 flex-col justify-between hidden md:flex min-h-screen sticky top-0 z-40">
         <div>
-            <!-- Brand Logo (Exact Reference Luxury Jewelry Maison Design) -->
-            <div class="h-28 flex flex-col items-center justify-center px-6 border-b border-white/5 bg-gradient-to-b from-amber-950/20 to-transparent select-none text-center">
+            <!-- Brand Logo (Exact Reference Luxury Jewelry Maison Design - Compact) -->
+            <div class="h-24 flex flex-col items-center justify-center px-6 border-b border-white/5 bg-gradient-to-b from-amber-950/20 to-transparent select-none text-center">
                 <!-- Top Star Accent -->
-                <span class="text-amber-300 text-[8px] leading-none mb-0.5 animate-pulse">✦</span>
+                <span class="text-amber-300 text-[6.5px] leading-none mb-[1px] animate-pulse">✦</span>
                 
                 <!-- Main Serif Wordmark -->
-                <span class="font-cinzel font-semibold text-xl tracking-[0.28em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.28em] drop-shadow-[0_2px_10px_rgba(217,119,6,0.4)]">
+                <span class="font-cinzel font-semibold text-lg tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D1] via-[#E8C265] to-[#AA7C11] block leading-none pl-[0.26em] drop-shadow-[0_2px_8px_rgba(217,119,6,0.4)]">
                     ZVARR
                 </span>
                 
                 <!-- Center Hairline Divider with Diamond Rhombus -->
-                <div class="flex items-center justify-center w-full max-w-[130px] my-1 relative">
+                <div class="flex items-center justify-center w-full max-w-[105px] my-[2px] relative">
                     <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-amber-400/80 to-amber-300"></div>
-                    <span class="text-[7px] text-amber-300 px-1 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.8)]">◆</span>
+                    <span class="text-[5.5px] text-amber-300 px-0.5 leading-none drop-shadow-[0_0_4px_rgba(245,158,11,0.8)]">◆</span>
                     <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-amber-400/80 to-amber-300"></div>
                 </div>
                 
                 <!-- Subtitle Tagline -->
-                <span class="text-[7.5px] uppercase font-bold tracking-[0.45em] text-[#E8C265] leading-none pl-[0.45em]">
+                <span class="text-[6.5px] uppercase font-bold tracking-[0.42em] text-[#E8C265] leading-none pl-[0.42em]">
                     BY ZAIYAL • CRM
                 </span>
             </div>
