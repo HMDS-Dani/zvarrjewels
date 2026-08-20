@@ -39,6 +39,9 @@ $_ENV['SESSION_DRIVER'] = 'file';
 putenv('CACHE_STORE=file');
 $_ENV['CACHE_STORE'] = 'file';
 
+putenv('APP_MAINTENANCE_DRIVER=file');
+$_ENV['APP_MAINTENANCE_DRIVER'] = 'file';
+
 // Ensure default fallback APP_KEY if environment variable wasn't injected by Vercel
 if (! getenv('APP_KEY') && ! isset($_ENV['APP_KEY'])) {
     putenv('APP_KEY=base64:H9WwMWCk1nLWN1+8QKMeZ5JGzVpCALfVKzWM9myh33E=');
