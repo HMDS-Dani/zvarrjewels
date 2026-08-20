@@ -241,4 +241,48 @@
     </form>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.querySelector('form[action="{{ route('admin.contacts.update') }}"]');
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = contactForm.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i> Saving...';
+        btn.disabled = true;
+
+        try {
+            const formData = new FormData(contactForm);
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                if (window.showToast) {
+                    window.showToast(data.message || 'Settings saved successfully!', 'success');
+                } else {
+                    alert(data.message || 'Settings saved successfully!');
+                }
+            } else {
+                alert(data.message || 'Failed to save settings.');
+            }
+        } catch (err) {
+            console.error(err);
+            contactForm.submit(); // fallback to normal submit if AJAX fails
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+});
+</script>
 @endsection

@@ -25,6 +25,14 @@ class AdminInquiryController extends Controller
 
         $inquiry->update(['status' => $request->status]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Inquiry status updated successfully.',
+                'inquiry' => $inquiry,
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Inquiry status updated successfully.');
     }
 
@@ -32,6 +40,13 @@ class AdminInquiryController extends Controller
     {
         $inquiry = Inquiry::findOrFail($id);
         $inquiry->delete();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Inquiry deleted successfully.',
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Inquiry deleted successfully.');
     }

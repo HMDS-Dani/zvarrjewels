@@ -60,7 +60,42 @@ if (! getenv('APP_KEY') && ! isset($_ENV['APP_KEY'])) {
     $_ENV['APP_KEY'] = 'base64:H9WwMWCk1nLWN1+8QKMeZ5JGzVpCALfVKzWM9myh33E=';
 }
 
-// Database setup for serverless: if no external DB configured or localhost, fallback to SQLite
+// Database setup for serverless: Support DATABASE_URL (Neon, Supabase, TiDB, MySQL, PostgreSQL)
+$databaseUrl = getenv('DATABASE_URL') ?: ($_ENV['DATABASE_URL'] ?? '');
+if (! empty($databaseUrl)) {
+    $parsed = parse_url($databaseUrl);
+    if ($parsed) {
+        $scheme = $parsed['scheme'] ?? '';
+        if (str_contains($scheme, 'postgres') || str_contains($scheme, 'pgsql')) {
+            putenv('DB_CONNECTION=pgsql');
+            $_ENV['DB_CONNECTION'] = 'pgsql';
+            putenv('DB_PORT='.($parsed['port'] ?? 5432));
+            $_ENV['DB_PORT'] = $parsed['port'] ?? 5432;
+        } elseif (str_contains($scheme, 'mysql')) {
+            putenv('DB_CONNECTION=mysql');
+            $_ENV['DB_CONNECTION'] = 'mysql';
+            putenv('DB_PORT='.($parsed['port'] ?? 3306));
+            $_ENV['DB_PORT'] = $parsed['port'] ?? 3306;
+        }
+        putenv('DB_HOST='.($parsed['host'] ?? ''));
+        $_ENV['DB_HOST'] = $parsed['host'] ?? '';
+        putenv('DB_USERNAME='.($parsed['user'] ?? ''));
+        $_ENV['DB_USERNAME'] = $parsed['user'] ?? '';
+        putenv('DB_PASSWORD='.($parsed['pass'] ?? ''));
+        $_ENV['DB_PASSWORD'] = $parsed['pass'] ?? '';
+        $dbName = ltrim($parsed['path'] ?? '', '/');
+        if (empty($dbName) || $dbName === 'sys') {
+            $dbName = 'test';
+        }
+        putenv('DB_DATABASE='.$dbName);
+        $_ENV['DB_DATABASE'] = $dbName;
+        putenv('MYSQL_ATTR_SSL_CA=true');
+        $_ENV['MYSQL_ATTR_SSL_CA'] = 'true';
+        putenv('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT=false');
+        $_ENV['MYSQL_ATTR_SSL_VERIFY_SERVER_CERT'] = 'false';
+    }
+}
+
 $dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? '');
 if (empty($dbHost) || in_array($dbHost, ['127.0.0.1', 'localhost', '::1'])) {
     $sqliteDb = '/tmp/database.sqlite';

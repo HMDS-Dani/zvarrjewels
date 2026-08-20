@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Review;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -30,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Share live store contact & social media settings across all shop storefront views
-        View::composer('shop.*', function ($view) {
+        View::composer(['shop.*', 'admin.*'], function ($view) {
             $settings = [];
             try {
                 if (Schema::hasTable('settings')) {
@@ -41,5 +45,10 @@ class AppServiceProvider extends ServiceProvider
             }
             $view->with('storeSettings', $settings);
         });
+
+        // Clear settings cache on any setting mutation
+        Product::saved(fn () => Cache::forget('store_all_settings'));
+        Category::saved(fn () => Cache::forget('store_all_settings'));
+        Review::saved(fn () => Cache::forget('store_all_settings'));
     }
 }

@@ -42,12 +42,20 @@ class AdminCategoryController extends Controller
             $count++;
         }
 
-        Category::create([
+        $category = Category::create([
             'name' => $validated['name'],
             'slug' => $slug,
             'description' => $validated['description'] ?? null,
             'image' => $imagePath,
         ]);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category created successfully!',
+                'category' => $category,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Category created successfully!');
     }
@@ -56,6 +64,10 @@ class AdminCategoryController extends Controller
     {
         $category = Category::find($id);
         if (! $category) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Category not found.'], 404);
+            }
+
             return redirect()->back()->with('error', 'Category not found.');
         }
 
@@ -94,6 +106,14 @@ class AdminCategoryController extends Controller
             'image' => $imagePath,
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category updated successfully!',
+                'category' => $category->fresh(),
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Category updated successfully!');
     }
 
@@ -102,6 +122,13 @@ class AdminCategoryController extends Controller
         $category = Category::find($id);
         if ($category) {
             $category->delete();
+        }
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Category deleted successfully.',
+            ]);
         }
 
         return redirect()->back()->with('success', 'Category deleted successfully.');

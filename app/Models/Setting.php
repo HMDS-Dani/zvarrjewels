@@ -12,6 +12,19 @@ class Setting extends Model
         'value',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function ($setting) {
+            Cache::forget("setting_{$setting->key}");
+            Cache::forget('store_all_settings');
+        });
+
+        static::deleted(function ($setting) {
+            Cache::forget("setting_{$setting->key}");
+            Cache::forget('store_all_settings');
+        });
+    }
+
     /**
      * Get setting value by key with optional fallback
      */

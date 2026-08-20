@@ -116,7 +116,7 @@ class StorefrontController extends Controller
             'comment' => 'required|string|max:1000',
         ]);
 
-        Review::create([
+        $review = Review::create([
             'product_id' => $validated['product_id'] ?? null,
             'user_id' => Auth::id(),
             'name' => $validated['name'],
@@ -126,6 +126,14 @@ class StorefrontController extends Controller
             'is_verified_buyer' => true,
             'is_approved' => true,
         ]);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Thank you! Your verified review has been submitted successfully.',
+                'review' => $review,
+            ]);
+        }
 
         return redirect()->back()->with('review_success', 'Thank you! Your verified review has been submitted successfully.');
     }

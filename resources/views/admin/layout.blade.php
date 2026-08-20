@@ -454,6 +454,23 @@
 
     <!-- Interactive Scripts -->
     <script>
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 right-6 z-50 max-w-sm glass-card-3d bg-[#0d0c11]/95 border ${type === 'success' ? 'border-emerald-500/40 text-emerald-300' : 'border-rose-500/40 text-rose-300'} p-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-bounce`;
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-full ${type === 'success' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'} flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid ${type === 'success' ? 'fa-check' : 'fa-xmark'} text-sm"></i>
+                </div>
+                <p class="text-xs font-medium flex-1">${message}</p>
+                <button onclick="this.parentElement.remove()" class="text-stone-500 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 4000);
+        }
+        window.showToast = showToast;
+
         function toggleMobileDrawer() {
             const drawer = document.getElementById('mobile-menu-drawer');
             drawer.classList.toggle('hidden');

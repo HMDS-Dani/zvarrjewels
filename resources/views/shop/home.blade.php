@@ -492,16 +492,62 @@
 </section>
 @endif
 
-<!-- FULL 3D INTERACTIVE LEAP & DOCK ENGINE WITH STUDIO REFLECTIONS -->
+<!-- FULL 3D INTERACTIVE LEAP & DOCK ENGINE WITH STUDIO REFLECTIONS & FAIL-SAFE FALLBACK -->
 <script>
-let playCinematicIntro;
+let playCinematicIntro = function() {};
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('three-stage-container');
     if (!container) return;
 
-    // 1. Scene, Camera & WebGL Renderer
-    const scene = new THREE.Scene();
+    function revealHeroFallback() {
+        const navbar = document.getElementById('main-navbar');
+        if (navbar) {
+            navbar.classList.remove('opacity-0', '-translate-y-full');
+            navbar.classList.add('opacity-100', 'translate-y-0');
+        }
+        const leftContent = document.getElementById('hero-left-content');
+        if (leftContent) {
+            leftContent.classList.remove('opacity-0', 'translate-y-6');
+            leftContent.classList.add('opacity-100', 'translate-y-0');
+        }
+        const mobHeader = document.getElementById('hero-mobile-header');
+        if (mobHeader) {
+            mobHeader.classList.remove('opacity-0', 'translate-y-4');
+            mobHeader.classList.add('opacity-100', 'translate-y-0');
+        }
+        const mobActions = document.getElementById('hero-mobile-actions');
+        if (mobActions) {
+            mobActions.classList.remove('opacity-0', 'translate-y-4');
+            mobActions.classList.add('opacity-100', 'translate-y-0');
+        }
+    }
+
+    function createFallbackStage(cnt) {
+        if (!cnt) return;
+        cnt.innerHTML = `
+            <div class="w-full h-full flex items-center justify-center relative pointer-events-none p-4">
+                <div class="absolute w-72 sm:w-96 h-72 sm:h-96 bg-amber-500/20 rounded-full blur-3xl animate-pulse"></div>
+                <div class="mirelle-mirror-stage relative z-10 flex flex-col items-center justify-center">
+                    <div class="mirelle-contact-shadow"></div>
+                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80" 
+                        alt="ZVARR Masterpiece Ring" 
+                        class="mirelle-jewel-img max-h-52 sm:max-h-72 object-contain animate-bounce transition duration-1000"
+                        style="animation-duration: 4s;">
+                    <div class="mirelle-reflection-layer">
+                        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80" 
+                            alt="" 
+                            class="mirelle-reflection-img max-h-52 sm:max-h-72 object-contain">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    let renderer;
+    let scene;
+    let camera;
+    let config;
 
     function getResponsiveConfig() {
         const isMobile = window.innerWidth < 1024;
@@ -518,18 +564,30 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    let config = getResponsiveConfig();
+    try {
+        if (typeof THREE === 'undefined') {
+            throw new Error('Three.js library failed to load');
+        }
 
-    const camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.set(0, config.cameraY, config.cameraDistance);
+        scene = new THREE.Scene();
+        config = getResponsiveConfig();
+        camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, config.cameraY, config.cameraDistance);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    container.appendChild(renderer.domElement);
+        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+    } catch (webglErr) {
+        console.warn("WebGL is unavailable or failed to initialize, loading luxury 2D fallback stage:", webglErr);
+        revealHeroFallback();
+        createFallbackStage(container);
+        playCinematicIntro = function() { revealHeroFallback(); };
+        return;
+    }
 
     // 2. Warm Luxury Studio Environment Reflections
     function createStudioCubeMap() {

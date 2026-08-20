@@ -29,7 +29,7 @@ class AdminReviewController extends Controller
             'is_approved' => 'nullable|boolean',
         ]);
 
-        Review::create([
+        $review = Review::create([
             'product_id' => $validated['product_id'] ?? null,
             'name' => $validated['name'],
             'city' => $validated['city'] ?? 'Pakistan',
@@ -38,6 +38,14 @@ class AdminReviewController extends Controller
             'is_verified_buyer' => $request->has('is_verified_buyer'),
             'is_approved' => $request->has('is_approved'),
         ]);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'New customer review added successfully.',
+                'review' => $review->load('product'),
+            ]);
+        }
 
         return redirect()->back()->with('success', 'New customer review added successfully.');
     }
@@ -66,6 +74,14 @@ class AdminReviewController extends Controller
             'is_approved' => $request->has('is_approved'),
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer review updated successfully.',
+                'review' => $review->fresh('product'),
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Customer review updated successfully.');
     }
 
@@ -73,6 +89,13 @@ class AdminReviewController extends Controller
     {
         $review = Review::findOrFail($id);
         $review->delete();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer review deleted successfully.',
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Customer review deleted successfully.');
     }

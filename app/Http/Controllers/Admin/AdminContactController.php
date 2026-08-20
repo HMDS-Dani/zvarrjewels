@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AdminContactController extends Controller
 {
@@ -46,6 +47,16 @@ class AdminContactController extends Controller
 
         foreach ($validated as $key => $value) {
             Setting::set($key, $value);
+        }
+
+        Cache::forget('store_all_settings');
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Store Contacts & Social Media settings updated successfully in real-time!',
+                'settings' => Setting::getAll(),
+            ]);
         }
 
         return redirect()->back()->with('success', 'Store Contacts & Social Media settings updated successfully in real-time!');

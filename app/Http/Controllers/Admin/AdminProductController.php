@@ -109,7 +109,7 @@ class AdminProductController extends Controller
             $count++;
         }
 
-        Product::create([
+        $product = Product::create([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
             'slug' => $slug,
@@ -122,6 +122,14 @@ class AdminProductController extends Controller
             'is_featured' => $request->boolean('is_featured'),
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added successfully!',
+                'product' => $product->load('category'),
+            ]);
+        }
+
         return redirect()->route('admin.products.index')->with('success', 'Product added successfully!');
     }
 
@@ -132,9 +140,17 @@ class AdminProductController extends Controller
     {
         $product = Product::find($id);
         if (! $product) {
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
+            }
+
             return redirect()->route('admin.products.index')->with('error', 'Product not found.');
         }
         $categories = Category::all();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json(['success' => true, 'product' => $product, 'categories' => $categories]);
+        }
 
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -146,6 +162,10 @@ class AdminProductController extends Controller
     {
         $product = Product::find($id);
         if (! $product) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
+            }
+
             return redirect()->route('admin.products.index')->with('error', 'Product not found.');
         }
 
@@ -187,6 +207,14 @@ class AdminProductController extends Controller
             'is_featured' => $request->boolean('is_featured'),
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully!',
+                'product' => $product->fresh('category'),
+            ]);
+        }
+
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 
@@ -198,6 +226,13 @@ class AdminProductController extends Controller
         $product = Product::find($id);
         if ($product) {
             $product->delete();
+        }
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product deleted successfully.',
+            ]);
         }
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');

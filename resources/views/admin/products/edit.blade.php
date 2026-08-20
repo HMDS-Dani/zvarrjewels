@@ -342,32 +342,46 @@
     </div>
 </div>
 
-<!-- ZVARR AI Segmentation & Alpha Speck Cleanup Engine -->
-<script type="module">
-    import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
-
-    const fileInput = document.getElementById('input_image_file');
-    const urlInput = document.getElementById('input_image_url');
-    const previewWrapper = document.getElementById('preview-wrapper');
-    const previewImg = document.getElementById('live-transparent-preview');
-    const hiddenBase64Input = document.getElementById('transparent_image_base64');
-    const loadingBar = document.getElementById('ai-loading-bar');
-    const statusText = document.getElementById('ai-status-text');
-    const submitBtn = document.getElementById('submit-btn');
-
-    // Mode Radio Buttons
+<!-- ZVARR AI Segmentation & Background Removal Engine -->
+<script>
     let currentRawImageSource = null;
 
-    // Intelligent Noise Speck & Halo Cleaner
-    function cleanAlphaNoise(blob) {
+    function handleSource(imageSource) {
+        if (!imageSource) return;
+        currentRawImageSource = imageSource;
+        const hiddenBase64Input = document.getElementById('transparent_image_base64');
+        const previewImg = document.getElementById('live-transparent-preview');
+        const previewWrapper = document.getElementById('preview-wrapper');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (hiddenBase64Input) hiddenBase64Input.value = '';
+
+        if (previewImg) {
+            if (typeof imageSource === 'string') {
+                previewImg.src = imageSource;
+            } else {
+                previewImg.src = URL.createObjectURL(imageSource);
+            }
+        }
+
+        if (previewWrapper) previewWrapper.classList.remove('hidden');
+        const revertBtn = document.getElementById('btn-revert-bg');
+        if (revertBtn) revertBtn.classList.add('hidden');
+        const removeBgText = document.getElementById('btn-remove-bg-text');
+        if (removeBgText) removeBgText.textContent = 'Remove Background';
+        if (submitBtn) submitBtn.disabled = false;
+    }
+
+    function processSmartBackgroundRemoval(src) {
         return new Promise((resolve) => {
             const img = new Image();
+            img.crossOrigin = 'anonymous';
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 let w = img.naturalWidth || img.width;
                 let h = img.naturalHeight || img.height;
-                const maxDim = 1000;
+                const maxDim = 1200;
                 if (w > maxDim || h > maxDim) {
                     if (w > h) {
                         h = Math.round((h * maxDim) / w);
@@ -381,88 +395,129 @@
                 canvas.height = h;
                 ctx.drawImage(img, 0, 0, w, h);
 
-                const imgData = ctx.getImageData(0, 0, w, h);
-                const d = imgData.data;
+                try {
+                    const imgData = ctx.getImageData(0, 0, w, h);
+                    const data = imgData.data;
 
-                // 1. Erase low-alpha semi-transparent speckles
-                for (let i = 0; i < d.length; i += 4) {
-                    if (d[i + 3] < 40) {
-                        d[i + 3] = 0;
+                    // 1. Sample outer border perimeter pixels
+                    let totalR = 0, totalG = 0, totalB = 0, sampleCount = 0;
+                    const sample = (x, y) => {
+                        const idx = (y * w + x) * 4;
+                        totalR += data[idx];
+                        totalG += data[idx + 1];
+                        totalB += data[idx + 2];
+                        sampleCount++;
+                    };
+
+                    for (let x = 0; x < w; x += 2) {
+                        sample(x, 0);
+                        sample(x, h - 1);
                     }
-                }
+                    for (let y = 0; y < h; y += 2) {
+                        sample(0, y);
+                        sample(w - 1, y);
+                    }
 
-                // 2. Erase isolated tiny islands of noise (< 80 connected pixels)
-                const visited = new Uint8Array(w * h);
-                const minClusterSize = 80;
+                    const bgR = Math.round(totalR / Math.max(1, sampleCount));
+                    const bgG = Math.round(totalG / Math.max(1, sampleCount));
+                    const bgB = Math.round(totalB / Math.max(1, sampleCount));
 
-                for (let y = 0; y < h; y++) {
+                    // 2. Tolerance for solid / studio gradient backgrounds
+                    const threshold = 48;
+                    const isBg = (idx) => {
+                        const r = data[idx];
+                        const g = data[idx + 1];
+                        const b = data[idx + 2];
+                        const a = data[idx + 3];
+                        if (a < 25) return true;
+                        const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+                        return dist < threshold;
+                    };
+
+                    // 3. Flood-fill from borders inward only (preserves diamond sparkles & inner metals)
+                    const visited = new Uint8Array(w * h);
+                    const queue = [];
+
                     for (let x = 0; x < w; x++) {
-                        const pos = y * w + x;
-                        if (d[pos * 4 + 3] > 0 && !visited[pos]) {
-                            const cluster = [];
-                            const queue = [pos];
-                            visited[pos] = 1;
-                            let head = 0;
+                        const top = 0 * w + x;
+                        const btm = (h - 1) * w + x;
+                        if (isBg(top * 4)) { visited[top] = 1; queue.push(top); }
+                        if (isBg(btm * 4)) { visited[btm] = 1; queue.push(btm); }
+                    }
+                    for (let y = 0; y < h; y++) {
+                        const lft = y * w + 0;
+                        const rgt = y * w + (w - 1);
+                        if (isBg(lft * 4)) { visited[lft] = 1; queue.push(lft); }
+                        if (isBg(rgt * 4)) { visited[rgt] = 1; queue.push(rgt); }
+                    }
 
-                            while (head < queue.length) {
-                                const curr = queue[head++];
-                                cluster.push(curr);
-                                const cx = curr % w;
-                                const cy = Math.floor(curr / w);
+                    let head = 0;
+                    while (head < queue.length) {
+                        const curr = queue[head++];
+                        const cx = curr % w;
+                        const cy = Math.floor(curr / w);
+                        const cIdx = curr * 4;
 
-                                const neighbors = [
-                                    [cx + 1, cy], [cx - 1, cy],
-                                    [cx, cy + 1], [cx, cy - 1]
-                                ];
+                        data[cIdx + 3] = 0; // Cut background
 
-                                for (let n = 0; n < neighbors.length; n++) {
-                                    const nx = neighbors[n][0];
-                                    const ny = neighbors[n][1];
-                                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-                                        const nPos = ny * w + nx;
-                                        if (!visited[nPos] && d[nPos * 4 + 3] > 0) {
-                                            visited[nPos] = 1;
-                                            queue.push(nPos);
-                                        }
+                        if (cx > 0) {
+                            const left = curr - 1;
+                            if (!visited[left] && isBg(left * 4)) { visited[left] = 1; queue.push(left); }
+                        }
+                        if (cx < w - 1) {
+                            const right = curr + 1;
+                            if (!visited[right] && isBg(right * 4)) { visited[right] = 1; queue.push(right); }
+                        }
+                        if (cy > 0) {
+                            const up = curr - w;
+                            if (!visited[up] && isBg(up * 4)) { visited[up] = 1; queue.push(up); }
+                        }
+                        if (cy < h - 1) {
+                            const down = curr + w;
+                            if (!visited[down] && isBg(down * 4)) { visited[down] = 1; queue.push(down); }
+                        }
+                    }
+
+                    // 4. Edge Anti-Aliasing Feathering
+                    for (let y = 1; y < h - 1; y++) {
+                        for (let x = 1; x < w - 1; x++) {
+                            const pos = y * w + x;
+                            const idx = pos * 4;
+                            if (data[idx + 3] > 0) {
+                                const hasTransparentNeighbor = (
+                                    data[((y - 1) * w + x) * 4 + 3] === 0 ||
+                                    data[((y + 1) * w + x) * 4 + 3] === 0 ||
+                                    data[(y * w + (x - 1)) * 4 + 3] === 0 ||
+                                    data[(y * w + (x + 1)) * 4 + 3] === 0
+                                );
+                                if (hasTransparentNeighbor) {
+                                    const dist = Math.sqrt((data[idx] - bgR) ** 2 + (data[idx + 1] - bgG) ** 2 + (data[idx + 2] - bgB) ** 2);
+                                    if (dist < threshold + 25) {
+                                        data[idx + 3] = Math.max(0, Math.min(255, Math.round(((dist - threshold) / 25) * 255)));
                                     }
-                                }
-                            }
-
-                            if (cluster.length < minClusterSize) {
-                                for (let k = 0; k < cluster.length; k++) {
-                                    d[cluster[k] * 4 + 3] = 0;
                                 }
                             }
                         }
                     }
-                }
 
-                ctx.putImageData(imgData, 0, 0);
-                resolve(canvas.toDataURL('image/png'));
+                    ctx.putImageData(imgData, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                } catch (e) {
+                    console.warn('Fallback direct render:', e);
+                    resolve(typeof src === 'string' ? src : URL.createObjectURL(src));
+                }
             };
-            img.src = URL.createObjectURL(blob);
+            img.onerror = () => {
+                resolve(typeof src === 'string' ? src : URL.createObjectURL(src));
+            };
+            if (typeof src === 'string') img.src = src;
+            else img.src = URL.createObjectURL(src);
         });
     }
 
-    function handleSource(imageSource) {
-        if (!imageSource) return;
-        currentRawImageSource = imageSource;
-        hiddenBase64Input.value = '';
-
-        if (typeof imageSource === 'string') {
-            previewImg.src = imageSource;
-        } else {
-            previewImg.src = URL.createObjectURL(imageSource);
-        }
-
-        previewWrapper.classList.remove('hidden');
-        document.getElementById('btn-revert-bg').classList.add('hidden');
-        document.getElementById('btn-remove-bg-text').textContent = 'Remove Background';
-        if (submitBtn) submitBtn.disabled = false;
-    }
-
     async function triggerManualBackgroundRemoval() {
-        const source = currentRawImageSource || previewImg.src;
+        const previewImg = document.getElementById('live-transparent-preview');
+        const source = currentRawImageSource || (previewImg ? previewImg.src : null);
         if (!source) {
             alert('Please select an image file or enter an image URL first.');
             return;
@@ -471,100 +526,100 @@
         const removeBgBtn = document.getElementById('btn-remove-bg');
         const removeBgText = document.getElementById('btn-remove-bg-text');
         const revertBtn = document.getElementById('btn-revert-bg');
+        const loadingBar = document.getElementById('ai-loading-bar');
+        const statusText = document.getElementById('ai-status-text');
+        const hiddenBase64Input = document.getElementById('transparent_image_base64');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressFill = document.getElementById('ai-progress-fill');
+        const percentage = document.getElementById('ai-percentage');
 
-        loadingBar.classList.remove('hidden');
-        removeBgBtn.disabled = true;
+        if (loadingBar) loadingBar.classList.remove('hidden');
+        if (removeBgBtn) removeBgBtn.disabled = true;
         if (submitBtn) submitBtn.disabled = true;
 
-        statusText.textContent = 'ZVARR AI is segmenting jewelry & eliminating background...';
+        if (statusText) statusText.textContent = 'ZVARR AI: Segmenting jewellery & removing background...';
+        if (progressFill) progressFill.style.width = '35%';
+        if (percentage) percentage.textContent = '35%';
+
+        await new Promise(r => setTimeout(r, 120));
+        if (progressFill) progressFill.style.width = '70%';
+        if (percentage) percentage.textContent = '70%';
 
         try {
-            const rawBlob = await removeBackground(source, {
-                model: 'medium',
-                output: {
-                    format: 'image/png',
-                    quality: 0.95
-                }
-            });
+            const cleanPng = await processSmartBackgroundRemoval(source);
 
-            const cleanedPng = await cleanAlphaNoise(rawBlob);
+            if (progressFill) progressFill.style.width = '100%';
+            if (percentage) percentage.textContent = '100%';
+            if (statusText) statusText.textContent = 'Background eliminated successfully ✓';
 
-            hiddenBase64Input.value = cleanedPng;
-            previewImg.src = cleanedPng;
-            loadingBar.classList.add('hidden');
-            removeBgBtn.disabled = false;
-            removeBgText.textContent = 'Background Removed ✓';
-            revertBtn.classList.remove('hidden');
+            await new Promise(r => setTimeout(r, 150));
+
+            if (hiddenBase64Input) hiddenBase64Input.value = cleanPng;
+            if (previewImg) previewImg.src = cleanPng;
+
+            if (loadingBar) loadingBar.classList.add('hidden');
+            if (removeBgBtn) removeBgBtn.disabled = false;
+            if (removeBgText) removeBgText.textContent = 'Background Removed ✓';
+            if (revertBtn) revertBtn.classList.remove('hidden');
             if (submitBtn) submitBtn.disabled = false;
 
         } catch (error) {
-            console.warn('AI fallback to canvas segmentation:', error);
-            fallbackCanvasProcessor(source);
+            console.error('Error removing background:', error);
+            if (loadingBar) loadingBar.classList.add('hidden');
+            if (removeBgBtn) removeBgBtn.disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
         }
     }
+    window.triggerManualBackgroundRemoval = triggerManualBackgroundRemoval;
 
     function restoreOriginalPhoto() {
-        hiddenBase64Input.value = '';
-        if (currentRawImageSource) {
+        const hiddenBase64Input = document.getElementById('transparent_image_base64');
+        const previewImg = document.getElementById('live-transparent-preview');
+        const revertBtn = document.getElementById('btn-revert-bg');
+        const removeBgText = document.getElementById('btn-remove-bg-text');
+
+        if (hiddenBase64Input) hiddenBase64Input.value = '';
+        if (currentRawImageSource && previewImg) {
             if (typeof currentRawImageSource === 'string') {
                 previewImg.src = currentRawImageSource;
             } else {
                 previewImg.src = URL.createObjectURL(currentRawImageSource);
             }
-        } else {
+        } else if (previewImg) {
             previewImg.src = "{{ $product->image_url }}";
         }
-        document.getElementById('btn-revert-bg').classList.add('hidden');
-        document.getElementById('btn-remove-bg-text').textContent = 'Remove Background';
+        if (revertBtn) revertBtn.classList.add('hidden');
+        if (removeBgText) removeBgText.textContent = 'Remove Background';
     }
+    window.restoreOriginalPhoto = restoreOriginalPhoto;
 
-    function fallbackCanvasProcessor(src) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            let w = img.naturalWidth || img.width;
-            let h = img.naturalHeight || img.height;
-            const maxDim = 1000;
-            if (w > maxDim || h > maxDim) {
-                if (w > h) {
-                    h = Math.round((h * maxDim) / w);
-                    w = maxDim;
-                } else {
-                    w = Math.round((w * maxDim) / h);
-                    h = maxDim;
-                }
-            }
-            canvas.width = w;
-            canvas.height = h;
-            ctx.drawImage(img, 0, 0, w, h);
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('input_image_file');
+        const urlInput = document.getElementById('input_image_url');
+        const removeBgBtn = document.getElementById('btn-remove-bg');
+        const revertBtn = document.getElementById('btn-revert-bg');
 
-            const transparentPng = canvas.toDataURL('image/png');
-            hiddenBase64Input.value = transparentPng;
-            previewImg.src = transparentPng;
-            loadingBar.classList.add('hidden');
-            document.getElementById('btn-remove-bg').disabled = false;
-            document.getElementById('btn-remove-bg-text').textContent = 'Background Removed ✓';
-            document.getElementById('btn-revert-bg').classList.remove('hidden');
-            if (submitBtn) submitBtn.disabled = false;
-        };
-        if (typeof src === 'string') img.src = src;
-        else img.src = URL.createObjectURL(src);
-    }
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleSource(file);
+            });
+        }
 
-    if (fileInput) {
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) handleSource(file);
-        });
-    }
+        if (urlInput) {
+            urlInput.addEventListener('input', (e) => {
+                if (e.target.value) handleSource(e.target.value);
+            });
+        }
 
-    if (urlInput) {
-        urlInput.addEventListener('blur', (e) => {
-            if (e.target.value) handleSource(e.target.value);
-        });
-    }
+        if (removeBgBtn) {
+            removeBgBtn.addEventListener('click', triggerManualBackgroundRemoval);
+        }
+
+        if (revertBtn) {
+            revertBtn.addEventListener('click', restoreOriginalPhoto);
+        }
+    });
 </script>
 
 <!-- Interactive Studio Polish Script -->
