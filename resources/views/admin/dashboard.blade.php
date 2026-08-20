@@ -133,8 +133,8 @@
                             <tr class="hover:bg-white/[0.02] transition">
                                 <td class="py-3.5 px-4">
                                     <div class="flex items-center gap-3">
-                                        @if($product->image)
-                                            <img src="{{ $product->image }}" alt="{{ $product->name }}" 
+                                        @if($product->image_url)
+                                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" 
                                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
                                                 class="w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] rounded-xl object-cover border border-amber-400/20 shadow-md flex-shrink-0">
                                         @else
@@ -181,8 +181,8 @@
                 @forelse($recentProducts as $product)
                     <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 min-w-0">
-                            @if($product->image)
-                                <img src="{{ $product->image }}" alt="{{ $product->name }}" 
+                            @if($product->image_url)
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" 
                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
                                     class="w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-xl object-cover border border-amber-400/20 flex-shrink-0">
                             @else

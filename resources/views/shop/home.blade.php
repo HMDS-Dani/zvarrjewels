@@ -299,14 +299,14 @@
                             <div class="mirelle-contact-shadow"></div>
 
                             <!-- Main Floating Jewel -->
-                            <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800' }}" 
+                            <img src="{{ $product->image_url }}" 
                                 alt="{{ $product->name }}" 
                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';"
                                 class="auto-remove-bg mirelle-jewel-img">
 
                             <!-- Exact Glass Floor Reflection -->
                             <div class="mirelle-reflection-layer">
-                                <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800' }}" 
+                                <img src="{{ $product->image_url }}" 
                                     alt="" 
                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';"
                                     class="auto-remove-bg mirelle-reflection-img">
@@ -318,25 +318,16 @@
                     <div class="pt-5 mt-3 border-t border-white/10 flex items-center justify-between z-10">
                         <a href="{{ route('shop.product', $product->slug) }}" 
                             class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-300 hover:text-white transition">
-                            <span>View Piece</span>
-                            <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                            <span>Inspect Piece</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </a>
 
-                        <a href="{{ route('shop.product', $product->slug) }}" 
-                            class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-300 hover:text-white transition">
-                            <span>View Piece</span>
-                            <i class="fa-solid fa-arrow-right text-[9px]"></i>
-                        </a>
-
-                        @if(!empty($storeSettings['whatsapp_number']))
-                            <a href="https://wa.me/{{ $storeSettings['whatsapp_number'] }}?text={{ urlencode('Hi ZVARR by Zaiyal! I want to order: ' . $product->name . ' (Rs. ' . number_format($product->price, 0) . ')') }}"
-                                target="_blank"
-                                title="Quick WhatsApp Order"
-                                class="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5 transition">
-                                <i class="fa-brands fa-whatsapp text-sm"></i>
-                                <span>WhatsApp</span>
-                            </a>
-                        @endif
+                        <button type="button" 
+                            onclick="openDirectWhatsApp('{{ addslashes($product->name) }}', '{{ number_format($product->price, 0) }}', '{{ route('shop.product', $product->slug) }}')"
+                            class="w-8 h-8 rounded-full bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-xs transition active:scale-95" 
+                            title="Order via WhatsApp">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                        </button>
                     </div>
 
                 </div>
@@ -351,7 +342,7 @@
 </section>
 
 <!-- 3. EXPLORE BY CATEGORY -->
-<section class="py-16 bg-[#09090b] relative z-10 border-b border-white/5">
+<section id="categories" class="py-20 sm:py-28 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center max-w-xl mx-auto mb-12 space-y-2">
@@ -364,7 +355,7 @@
             @foreach($categories as $category)
                 <a href="{{ route('shop.category', $category->slug) }}" 
                     class="group relative h-64 rounded-2xl overflow-hidden glass-card-3d block border border-white/10 hover:border-amber-400/40">
-                    <img src="{{ $category->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600' }}" 
+                    <img src="{{ $category->image_url }}" 
                         alt="{{ $category->name }}" 
                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
                         class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700 opacity-60 group-hover:opacity-80">

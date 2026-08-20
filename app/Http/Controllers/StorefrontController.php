@@ -176,4 +176,58 @@ class StorefrontController extends Controller
 
         return redirect()->back()->with('inquiry_success', 'Your inquiry has been received! Our concierge team will contact you shortly.');
     }
+
+    /**
+     * Stream product image directly without bloating HTML response
+     */
+    public function productMedia($id)
+    {
+        $product = Product::find($id);
+        if (! $product || empty($product->image)) {
+            return redirect('https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800');
+        }
+
+        if (str_starts_with($product->image, 'http://') || str_starts_with($product->image, 'https://')) {
+            return redirect($product->image);
+        }
+
+        if (preg_match('/^data:(image\/[a-zA-Z0-9\+\-]+);base64,(.+)$/s', $product->image, $matches)) {
+            $mime = $matches[1];
+            $binary = base64_decode($matches[2]);
+
+            return response($binary, 200, [
+                'Content-Type' => $mime,
+                'Cache-Control' => 'public, max-age=604800, immutable',
+            ]);
+        }
+
+        return redirect($product->image);
+    }
+
+    /**
+     * Stream category image directly without bloating HTML response
+     */
+    public function categoryMedia($id)
+    {
+        $category = Category::find($id);
+        if (! $category || empty($category->image)) {
+            return redirect('https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600');
+        }
+
+        if (str_starts_with($category->image, 'http://') || str_starts_with($category->image, 'https://')) {
+            return redirect($category->image);
+        }
+
+        if (preg_match('/^data:(image\/[a-zA-Z0-9\+\-]+);base64,(.+)$/s', $category->image, $matches)) {
+            $mime = $matches[1];
+            $binary = base64_decode($matches[2]);
+
+            return response($binary, 200, [
+                'Content-Type' => $mime,
+                'Cache-Control' => 'public, max-age=604800, immutable',
+            ]);
+        }
+
+        return redirect($category->image);
+    }
 }

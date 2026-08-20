@@ -97,8 +97,10 @@
                     <div class="p-4 rounded-2xl bg-[#08080d] border border-white/5 hover:border-amber-400/30 flex flex-col justify-between gap-3.5 transition group">
                         
                         <div class="flex items-start gap-3.5">
-                            @if($category->image)
-                                <img src="{{ $category->image }}" alt="{{ $category->name }}" class="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-2xl object-cover border border-amber-400/20 flex-shrink-0 bg-black/40 shadow-md">
+                            @if($category->image_url)
+                                <img src="{{ $category->image_url }}" alt="{{ $category->name }}" 
+                                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
+                                    class="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-2xl object-cover border border-amber-400/20 flex-shrink-0 bg-black/40 shadow-md">
                             @else
                                 <div class="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400 flex-shrink-0">
                                     <i class="fa-solid fa-tag text-lg"></i>

@@ -146,14 +146,14 @@
                         <div class="mirelle-detail-shadow"></div>
 
                         <!-- Main Jewel -->
-                        <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1000' }}" 
+                        <img src="{{ $product->image_url }}" 
                             alt="{{ $product->name }}" 
                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1000';"
                             class="auto-remove-bg mirelle-detail-img">
 
                         <!-- Upside Down Mirror Reflection -->
                         <div class="mirelle-detail-reflection">
-                            <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1000' }}" 
+                            <img src="{{ $product->image_url }}" 
                                 alt="" 
                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1000';"
                                 class="auto-remove-bg mirelle-detail-reflect-img">

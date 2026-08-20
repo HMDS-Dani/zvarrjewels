@@ -23,6 +23,10 @@ Route::get('/contact', [StorefrontController::class, 'contact'])->name('contact'
 Route::post('/contact/inquiry', [StorefrontController::class, 'submitContactInquiry'])->name('contact.inquiry');
 Route::post('/reviews', [StorefrontController::class, 'submitReview'])->name('reviews.submit');
 
+// Dedicated high-speed media stream routes (keeps HTML payload ultralight < 30KB)
+Route::get('/media/product/{id}', [StorefrontController::class, 'productMedia'])->name('media.product');
+Route::get('/media/category/{id}', [StorefrontController::class, 'categoryMedia'])->name('media.category');
+
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATION ROUTES (Login, Register, Logout)

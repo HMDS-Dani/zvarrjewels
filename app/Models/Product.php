@@ -39,4 +39,20 @@ class Product extends Model
     {
         return $this->hasMany(Review::class)->where('is_approved', true)->latest();
     }
+
+    /**
+     * Get ultralight streamable image URL
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if (empty($this->image)) {
+            return 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        return route('media.product', $this->id);
+    }
 }

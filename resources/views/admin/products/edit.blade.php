@@ -220,7 +220,7 @@
 
                     <div id="card-preview-podium" class="flex items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] shadow-2xl min-h-[220px] sm:min-h-[260px] relative overflow-hidden">
                         <div id="spotlight-aura" class="absolute w-36 sm:w-44 h-36 sm:h-44 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
-                        <img id="live-transparent-preview" src="{{ $product->image ?? '' }}" alt="Transparent Preview" 
+                        <img id="live-transparent-preview" src="{{ $product->image_url }}" alt="Transparent Preview" 
                             class="max-h-48 sm:max-h-56 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]">
                     </div>
                 </div>
