@@ -52,10 +52,11 @@ class AdminProductController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        $products = $query->latest()->paginate(10)->withQueryString();
-        $categories = Category::all();
+        $products = $query->latest()->paginate(50)->withQueryString();
+        $categories = Category::withCount('products')->get();
+        $totalProductCount = Product::count();
 
-        return view('admin.products.index', compact('products', 'categories'));
+        return view('admin.products.index', compact('products', 'categories', 'totalProductCount'));
     }
 
     /**

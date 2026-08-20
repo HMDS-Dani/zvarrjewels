@@ -6,8 +6,9 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- TOP FILTER BAR -->
+    <!-- TOP FILTER & CATEGORY CHIPS BAR -->
     <div class="glass-card-luxury p-4 sm:p-6 rounded-3xl space-y-4">
+        <!-- Search & Dropdown Form -->
         <form method="GET" action="{{ route('admin.products.index') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             
             <!-- Search Input -->
@@ -16,17 +17,17 @@
                     <i class="fa-solid fa-magnifying-glass text-xs"></i>
                 </div>
                 <input type="text" name="search" value="{{ request('search') }}" 
-                    placeholder="Search product name, gold karat, diamond, material..." 
+                    placeholder="Search product name, material, gold karat..." 
                     class="w-full pl-10 pr-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
             </div>
 
             <div class="flex items-center gap-2.5">
-                <!-- Category Select -->
+                <!-- Category Select Dropdown -->
                 <select name="category_id" class="flex-1 sm:flex-none py-3 px-4 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     <option value="" class="bg-[#0d0d14] text-stone-300">All Categories</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" class="bg-[#0d0d14] text-stone-200" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
-                            {{ $cat->name }}
+                            {{ $cat->name }} ({{ $cat->products_count }})
                         </option>
                     @endforeach
                 </select>
@@ -38,19 +39,44 @@
                 </button>
 
                 @if(request()->hasAny(['search', 'category_id']))
-                    <a href="{{ route('admin.products.index') }}" class="text-xs text-stone-400 hover:text-rose-400 underline px-2">
-                        Clear
+                    <a href="{{ route('admin.products.index') }}" class="text-xs text-stone-400 hover:text-rose-400 underline px-2 whitespace-nowrap">
+                        Clear Filters
                     </a>
                 @endif
             </div>
         </form>
 
+        <!-- Category Filter Pills / Tabs (Quick 1-Click Access) -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none">
+            <a href="{{ route('admin.products.index', request()->filled('search') ? ['search' => request('search')] : []) }}" 
+                class="px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 {{ !request('category_id') ? 'bg-gradient-to-r from-amber-300 to-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20' : 'bg-white/5 text-stone-300 hover:bg-white/10 border border-white/10' }}">
+                <span>All Products</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] {{ !request('category_id') ? 'bg-black/20 text-slate-950 font-black' : 'bg-white/10 text-stone-400' }}">
+                    {{ $totalProductCount }}
+                </span>
+            </a>
+
+            @foreach($categories as $cat)
+                <a href="{{ route('admin.products.index', array_merge(['category_id' => $cat->id], request()->filled('search') ? ['search' => request('search')] : [])) }}" 
+                    class="px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 {{ request('category_id') == $cat->id ? 'bg-gradient-to-r from-amber-300 to-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20' : 'bg-white/5 text-stone-300 hover:bg-white/10 border border-white/10' }}">
+                    <span>{{ $cat->name }}</span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] {{ request('category_id') == $cat->id ? 'bg-black/20 text-slate-950 font-black' : 'bg-white/10 text-stone-400' }}">
+                        {{ $cat->products_count }}
+                    </span>
+                </a>
+            @endforeach
+        </div>
+
+        <!-- Counter & Add Action -->
         <div class="flex items-center justify-between pt-3 border-t border-white/5">
-            <span class="text-xs text-stone-400">
-                Total Products: <span class="font-bold text-amber-300">{{ $products->total() }}</span> items
-            </span>
+            <div class="flex items-center gap-2 text-xs text-stone-400">
+                <span>Showing: <span class="font-bold text-amber-300">{{ $products->count() }}</span> of <span class="font-bold text-white">{{ $products->total() }}</span> products</span>
+                @if(request('category_id'))
+                    <span class="text-stone-500">• Filtered by category</span>
+                @endif
+            </div>
             <a href="{{ route('admin.products.create') }}" 
-                class="px-4 sm:px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2">
+                class="px-4 sm:px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 flex-shrink-0">
                 <i class="fa-solid fa-plus text-[11px]"></i>
                 <span>Add Product</span>
             </a>
