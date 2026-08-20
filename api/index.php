@@ -33,8 +33,8 @@ if (file_exists(__DIR__.'/../bootstrap/cache/packages.php')) {
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
 
-putenv('SESSION_DRIVER=cookie');
-$_ENV['SESSION_DRIVER'] = 'cookie';
+putenv('SESSION_DRIVER=database');
+$_ENV['SESSION_DRIVER'] = 'database';
 
 putenv('SESSION_LIFETIME=120');
 $_ENV['SESSION_LIFETIME'] = '120';

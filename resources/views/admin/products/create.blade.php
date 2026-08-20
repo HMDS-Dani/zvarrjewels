@@ -385,11 +385,21 @@
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
-                const w = img.naturalWidth || img.width;
-                const h = img.naturalHeight || img.height;
+                let w = img.naturalWidth || img.width;
+                let h = img.naturalHeight || img.height;
+                const maxDim = 1000;
+                if (w > maxDim || h > maxDim) {
+                    if (w > h) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                    } else {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                    }
+                }
                 canvas.width = w;
                 canvas.height = h;
-                ctx.drawImage(img, 0, 0);
+                ctx.drawImage(img, 0, 0, w, h);
 
                 const imgData = ctx.getImageData(0, 0, w, h);
                 const d = imgData.data;
@@ -461,16 +471,11 @@
 
         if (!isAiMode) {
             loadingBar.classList.add('hidden');
+            hiddenBase64Input.value = '';
             if (typeof imageSource === 'string') {
                 previewImg.src = imageSource;
-                hiddenBase64Input.value = '';
             } else {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    hiddenBase64Input.value = e.target.result;
-                    previewImg.src = e.target.result;
-                };
-                reader.readAsDataURL(imageSource);
+                previewImg.src = URL.createObjectURL(imageSource);
             }
             previewWrapper.classList.remove('hidden');
             if (submitBtn) submitBtn.disabled = false;
@@ -484,39 +489,51 @@
         statusText.textContent = 'ZVARR AI is segmenting jewelry & eliminating noise...';
 
         try {
-            // Run high-definition model for pristine, crisp results
-            const rawBlob = await removeBackground(imageSource, {
-                model: 'medium', // High-definition precision
-                output: {
-                    format: 'image/png',
-                    quality: 0.98
+            // High-precision Client-side Alpha Segmentation
+            const blob = await imglyRemoveBackground(imageSource, {
+                progress: (key, current, total) => {
+                    const pct = Math.round((current / total) * 100);
+                    if (progressFill) progressFill.style.width = pct + '%';
+                    if (percentage) percentage.textContent = pct + '%';
                 }
             });
 
-            // Clean isolated specks and polish alpha
-            const cleanedPng = await cleanAlphaNoise(rawBlob);
+            statusText.textContent = 'Applying fine edge polish & shadow contouring...';
+            const cleanPngDataUrl = await cleanAlphaNoise(blob);
 
-            hiddenBase64Input.value = cleanedPng;
-            previewImg.src = cleanedPng;
+            hiddenBase64Input.value = cleanPngDataUrl;
+            previewImg.src = cleanPngDataUrl;
             loadingBar.classList.add('hidden');
             previewWrapper.classList.remove('hidden');
             if (submitBtn) submitBtn.disabled = false;
 
         } catch (error) {
-            console.warn('AI fallback to canvas segmentation:', error);
-            fallbackCanvasProcessor(imageSource);
+            console.warn('Advanced AI segmentation error, fallback active:', error);
+            fallbackCleanCut(imageSource);
         }
     }
 
-    function fallbackCanvasProcessor(src) {
+    function fallbackCleanCut(src) {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = img.naturalWidth || img.width;
-            canvas.height = img.naturalHeight || img.height;
-            ctx.drawImage(img, 0, 0);
+            let w = img.naturalWidth || img.width;
+            let h = img.naturalHeight || img.height;
+            const maxDim = 1000;
+            if (w > maxDim || h > maxDim) {
+                if (w > h) {
+                    h = Math.round((h * maxDim) / w);
+                    w = maxDim;
+                } else {
+                    w = Math.round((w * maxDim) / h);
+                    h = maxDim;
+                }
+            }
+            canvas.width = w;
+            canvas.height = h;
+            ctx.drawImage(img, 0, 0, w, h);
 
             const transparentPng = canvas.toDataURL('image/png');
             hiddenBase64Input.value = transparentPng;
