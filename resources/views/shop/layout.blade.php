@@ -95,21 +95,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
                 
-                <!-- Brand Logo (Clean, sleek, gold) -->
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 flex-shrink-0 group">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-300 via-amber-500 to-stone-900 p-[1px] shadow-lg shadow-amber-500/15 group-hover:scale-105 transition duration-300">
-                        <div class="w-full h-full bg-[#0a0a0c] rounded-xl flex items-center justify-center">
-                            <span class="font-cinzel font-black text-xs text-amber-300">Z</span>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="font-cinzel font-black text-lg sm:text-xl tracking-[0.2em] gold-gradient-text block leading-none">
-                            ZVARR
-                        </span>
-                        <span class="text-[7.5px] uppercase font-bold tracking-[0.35em] text-stone-400 block mt-0.5">
-                            BY ZAIYAL
-                        </span>
-                    </div>
+                <!-- Brand Logo (Clean VIP Luxury Typography) -->
+                <a href="{{ route('home') }}" class="flex flex-col items-start flex-shrink-0 group py-1">
+                    <span class="font-cinzel font-bold text-xl sm:text-2xl tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 group-hover:from-white group-hover:to-amber-300 transition-all duration-300 drop-shadow-[0_2px_12px_rgba(245,158,11,0.3)]">
+                        ZVARR
+                    </span>
+                    <span class="text-[8px] sm:text-[8.5px] uppercase font-semibold tracking-[0.44em] text-stone-400 group-hover:text-amber-300 transition-colors duration-300 -mt-0.5">
+                        BY ZAIYAL
+                    </span>
                 </a>
 
                 <!-- Desktop Navigation Links -->
@@ -275,16 +268,13 @@
                 
                 <!-- Col 1: Brand Info (4 cols) -->
                 <div class="lg:col-span-4 space-y-3.5 sm:space-y-4">
-                    <a href="{{ route('home') }}" class="inline-flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-300 via-amber-500 to-yellow-700 p-[1px] shadow-lg shadow-amber-500/20">
-                            <div class="w-full h-full bg-[#0a0a0c] rounded-xl flex items-center justify-center">
-                                <span class="font-cinzel font-black text-xs text-amber-300">Z</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="font-cinzel font-black text-xl tracking-[0.2em] gold-gradient-text block leading-none">ZVARR</span>
-                            <span class="text-[8px] uppercase font-bold tracking-[0.35em] text-stone-400 block mt-0.5">BY ZAIYAL</span>
-                        </div>
+                    <a href="{{ route('home') }}" class="inline-flex flex-col items-start group">
+                        <span class="font-cinzel font-bold text-2xl tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 group-hover:from-white group-hover:to-amber-300 transition-all duration-300 drop-shadow-[0_2px_12px_rgba(245,158,11,0.3)]">
+                            ZVARR
+                        </span>
+                        <span class="text-[8.5px] uppercase font-semibold tracking-[0.44em] text-stone-400 group-hover:text-amber-300 transition-colors duration-300 -mt-0.5">
+                            BY ZAIYAL
+                        </span>
                     </a>
 
                     <p class="text-xs text-stone-400 leading-relaxed font-light max-w-sm sm:max-w-md">
@@ -435,13 +425,14 @@
             </button>
 
             <!-- Brand Header -->
-            <div class="text-center mb-6 space-y-1.5">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-300 via-amber-500 to-stone-900 p-[1px] mx-auto shadow-lg shadow-amber-500/20">
-                    <div class="w-full h-full bg-[#0a0a0c] rounded-xl flex items-center justify-center">
-                        <span class="font-cinzel font-black text-xs text-amber-300">Z</span>
-                    </div>
-                </div>
-                <h3 class="text-2xl font-serif-luxury font-normal text-white">ZVARR Vault Access</h3>
+            <div class="text-center mb-6 space-y-1">
+                <span class="font-cinzel font-bold text-2xl tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)]">
+                    ZVARR
+                </span>
+                <span class="text-[8.5px] uppercase font-semibold tracking-[0.44em] text-stone-400 block -mt-0.5">
+                    BY ZAIYAL
+                </span>
+                <h3 class="text-xl font-serif-luxury font-normal text-white pt-2">Vault Access</h3>
                 <p class="text-[11px] text-stone-400 font-light">Exclusive access to bespoke jewelry & order tracking</p>
             </div>
 

@@ -119,15 +119,14 @@
     <aside class="w-72 bg-[#09090f]/95 backdrop-blur-2xl border-r border-amber-400/15 flex-col justify-between hidden md:flex min-h-screen sticky top-0 z-40">
         <div>
             <!-- Brand Logo -->
-            <div class="h-24 flex items-center px-6 border-b border-white/5 gap-3.5 bg-gradient-to-b from-amber-950/20 to-transparent">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 p-[1px] shadow-lg shadow-amber-500/20 flex-shrink-0">
-                    <div class="w-full h-full bg-[#09090d] rounded-2xl flex items-center justify-center">
-                        <span class="font-cinzel font-black text-lg text-amber-300">Z</span>
-                    </div>
-                </div>
+            <div class="h-24 flex items-center px-6 border-b border-white/5 bg-gradient-to-b from-amber-950/20 to-transparent">
                 <div>
-                    <h1 class="font-cinzel font-bold text-lg tracking-widest text-white">ZVARR</h1>
-                    <p class="text-[9px] uppercase font-bold tracking-[0.2em] text-amber-400">ADMIN PANEL</p>
+                    <span class="font-cinzel font-bold text-xl tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)]">
+                        ZVARR
+                    </span>
+                    <span class="text-[8.5px] uppercase font-bold tracking-[0.38em] text-stone-400 block mt-0.5">
+                        BY ZAIYAL • CRM
+                    </span>
                 </div>
             </div>
 
@@ -262,16 +261,13 @@
             <div class="w-72 bg-[#09090f] border-r border-amber-400/20 h-full p-6 flex flex-col justify-between overflow-y-auto shadow-2xl">
                 <div>
                     <div class="flex items-center justify-between pb-6 border-b border-white/5 mb-6">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 p-[1px] shadow-lg shadow-amber-500/20">
-                                <div class="w-full h-full bg-[#09090d] rounded-2xl flex items-center justify-center">
-                                    <span class="font-cinzel font-black text-base text-amber-300">Z</span>
-                                </div>
-                            </div>
-                            <div>
-                                <span class="font-cinzel font-bold text-sm tracking-widest text-white">ZVARR</span>
-                                <p class="text-[9px] uppercase tracking-widest text-amber-400 font-bold">ADMIN PANEL</p>
-                            </div>
+                        <div>
+                            <span class="font-cinzel font-bold text-lg tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)]">
+                                ZVARR
+                            </span>
+                            <span class="text-[8px] uppercase font-bold tracking-[0.38em] text-stone-400 block mt-0.5">
+                                BY ZAIYAL • CRM
+                            </span>
                         </div>
                         <button type="button" onclick="toggleMobileDrawer()" class="w-9 h-9 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10">
                             <i class="fa-solid fa-xmark"></i>

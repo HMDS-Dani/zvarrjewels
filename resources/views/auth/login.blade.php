@@ -7,13 +7,14 @@
     <div class="max-w-md w-full glass-card-3d bg-gradient-to-b from-[#16161c] via-[#09090b] to-[#040405] p-8 sm:p-10 rounded-3xl border border-amber-400/30 shadow-2xl relative">
         
         <!-- Header -->
-        <div class="text-center mb-8 space-y-2">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-stone-900 p-[1px] mx-auto shadow-lg shadow-amber-500/20">
-                <div class="w-full h-full bg-[#0a0a0c] rounded-2xl flex items-center justify-center">
-                    <span class="font-cinzel font-black text-base text-amber-300">Z</span>
-                </div>
-            </div>
-            <h2 class="text-3xl font-serif-luxury font-normal text-white">Sign In to Vault</h2>
+        <div class="text-center mb-8 space-y-1">
+            <span class="font-cinzel font-bold text-3xl tracking-[0.26em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 block drop-shadow-[0_2px_12px_rgba(245,158,11,0.3)]">
+                ZVARR
+            </span>
+            <span class="text-[9px] uppercase font-semibold tracking-[0.45em] text-stone-400 block pb-2">
+                BY ZAIYAL
+            </span>
+            <h2 class="text-2xl font-serif-luxury font-normal text-white">Sign In to Vault</h2>
             <p class="text-xs text-stone-400 font-light">Access your exclusive wishlist & order tracking.</p>
         </div>
 
