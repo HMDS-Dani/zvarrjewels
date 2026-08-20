@@ -5,6 +5,8 @@ $storageDirs = [
     '/tmp/storage',
     '/tmp/storage/app',
     '/tmp/storage/app/public',
+    '/tmp/storage/bootstrap',
+    '/tmp/storage/bootstrap/cache',
     '/tmp/storage/framework',
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/sessions',
@@ -19,14 +21,13 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// Copy pre-discovered packages manifest to writable /tmp
-$bundledPackages = __DIR__.'/../bootstrap/cache/packages.php';
-if (file_exists($bundledPackages)) {
-    @copy($bundledPackages, '/tmp/packages.php');
+// Copy bootstrap files to writable /tmp
+if (file_exists(__DIR__.'/../bootstrap/providers.php')) {
+    @copy(__DIR__.'/../bootstrap/providers.php', '/tmp/storage/bootstrap/providers.php');
 }
-
-putenv('APP_PACKAGES_CACHE=/tmp/packages.php');
-$_ENV['APP_PACKAGES_CACHE'] = '/tmp/packages.php';
+if (file_exists(__DIR__.'/../bootstrap/cache/packages.php')) {
+    @copy(__DIR__.'/../bootstrap/cache/packages.php', '/tmp/storage/bootstrap/cache/packages.php');
+}
 
 // Redirect storage paths to /tmp
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
