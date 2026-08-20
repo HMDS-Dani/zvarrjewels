@@ -48,6 +48,9 @@ $_ENV['SESSION_SAME_SITE'] = 'lax';
 putenv('CACHE_STORE=file');
 $_ENV['CACHE_STORE'] = 'file';
 
+putenv('BCRYPT_ROUNDS=12');
+$_ENV['BCRYPT_ROUNDS'] = '12';
+
 putenv('APP_MAINTENANCE_DRIVER=file');
 $_ENV['APP_MAINTENANCE_DRIVER'] = 'file';
 
