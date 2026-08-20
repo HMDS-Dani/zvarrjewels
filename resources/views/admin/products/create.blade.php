@@ -8,17 +8,17 @@
 
     <!-- Top Back Button -->
     <div>
-        <a href="{{ route('admin.products.index') }}" class="text-xs font-bold text-slate-400 hover:text-amber-400 flex items-center gap-1.5 transition">
-            <i class="fa-solid fa-arrow-left"></i>
-            Back to Jewellery Inventory
+        <a href="{{ route('admin.products.index') }}" class="text-xs font-bold text-stone-400 hover:text-amber-300 flex items-center gap-2 transition group">
+            <i class="fa-solid fa-arrow-left text-[11px] group-hover:-translate-x-1 transition transform"></i>
+            <span>Back to Jewellery Inventory</span>
         </a>
     </div>
 
     <!-- Main Form Card -->
-    <div class="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 shadow-xl">
-        <div class="mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-slate-800">
-            <h2 class="font-serif font-bold text-lg sm:text-xl text-slate-100">Jewellery Details</h2>
-            <p class="text-xs text-slate-400 mt-0.5">Fill in specifications. ZVARR AI extracts crisp jewelry without background noise.</p>
+    <div class="glass-card-luxury p-5 sm:p-8 rounded-3xl space-y-6">
+        <div class="mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-white/5">
+            <h2 class="font-cinzel font-bold text-lg sm:text-xl text-white">Bespoke Jewellery Specifications</h2>
+            <p class="text-xs text-stone-400 mt-1">Register new creations into the Maison vault. ZVARR AI automatically isolates jewels for high-end catalog presentation.</p>
         </div>
 
         <form id="product-form" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5 sm:space-y-6">
@@ -30,21 +30,21 @@
             <!-- 1. Name & Category -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                        Product Name <span class="text-amber-400">*</span>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                        Jewellery Title <span class="text-amber-400">*</span>
                     </label>
                     <input type="text" name="name" value="{{ old('name') }}" required
-                        placeholder="e.g. Royal 24K Gold Bridal Set"
-                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        placeholder="e.g. Royal 24K Gold Solitaire Ring"
+                        class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                        Category <span class="text-amber-400">*</span>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                        Collection <span class="text-amber-400">*</span>
                     </label>
                     <select name="category_id" required
-                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
-                        <option value="">Select Category</option>
+                        class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-stone-200 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                        <option value="">Select Collection</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
                                 {{ $cat->name }}
@@ -57,106 +57,106 @@
             <!-- 2. Material & Stock -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                        Material / Metal Type <span class="text-amber-400">*</span>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                        Material & Metal Specification <span class="text-amber-400">*</span>
                     </label>
                     <input type="text" name="material" value="{{ old('material', '22K Yellow Gold') }}" required
                         placeholder="e.g. 24K Yellow Gold, Diamond VS1, Platinum"
-                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
                         Available Stock Count <span class="text-amber-400">*</span>
                     </label>
                     <input type="number" name="stock" value="{{ old('stock', 10) }}" min="0" required
-                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
             </div>
 
             <!-- 3. Pricing -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                        Regular Price (PKR) <span class="text-amber-400">*</span>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                        Regular Boutique Price (PKR) <span class="text-amber-400">*</span>
                     </label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 text-xs font-bold">Rs.</span>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-amber-400 text-xs font-bold font-cinzel">Rs.</span>
                         <input type="number" step="0.01" name="price" value="{{ old('price') }}" required
                             placeholder="125000"
-                            class="w-full pl-11 pr-3.5 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            class="w-full pl-12 pr-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white font-cinzel font-bold focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                        Discount / Sale Price (Optional)
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                        Discounted VIP Price (Optional)
                     </label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 text-xs font-bold">Rs.</span>
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-stone-500 text-xs font-bold font-cinzel">Rs.</span>
                         <input type="number" step="0.01" name="discount_price" value="{{ old('discount_price') }}"
                             placeholder="115000"
-                            class="w-full pl-11 pr-3.5 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            class="w-full pl-12 pr-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white font-cinzel focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     </div>
                 </div>
             </div>
 
             <!-- 4. Description -->
             <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                    Description & Specifications
+                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
+                    Maison Description & Specifications
                 </label>
                 <textarea name="description" rows="3"
-                    placeholder="Write details about diamond clarity, gold karat purity, weight in grams..."
-                    class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none">{{ old('description') }}</textarea>
+                    placeholder="Provide details about diamond clarity, gold karat purity, certifications, weight..."
+                    class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none">{{ old('description') }}</textarea>
             </div>
 
             <!-- 5. UPLOAD OPTIONS & AI REMOVAL SELECTION -->
-            <div class="p-4 sm:p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4 sm:space-y-5">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+            <div class="p-5 sm:p-6 rounded-3xl bg-[#08080d] border border-amber-400/15 space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>Jewellery Photograph & Processing Mode</span>
+                        <i class="fa-solid fa-camera-retro"></i>
+                        <span>Jewellery Imagery & Stage Mode</span>
                     </h4>
                 </div>
 
                 <!-- Mode Selector -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label id="label-mode-ai" class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/10 cursor-pointer transition">
+                    <label id="label-mode-ai" class="flex items-start gap-3 p-4 rounded-2xl border-2 border-amber-400 bg-amber-400/10 cursor-pointer transition shadow-lg shadow-amber-500/5">
                         <input type="radio" name="bg_mode" value="ai" checked class="mt-0.5 text-amber-500 focus:ring-amber-400">
                         <div>
                             <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                                <span>ZVARR AI Background Remover</span>
+                                <span>ZVARR Stage Background Remover</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 mt-0.5 font-light">Crystal clean edge cut & noise speck removal.</p>
+                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Crystal clear silhouette on Maison Obsidian Stage.</p>
                         </div>
                     </label>
 
-                    <label id="label-mode-direct" class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-slate-700 hover:border-slate-600 bg-slate-900 cursor-pointer transition">
+                    <label id="label-mode-direct" class="flex items-start gap-3 p-4 rounded-2xl border-2 border-white/10 hover:border-white/20 bg-white/[0.02] cursor-pointer transition">
                         <input type="radio" name="bg_mode" value="direct" class="mt-0.5 text-amber-500 focus:ring-amber-400">
                         <div>
-                            <div class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                                <i class="fa-solid fa-image text-slate-400"></i>
-                                <span>Direct Upload (Keep Original BG)</span>
+                            <div class="text-xs font-bold text-stone-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-image text-stone-400"></i>
+                                <span>Direct Upload (Keep Original Photo)</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 mt-0.5 font-light">Keeps photo as-is without any background removal.</p>
+                            <p class="text-[11px] text-stone-400 mt-0.5 font-light">Displays photo directly without background extraction.</p>
                         </div>
                     </label>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 pt-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Option A: Image Direct Web URL</label>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option A: Direct Image Web URL</label>
                         <input type="url" id="input_image_url" name="image_url" value="{{ old('image_url') }}"
                             placeholder="https://images.unsplash.com/photo-..."
-                            class="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Option B: Upload File (PNG, JPG, WebP)</label>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Option B: Upload File (PNG, JPG, WebP)</label>
                         <input type="file" id="input_image_file" name="image_file" accept="image/*"
-                            class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-300 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer">
+                            class="w-full px-4 py-2.5 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs text-stone-300 file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-400 file:text-slate-950 hover:file:bg-amber-300 cursor-pointer">
                     </div>
                 </div>
 
@@ -194,23 +194,24 @@
 
             </div>
 
-            <!-- 6. Featured Toggle -->
-            <div class="flex items-center gap-3 p-3.5 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
+            <!-- 6. Featured Spotlight Toggle -->
+            <div class="flex items-center gap-3.5 p-4 bg-[#08080d] rounded-2xl border border-white/5">
                 <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', true) ? 'checked' : '' }}
-                    class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 border-slate-700 bg-slate-900 flex-shrink-0">
-                <label for="is_featured" class="text-xs font-semibold text-slate-300 cursor-pointer">
-                    Display as Featured Jewellery on Homepage Spotlight
+                    class="w-4 h-4 rounded text-amber-400 focus:ring-amber-400 border-white/20 bg-black/60 flex-shrink-0">
+                <label for="is_featured" class="text-xs font-semibold text-stone-200 cursor-pointer">
+                    Feature on Boutique Homepage Spotlight Showcase
                 </label>
             </div>
 
-            <!-- Submit Buttons (Mobile Full-Width & Stacked) -->
-            <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-slate-800">
-                <a href="{{ route('admin.products.index') }}" class="py-3 px-5 text-center rounded-xl text-xs font-bold text-slate-400 hover:text-slate-200 bg-slate-800/60 sm:bg-transparent transition">
+            <!-- Submit Buttons -->
+            <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-5 border-t border-white/5">
+                <a href="{{ route('admin.products.index') }}" class="py-3 px-6 text-center rounded-2xl text-xs font-bold text-stone-400 hover:text-white bg-white/5 sm:bg-transparent transition">
                     Cancel
                 </a>
                 <button type="submit" id="submit-btn"
-                    class="py-3 px-7 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-600 hover:opacity-95 text-slate-950 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5">
-                    <i class="fa-solid fa-plus mr-1.5"></i> Save & Publish Item
+                    class="py-3.5 px-8 bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-200 hover:to-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-amber-500/20 transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus text-xs"></i> 
+                    <span>Save & Publish Creation</span>
                 </button>
             </div>
 
@@ -220,19 +221,19 @@
 </div>
 
 <!-- INTERACTIVE IMAGE EDIT STUDIO MODAL -->
-<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 items-center justify-center p-4">
-    <div class="bg-slate-900 border border-amber-400/30 p-6 sm:p-8 rounded-3xl max-w-2xl w-full shadow-2xl relative space-y-5 animate-smooth-in">
+<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-xl z-50 items-center justify-center p-4">
+    <div class="glass-card-luxury p-6 sm:p-8 rounded-3xl max-w-2xl w-full shadow-2xl relative space-y-5 border border-amber-400/30">
         
         <!-- Header -->
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
             <div>
                 <h3 class="text-lg font-bold text-white font-cinzel flex items-center gap-2">
                     <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
                     <span>Jewellery Polish & Lighting Studio</span>
                 </h3>
-                <p class="text-xs text-slate-400 mt-0.5">Adjust brightness, contrast, brilliance, and card spotlight aura.</p>
+                <p class="text-xs text-stone-400 mt-0.5">Refine brilliance, metal warmth, and card stage aura.</p>
             </div>
-            <button type="button" onclick="closeStudioModal()" class="text-slate-400 hover:text-white p-2 text-base">
+            <button type="button" onclick="closeStudioModal()" class="w-8 h-8 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
