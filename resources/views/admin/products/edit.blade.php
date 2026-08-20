@@ -1,0 +1,576 @@
+@extends('admin.layout')
+
+@section('title', 'Edit Jewellery')
+@section('header_title', 'Edit Jewellery Item')
+
+@section('content')
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- Top Back Button -->
+    <div>
+        <a href="{{ route('admin.products.index') }}" class="text-xs font-bold text-slate-400 hover:text-amber-400 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Jewellery Inventory
+        </a>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 shadow-xl">
+        <div class="mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+                <h2 class="font-serif font-bold text-lg sm:text-xl text-slate-100">Edit: {{ $product->name }}</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Update specifications. ZVARR AI extracts crisp jewelry without background noise.</p>
+            </div>
+            <span class="text-xs text-slate-500 font-mono self-start sm:self-auto">ID: #{{ $product->id }}</span>
+        </div>
+
+        <form id="product-form" action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5 sm:space-y-6">
+            @csrf
+            @method('PUT')
+
+            <!-- Hidden input for client-side processed transparent PNG -->
+            <input type="hidden" name="transparent_image_base64" id="transparent_image_base64">
+
+            <!-- 1. Name & Category -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Product Name <span class="text-amber-400">*</span>
+                    </label>
+                    <input type="text" name="name" value="{{ old('name', $product->name) }}" required
+                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Category <span class="text-amber-400">*</span>
+                    </label>
+                    <select name="category_id" required
+                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>
+                                {{ $cat->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- 2. Material & Stock -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Material / Metal Type <span class="text-amber-400">*</span>
+                    </label>
+                    <input type="text" name="material" value="{{ old('material', $product->material) }}" required
+                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Available Stock Count <span class="text-amber-400">*</span>
+                    </label>
+                    <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" min="0" required
+                        class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+            </div>
+
+            <!-- 3. Pricing -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Regular Price (PKR) <span class="text-amber-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 text-xs font-bold">Rs.</span>
+                        <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}" required
+                            class="w-full pl-11 pr-3.5 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Discount / Sale Price (Optional)
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 text-xs font-bold">Rs.</span>
+                        <input type="number" step="0.01" name="discount_price" value="{{ old('discount_price', $product->discount_price) }}"
+                            class="w-full pl-11 pr-3.5 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Description -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                    Description & Specifications
+                </label>
+                <textarea name="description" rows="3"
+                    class="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none">{{ old('description', $product->description) }}</textarea>
+            </div>
+
+            <!-- 5. UPLOAD OPTIONS & AI REMOVAL SELECTION -->
+            <div class="p-4 sm:p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4 sm:space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Jewellery Photograph & Processing Mode</span>
+                    </h4>
+                    @if($product->image)
+                        <span class="text-xs text-emerald-400 flex items-center gap-1">
+                            <i class="fa-solid fa-check"></i> Current Image Saved
+                        </span>
+                    @endif
+                </div>
+
+                <!-- Mode Selector -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label id="label-mode-ai" class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-amber-500 bg-amber-500/10 cursor-pointer transition">
+                        <input type="radio" name="bg_mode" value="ai" checked class="mt-0.5 text-amber-500 focus:ring-amber-400">
+                        <div>
+                            <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                                <span>ZVARR AI Background Remover</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-0.5 font-light">Crystal clean edge cut & noise speck removal.</p>
+                        </div>
+                    </label>
+
+                    <label id="label-mode-direct" class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-slate-700 hover:border-slate-600 bg-slate-900 cursor-pointer transition">
+                        <input type="radio" name="bg_mode" value="direct" class="mt-0.5 text-amber-500 focus:ring-amber-400">
+                        <div>
+                            <div class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-image text-slate-400"></i>
+                                <span>Direct Upload (Keep Original BG)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-0.5 font-light">Keeps photo as-is without any background removal.</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 pt-1">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Option A: Replace with Image URL</label>
+                        <input type="url" id="input_image_url" name="image_url" value="{{ old('image_url') }}"
+                            placeholder="https://images.unsplash.com/photo-..."
+                            class="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Option B: Replace with New File</label>
+                        <input type="file" id="input_image_file" name="image_file" accept="image/*"
+                            class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-300 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- AI Processing Progress Bar -->
+                <div id="ai-loading-bar" class="hidden p-3.5 sm:p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2">
+                    <div class="flex items-center justify-between text-xs text-amber-300 font-semibold">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-spinner fa-spin text-amber-400"></i>
+                            <span id="ai-status-text">ZVARR AI is segmenting jewelry & eliminating noise...</span>
+                        </span>
+                        <span id="ai-percentage" class="text-amber-400 font-mono">Running</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div id="ai-progress-fill" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 h-full w-3/4 transition-all duration-300 animate-pulse"></div>
+                    </div>
+                </div>
+
+                <!-- Current / Live Transparent Preview (Mobile-Spaced) -->
+                <div id="preview-wrapper" class="pt-4 border-t border-slate-800/80 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                        <span class="text-xs font-bold text-slate-300">Live Website Dark Card Preview:</span>
+                        <button type="button" onclick="openStudioModal()" 
+                            class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-sliders"></i>
+                            <span>Enhance & Edit Jewelry</span>
+                        </button>
+                    </div>
+
+                    <div id="card-preview-podium" class="flex items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] shadow-2xl min-h-[220px] sm:min-h-[260px] relative overflow-hidden">
+                        <div id="spotlight-aura" class="absolute w-36 sm:w-44 h-36 sm:h-44 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+                        <img id="live-transparent-preview" src="{{ $product->image ?? '' }}" alt="Transparent Preview" 
+                            class="max-h-48 sm:max-h-56 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 6. Featured Toggle -->
+            <div class="flex items-center gap-3 p-3.5 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}
+                    class="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 border-slate-700 bg-slate-900 flex-shrink-0">
+                <label for="is_featured" class="text-xs font-semibold text-slate-300 cursor-pointer">
+                    Display as Featured Jewellery on Homepage Spotlight
+                </label>
+            </div>
+
+            <!-- Submit Buttons (Mobile Full-Width & Stacked) -->
+            <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-slate-800">
+                <a href="{{ route('admin.products.index') }}" class="py-3 px-5 text-center rounded-xl text-xs font-bold text-slate-400 hover:text-slate-200 bg-slate-800/60 sm:bg-transparent transition">
+                    Cancel
+                </a>
+                <button type="submit" id="submit-btn"
+                    class="py-3 px-7 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-600 hover:opacity-95 text-slate-950 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20 transition transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-check mr-1.5"></i> Update Jewellery Item
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<!-- INTERACTIVE IMAGE EDIT STUDIO MODAL -->
+<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-400/30 p-6 sm:p-8 rounded-3xl max-w-2xl w-full shadow-2xl relative space-y-5 animate-smooth-in">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <h3 class="text-lg font-bold text-white font-cinzel flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span>Jewellery Polish & Lighting Studio</span>
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">Adjust brightness, contrast, brilliance, and card spotlight aura.</p>
+            </div>
+            <button type="button" onclick="closeStudioModal()" class="text-slate-400 hover:text-white p-2 text-base">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Studio Body -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            
+            <!-- Left: Live Podium Canvas Preview (7 cols) -->
+            <div class="md:col-span-7 flex items-center justify-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] min-h-[220px] relative overflow-hidden">
+                <div id="modal-spotlight-aura" class="absolute w-36 h-36 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                <img id="studio-preview-img" src="" alt="Editing" 
+                    class="max-h-48 max-w-full object-contain relative z-10 drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)]">
+            </div>
+
+            <!-- Right: Sliders & Controls (5 cols) -->
+            <div class="md:col-span-5 space-y-4 text-xs">
+                
+                <!-- Brightness -->
+                <div>
+                    <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                        <span>✨ Sparkle Brightness</span>
+                        <span id="val-brightness">105%</span>
+                    </div>
+                    <input type="range" id="slider-brightness" min="70" max="150" value="105" 
+                        class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                </div>
+
+                <!-- Contrast -->
+                <div>
+                    <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                        <span>💎 Clarity & Contrast</span>
+                        <span id="val-contrast">110%</span>
+                    </div>
+                    <input type="range" id="slider-contrast" min="80" max="160" value="110" 
+                        class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                </div>
+
+                <!-- Saturation / Gold Vibrance -->
+                <div>
+                    <div class="flex justify-between text-slate-300 mb-1 font-semibold">
+                        <span>👑 Metal Vibrance</span>
+                        <span id="val-saturation">108%</span>
+                    </div>
+                    <input type="range" id="slider-saturation" min="50" max="160" value="108" 
+                        class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
+                </div>
+
+                <!-- Card Spotlight Aura Color Presets -->
+                <div class="pt-1 border-t border-slate-800">
+                    <label class="block text-[11px] font-bold uppercase text-slate-400 mb-2">Card Spotlight Glow:</label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="setSpotlightAura('rgba(245, 158, 11, 0.25)')" title="Royal Warm Gold"
+                            class="w-7 h-7 rounded-full bg-amber-500 border-2 border-white/40 hover:scale-110 transition shadow"></button>
+                        <button type="button" onclick="setSpotlightAura('rgba(56, 189, 248, 0.25)')" title="Diamond Crystal Blue"
+                            class="w-7 h-7 rounded-full bg-sky-400 border-2 border-white/20 hover:scale-110 transition shadow"></button>
+                        <button type="button" onclick="setSpotlightAura('rgba(244, 63, 94, 0.25)')" title="Rose Gold Ruby"
+                            class="w-7 h-7 rounded-full bg-rose-500 border-2 border-white/20 hover:scale-110 transition shadow"></button>
+                        <button type="button" onclick="setSpotlightAura('rgba(255, 255, 255, 0.15)')" title="Pure Platinum"
+                            class="w-7 h-7 rounded-full bg-slate-100 border-2 border-white/20 hover:scale-110 transition shadow"></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <button type="button" onclick="closeStudioModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold">
+                Done & Keep
+            </button>
+            <button type="button" onclick="applyBakeAdjustments()" class="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-600 hover:opacity-95 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20">
+                Apply & Save Polish
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ZVARR AI Segmentation & Alpha Speck Cleanup Engine -->
+<script type="module">
+    import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm';
+
+    const fileInput = document.getElementById('input_image_file');
+    const urlInput = document.getElementById('input_image_url');
+    const previewWrapper = document.getElementById('preview-wrapper');
+    const previewImg = document.getElementById('live-transparent-preview');
+    const hiddenBase64Input = document.getElementById('transparent_image_base64');
+    const loadingBar = document.getElementById('ai-loading-bar');
+    const statusText = document.getElementById('ai-status-text');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Mode Radio Buttons
+    const modeRadios = document.querySelectorAll('input[name="bg_mode"]');
+    const labelAi = document.getElementById('label-mode-ai');
+    const labelDirect = document.getElementById('label-mode-direct');
+
+    modeRadios.forEach(r => {
+        r.addEventListener('change', () => {
+            if (r.value === 'ai') {
+                labelAi.classList.add('border-amber-500', 'bg-amber-500/10');
+                labelAi.classList.remove('border-slate-700', 'bg-slate-900');
+                labelDirect.classList.remove('border-amber-500', 'bg-amber-500/10');
+                labelDirect.classList.add('border-slate-700', 'bg-slate-900');
+            } else {
+                labelDirect.classList.add('border-amber-500', 'bg-amber-500/10');
+                labelDirect.classList.remove('border-slate-700', 'bg-slate-900');
+                labelAi.classList.remove('border-amber-500', 'bg-amber-500/10');
+                labelAi.classList.add('border-slate-700', 'bg-slate-900');
+            }
+            if (fileInput.files[0]) handleSource(fileInput.files[0]);
+            else if (urlInput.value) handleSource(urlInput.value);
+        });
+    });
+
+    // Intelligent Noise Speck & Halo Cleaner
+    function cleanAlphaNoise(blob) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                const w = img.naturalWidth || img.width;
+                const h = img.naturalHeight || img.height;
+                canvas.width = w;
+                canvas.height = h;
+                ctx.drawImage(img, 0, 0);
+
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const d = imgData.data;
+
+                // 1. Erase low-alpha semi-transparent speckles
+                for (let i = 0; i < d.length; i += 4) {
+                    if (d[i + 3] < 40) {
+                        d[i + 3] = 0;
+                    }
+                }
+
+                // 2. Erase isolated tiny islands of noise (< 80 connected pixels)
+                const visited = new Uint8Array(w * h);
+                const minClusterSize = 80;
+
+                for (let y = 0; y < h; y++) {
+                    for (let x = 0; x < w; x++) {
+                        const pos = y * w + x;
+                        if (d[pos * 4 + 3] > 0 && !visited[pos]) {
+                            const cluster = [];
+                            const queue = [pos];
+                            visited[pos] = 1;
+                            let head = 0;
+
+                            while (head < queue.length) {
+                                const curr = queue[head++];
+                                cluster.push(curr);
+                                const cx = curr % w;
+                                const cy = Math.floor(curr / w);
+
+                                const neighbors = [
+                                    [cx + 1, cy], [cx - 1, cy],
+                                    [cx, cy + 1], [cx, cy - 1]
+                                ];
+
+                                for (let n = 0; n < neighbors.length; n++) {
+                                    const nx = neighbors[n][0];
+                                    const ny = neighbors[n][1];
+                                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                                        const nPos = ny * w + nx;
+                                        if (!visited[nPos] && d[nPos * 4 + 3] > 0) {
+                                            visited[nPos] = 1;
+                                            queue.push(nPos);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (cluster.length < minClusterSize) {
+                                for (let k = 0; k < cluster.length; k++) {
+                                    d[cluster[k] * 4 + 3] = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ctx.putImageData(imgData, 0, 0);
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.src = URL.createObjectURL(blob);
+        });
+    }
+
+    async function handleSource(imageSource) {
+        if (!imageSource) return;
+
+        const isAiMode = document.querySelector('input[name="bg_mode"]:checked')?.value === 'ai';
+
+        if (!isAiMode) {
+            loadingBar.classList.add('hidden');
+            hiddenBase64Input.value = '';
+            if (typeof imageSource === 'string') {
+                previewImg.src = imageSource;
+            } else {
+                previewImg.src = URL.createObjectURL(imageSource);
+            }
+            previewWrapper.classList.remove('hidden');
+            return;
+        }
+
+        loadingBar.classList.remove('hidden');
+        previewWrapper.classList.add('hidden');
+        if (submitBtn) submitBtn.disabled = true;
+
+        statusText.textContent = 'ZVARR AI is segmenting jewelry & eliminating noise...';
+
+        try {
+            const rawBlob = await removeBackground(imageSource, {
+                model: 'medium', // High-definition precision
+                output: {
+                    format: 'image/png',
+                    quality: 0.98
+                }
+            });
+
+            const cleanedPng = await cleanAlphaNoise(rawBlob);
+
+            hiddenBase64Input.value = cleanedPng;
+            previewImg.src = cleanedPng;
+            loadingBar.classList.add('hidden');
+            previewWrapper.classList.remove('hidden');
+            if (submitBtn) submitBtn.disabled = false;
+
+        } catch (error) {
+            console.warn('AI fallback to canvas segmentation:', error);
+            fallbackCanvasProcessor(imageSource);
+        }
+    }
+
+    function fallbackCanvasProcessor(src) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.naturalWidth || img.width;
+            canvas.height = img.naturalHeight || img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const transparentPng = canvas.toDataURL('image/png');
+            hiddenBase64Input.value = transparentPng;
+            previewImg.src = transparentPng;
+            loadingBar.classList.add('hidden');
+            previewWrapper.classList.remove('hidden');
+            if (submitBtn) submitBtn.disabled = false;
+        };
+        if (typeof src === 'string') img.src = src;
+        else img.src = URL.createObjectURL(src);
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleSource(file);
+        });
+    }
+
+    if (urlInput) {
+        urlInput.addEventListener('blur', (e) => {
+            if (e.target.value) handleSource(e.target.value);
+        });
+    }
+</script>
+
+<!-- Interactive Studio Polish Script -->
+<script>
+let currentAuraColor = 'rgba(245, 158, 11, 0.2)';
+
+function openStudioModal() {
+    const previewImg = document.getElementById('live-transparent-preview');
+    const studioPreview = document.getElementById('studio-preview-img');
+    if (!previewImg.src) return;
+
+    studioPreview.src = previewImg.src;
+    document.getElementById('studio-modal').classList.remove('hidden');
+    document.getElementById('studio-modal').classList.add('flex');
+    applyStudioLiveFilters();
+}
+
+function closeStudioModal() {
+    document.getElementById('studio-modal').classList.add('hidden');
+    document.getElementById('studio-modal').classList.remove('flex');
+}
+
+function setSpotlightAura(color) {
+    currentAuraColor = color;
+    document.getElementById('modal-spotlight-aura').style.backgroundColor = color;
+    document.getElementById('spotlight-aura').style.backgroundColor = color;
+}
+
+function applyStudioLiveFilters() {
+    const b = document.getElementById('slider-brightness').value;
+    const c = document.getElementById('slider-contrast').value;
+    const s = document.getElementById('slider-saturation').value;
+
+    document.getElementById('val-brightness').textContent = `${b}%`;
+    document.getElementById('val-contrast').textContent = `${c}%`;
+    document.getElementById('val-saturation').textContent = `${s}%`;
+
+    const filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+    document.getElementById('studio-preview-img').style.filter = filterString;
+}
+
+['slider-brightness', 'slider-contrast', 'slider-saturation'].forEach(id => {
+    document.getElementById(id).addEventListener('input', applyStudioLiveFilters);
+});
+
+function applyBakeAdjustments() {
+    const studioImg = document.getElementById('studio-preview-img');
+    const b = document.getElementById('slider-brightness').value;
+    const c = document.getElementById('slider-contrast').value;
+    const s = document.getElementById('slider-saturation').value;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = studioImg.naturalWidth || studioImg.width;
+    canvas.height = studioImg.naturalHeight || studioImg.height;
+
+    ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+    ctx.drawImage(studioImg, 0, 0, canvas.width, canvas.height);
+
+    const bakedPng = canvas.toDataURL('image/png');
+    document.getElementById('transparent_image_base64').value = bakedPng;
+    document.getElementById('live-transparent-preview').src = bakedPng;
+
+    closeStudioModal();
+}
+</script>
+
+@endsection
