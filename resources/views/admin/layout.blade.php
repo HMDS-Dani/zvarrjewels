@@ -217,35 +217,31 @@
         <div class="fixed bottom-10 left-1/3 w-80 h-80 bg-amber-600/5 rounded-full blur-3xl pointer-events-none -z-10 animate-glow"></div>
 
         <!-- Top Header (Desktop & Mobile) -->
-        <header class="h-20 bg-[#07070b]/90 backdrop-blur-2xl border-b border-amber-400/15 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
-            <div class="flex items-center gap-3 min-w-0">
-                <button type="button" onclick="toggleMobileDrawer()" class="md:hidden w-11 h-11 rounded-2xl bg-white/5 hover:bg-white/10 text-amber-300 flex items-center justify-center text-base border border-amber-400/20 transition">
+        <header class="h-16 sm:h-20 bg-[#07070b]/90 backdrop-blur-2xl border-b border-amber-400/15 px-3.5 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+            <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                <button type="button" onclick="toggleMobileDrawer()" class="md:hidden w-10 h-10 rounded-2xl bg-white/5 hover:bg-white/10 text-amber-300 flex items-center justify-center text-sm border border-amber-400/20 transition flex-shrink-0">
                     <i class="fa-solid fa-bars-staggered"></i>
                 </button>
-                
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 flex items-center justify-center text-slate-950 font-bold flex-shrink-0 shadow-md shadow-amber-500/20 md:hidden">
-                    <span class="font-cinzel text-sm font-black">Z</span>
-                </div>
 
                 <div class="min-w-0">
-                    <h2 class="text-sm sm:text-lg font-cinzel font-bold text-white tracking-wide truncate">
+                    <h2 class="text-xs sm:text-base md:text-lg font-cinzel font-bold text-white tracking-wide truncate max-w-[170px] sm:max-w-md">
                         @yield('header_title', 'Maison Administration')
                     </h2>
                     <p class="text-[10px] text-stone-400 hidden sm:block">ZVARR by Zaiyal • Haute Horlogerie & Fine Jewels Management</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2.5 sm:gap-4 flex-shrink-0">
-                <!-- Live Pill Badge -->
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <div class="flex items-center gap-2 sm:gap-3.5 flex-shrink-0">
+                <!-- Live Pill Badge (Visible on Desktop / Large Screens) -->
+                <span class="hidden lg:inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                     <span class="w-1.5 h-1.5 mr-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     Maison Online
                 </span>
 
                 <!-- Quick Store Link -->
                 <a href="{{ url('/') }}" target="_blank" title="Preview Public Storefront"
-                    class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400/10 to-amber-600/10 hover:from-amber-400/20 hover:to-amber-600/20 text-amber-300 border border-amber-400/30 text-xs font-bold flex items-center gap-2 transition duration-200 shadow-md shadow-amber-500/5">
-                    <i class="fa-solid fa-gem text-amber-400 text-xs"></i>
+                    class="p-2 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-400/10 to-amber-600/10 hover:from-amber-400/20 hover:to-amber-600/20 text-amber-300 border border-amber-400/30 text-xs font-bold flex items-center gap-2 transition duration-200 shadow-md shadow-amber-500/5">
+                    <i class="fa-solid fa-store text-amber-400 text-xs sm:text-sm"></i>
                     <span class="hidden sm:inline">Storefront</span>
                 </a>
 
@@ -253,8 +249,8 @@
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" title="Sign Out" 
-                        class="p-2 sm:px-3.5 sm:py-2 text-xs font-bold text-stone-400 hover:text-rose-400 bg-white/5 hover:bg-rose-500/10 rounded-xl transition border border-white/5 hover:border-rose-500/30">
-                        <i class="fa-solid fa-power-off sm:mr-1.5"></i>
+                        class="p-2 sm:px-3.5 sm:py-2 text-xs font-bold text-stone-400 hover:text-rose-400 bg-white/5 hover:bg-rose-500/10 rounded-xl transition border border-white/5 hover:border-rose-500/30 flex items-center gap-1.5">
+                        <i class="fa-solid fa-power-off text-xs sm:text-sm"></i>
                         <span class="hidden sm:inline">Sign Out</span>
                     </button>
                 </form>
