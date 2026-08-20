@@ -17,9 +17,6 @@
     <!-- Font Awesome Pro Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Puter.js AI Engine for Real LLM Generation -->
-    <script src="https://js.puter.com/v2/"></script>
-
     <!-- Tailwind CSS with Luxury Config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
