@@ -18,5 +18,11 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// Forward all incoming Vercel Serverless requests to the Laravel public entrypoint
-require __DIR__.'/../public/index.php';
+try {
+    // Forward all incoming Vercel Serverless requests to the Laravel public entrypoint
+    require __DIR__.'/../public/index.php';
+} catch (Throwable $e) {
+    http_response_code(500);
+    header('Content-Type: text/plain');
+    echo 'ZVARR Vercel Error: '.$e->getMessage()."\nFile: ".$e->getFile().':'.$e->getLine()."\n\nTrace:\n".$e->getTraceAsString();
+}
