@@ -33,7 +33,7 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
                         Product Name <span class="text-amber-400">*</span>
                     </label>
-                    <input type="text" name="name" value="{{ old('name') }}" required
+                    <input type="text" name="name" id="product_name_input" value="{{ old('name') }}" required
                         placeholder="e.g. Royal Emerald Halo Ring"
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
@@ -86,7 +86,7 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
                         Material & Metal Specification <span class="text-amber-400">*</span>
                     </label>
-                    <input type="text" name="material" value="{{ old('material', '18K Gold Plated Brass') }}" required
+                    <input type="text" name="material" id="product_material_input" value="{{ old('material', '18K Gold Plated Brass') }}" required
                         placeholder="e.g. 18K Yellow Gold / 925 Sterling Silver"
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                 </div>
@@ -127,14 +127,32 @@
                 </div>
             </div>
 
-            <!-- 4. Description -->
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                    Product Description
-                </label>
-                <textarea name="description" rows="3"
-                    placeholder="Describe the gemstone, finish, craftmanship and luxury appeal..."
-                    class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none">{{ old('description') }}</textarea>
+            <!-- 4. Description with AI Copywriter Generator -->
+            <div class="space-y-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">
+                        Product Description
+                    </label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-ai-desc" onclick="generateProductDescriptionAI()"
+                            class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400/20 via-yellow-400/20 to-amber-500/20 hover:from-amber-400/30 hover:to-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm shadow-amber-500/10">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xs animate-pulse"></i>
+                            <span id="ai-desc-btn-text">Generate with AI ✨</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <textarea name="description" id="product_description_input" rows="3"
+                        placeholder="Describe the gemstone, finish, craftmanship and luxury appeal or click 'Generate with AI'..."
+                        class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none leading-relaxed">{{ old('description') }}</textarea>
+                    
+                    <!-- Typing / Generating Indicator -->
+                    <div id="ai-desc-typing-indicator" class="hidden absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] text-amber-400 bg-black/80 px-2.5 py-1 rounded-lg border border-amber-400/30 backdrop-blur">
+                        <i class="fa-solid fa-feather-pointed fa-bounce text-xs"></i>
+                        <span>Writing luxury copy...</span>
+                    </div>
+                </div>
             </div>
 
             <!-- 5. UPLOAD OPTIONS & AI REMOVAL SELECTION -->
@@ -184,21 +202,18 @@
                         </span>
 
                         <div class="flex items-center gap-2 flex-wrap">
-                            <!-- 1. Remove Background Button -->
                             <button type="button" id="btn-remove-bg" onclick="triggerManualBackgroundRemoval()" 
                                 class="px-3.5 py-2 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 text-amber-300 border border-amber-400/40 text-xs font-bold flex items-center gap-1.5 transition shadow-md shadow-amber-500/10 active:scale-95">
                                 <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xs"></i>
                                 <span id="btn-remove-bg-text">Remove Background</span>
                             </button>
 
-                            <!-- 2. Restore Original Photo Button -->
                             <button type="button" id="btn-revert-bg" onclick="restoreOriginalPhoto()" 
                                 class="hidden px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
                                 <i class="fa-solid fa-rotate-left text-stone-400 text-xs"></i>
                                 <span>Restore Original</span>
                             </button>
 
-                            <!-- 3. Adjust Button -->
                             <button type="button" onclick="openStudioModal()" 
                                 class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-stone-300 border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
                                 <i class="fa-solid fa-sliders text-amber-400 text-xs"></i>
@@ -266,15 +281,12 @@
             <!-- Left: Interactive Canvas & WhatsApp-Style Drag Crop Viewport (6 cols) -->
             <div class="md:col-span-6 flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] min-h-[220px] sm:min-h-[280px] relative overflow-hidden w-full select-none">
                 
-                <!-- Stage Container with fixed relative viewport -->
                 <div id="crop-stage" class="relative max-w-full flex items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40 touch-none select-none" style="min-height: 200px; max-height: 280px;">
-                    <!-- Image -->
                     <img id="studio-preview-img" src="" alt="Editing" draggable="false"
                         class="max-h-48 sm:max-h-60 max-w-full object-contain relative z-0 transition-filter duration-150 pointer-events-none select-none">
 
-                    <!-- Interactive Drag/Resize Crop Overlay Box (Visible in Crop Tab) -->
+                    <!-- Interactive Drag/Resize Crop Overlay Box -->
                     <div id="interactive-crop-box" class="hidden absolute border-2 border-amber-400 shadow-[0_0_0_9999px_rgba(0,0,0,0.65)] z-20 cursor-move transition-border">
-                        <!-- 3x3 Rule of Thirds Grid -->
                         <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none">
                             <div class="border-r border-b border-white/20"></div>
                             <div class="border-r border-b border-white/20"></div>
@@ -287,7 +299,6 @@
                             <div></div>
                         </div>
 
-                        <!-- 4 Corner Drag Handles -->
                         <div data-handle="tl" class="crop-corner -top-2 -left-2 cursor-nwse-resize"></div>
                         <div data-handle="tr" class="crop-corner -top-2 -right-2 cursor-nesw-resize"></div>
                         <div data-handle="bl" class="crop-corner -bottom-2 -left-2 cursor-nesw-resize"></div>
@@ -295,7 +306,6 @@
                     </div>
                 </div>
 
-                <!-- Status Labels -->
                 <div class="mt-2.5 flex items-center gap-2 text-[10px] text-stone-400">
                     <span id="studio-crop-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">Freeform / 1:1 Crop</span>
                     <span id="studio-rotation-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">0°</span>
@@ -326,7 +336,6 @@
 
                 <!-- TAB 1: FINE TUNE ADJUSTMENTS -->
                 <div id="tab-panel-adjust" class="space-y-3 text-xs">
-                    <!-- Brightness -->
                     <div>
                         <div class="flex justify-between text-slate-300 mb-1 font-semibold">
                             <span>✨ Sparkle Brightness</span>
@@ -336,7 +345,6 @@
                             class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
                     </div>
 
-                    <!-- Contrast -->
                     <div>
                         <div class="flex justify-between text-slate-300 mb-1 font-semibold">
                             <span>💎 Clarity & Contrast</span>
@@ -346,7 +354,6 @@
                             class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
                     </div>
 
-                    <!-- Saturation / Vibrance -->
                     <div>
                         <div class="flex justify-between text-slate-300 mb-1 font-semibold">
                             <span>👑 Metal Vibrance</span>
@@ -356,7 +363,6 @@
                             class="w-full accent-amber-400 bg-slate-800 rounded-lg cursor-pointer">
                     </div>
 
-                    <!-- Warmth / Sepia -->
                     <div>
                         <div class="flex justify-between text-slate-300 mb-1 font-semibold">
                             <span>🌡️ Golden Warmth</span>
@@ -426,7 +432,6 @@
 
                 <!-- TAB 3: WHATSAPP-STYLE DRAG CROP & ROTATE TOOLS -->
                 <div id="tab-panel-crop" class="hidden space-y-3 text-xs">
-                    <!-- Aspect Ratio Presets -->
                     <div>
                         <div class="flex items-center justify-between mb-1.5">
                             <label class="block text-[10px] uppercase font-bold text-stone-400 tracking-wider">Crop Presets (Touch & Drag on Image):</label>
@@ -456,7 +461,6 @@
                         </div>
                     </div>
 
-                    <!-- Rotation & Flip Controls -->
                     <div class="pt-2 border-t border-white/10">
                         <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1.5 tracking-wider">Orientation & Flip:</label>
                         <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
@@ -507,7 +511,6 @@
 </div>
 
 <style>
-/* Corner Handles for WhatsApp Crop Box */
 .crop-corner {
     position: absolute;
     width: 14px;
@@ -524,6 +527,108 @@
 <!-- SINGLE UNIFIED CLIENT ENGINE SCRIPT -->
 <script>
     let currentRawImageSource = null;
+
+    // AI LUXURY COPYWRITING GENERATOR ENGINE
+    let aiDescAngleIndex = 0;
+    let isAiTyping = false;
+
+    function generateProductDescriptionAI() {
+        if (isAiTyping) return;
+
+        const nameInput = document.getElementById('product_name_input') || document.querySelector('input[name="name"]');
+        const materialInput = document.getElementById('product_material_input') || document.querySelector('input[name="material"]');
+        const categorySelect = document.getElementById('real_category_select');
+        const descTextarea = document.getElementById('product_description_input');
+        const btnText = document.getElementById('ai-desc-btn-text');
+        const typingIndicator = document.getElementById('ai-desc-typing-indicator');
+
+        const productName = nameInput ? nameInput.value.trim() : '';
+        if (!productName) {
+            if (nameInput) {
+                nameInput.focus();
+                nameInput.classList.add('border-amber-400', 'ring-2', 'ring-amber-400');
+                setTimeout(() => nameInput.classList.remove('ring-2', 'ring-amber-400'), 1500);
+            }
+            alert('Please enter a Product Name first so AI can write a tailored description!');
+            return;
+        }
+
+        const material = (materialInput && materialInput.value.trim()) ? materialInput.value.trim() : '18K Gold Plated Brass';
+        let categoryName = '';
+        if (categorySelect && categorySelect.selectedIndex >= 0) {
+            const opt = categorySelect.options[categorySelect.selectedIndex];
+            if (opt && opt.value) categoryName = opt.text.trim();
+        }
+
+        const lowerName = productName.toLowerCase();
+        const lowerCat = categoryName.toLowerCase();
+        const combined = lowerName + ' ' + lowerCat;
+
+        let itemType = 'jewellery piece';
+        if (combined.includes('ring') || combined.includes('solitaire') || combined.includes('band')) itemType = 'ring';
+        else if (combined.includes('necklace') || combined.includes('choker') || combined.includes('pendant') || combined.includes('chain') || combined.includes('mala') || combined.includes('haar')) itemType = 'necklace';
+        else if (combined.includes('earring') || combined.includes('stud') || combined.includes('jhumk') || combined.includes('bali') || combined.includes('top') || combined.includes('hoop')) itemType = 'earrings';
+        else if (combined.includes('bracelet') || combined.includes('bangle') || combined.includes('kara') || combined.includes('cuff')) itemType = 'bracelet';
+        else if (combined.includes('set') || combined.includes('bridal') || combined.includes('collection')) itemType = 'jewellery set';
+        else if (combined.includes('anklet') || combined.includes('payal')) itemType = 'anklet';
+
+        const isEmerald = combined.includes('emerald') || combined.includes('zamrud') || combined.includes('green');
+        const isRuby = combined.includes('ruby') || combined.includes('yaqoot') || combined.includes('red');
+        const isSapphire = combined.includes('sapphire') || combined.includes('neelam') || combined.includes('blue');
+        const isDiamond = combined.includes('diamond') || combined.includes('solitaire') || combined.includes('heera') || combined.includes('moissanite') || combined.includes('zircon') || combined.includes('crystal');
+        const isPearl = combined.includes('pearl') || combined.includes('moti');
+        const isBridal = combined.includes('bridal') || combined.includes('wedding') || combined.includes('dulhan') || combined.includes('shaadi') || combined.includes('royal');
+
+        let gemFocus = 'luminous gemstone centerpiece';
+        if (isEmerald) gemFocus = 'vibrant emerald-hued centerpiece with rich verdant depth';
+        else if (isRuby) gemFocus = 'passionate ruby-toned gemstone radiating opulent crimson fire';
+        else if (isSapphire) gemFocus = 'regal sapphire centerpiece capturing deep celestial luster';
+        else if (isDiamond) gemFocus = 'dazzling diamond-cut solitaire reflecting scintillating fire from every facet';
+        else if (isPearl) gemFocus = 'lustrous heirloom pearl boasting silky, iridescent glow';
+        else if (isBridal) gemFocus = 'intricately embellished stones evoking grand celebratory splendour';
+
+        const angles = [
+            `Imbued with regal grandeur, the ${productName} features a ${gemFocus} framed with meticulous artisanal precision. Mastercrafted in lustrous ${material}, this majestic ${itemType} exudes timeless royalty—curated to make an unforgettable statement at weddings, galas, and milestone celebrations.`,
+
+            `Designed to mesmerize from every vantage point, the ${productName} seamlessly unites classic heritage with contemporary luxury. Cast in radiant ${material}, its high-polish finish and radiant light-play ensure an ethereal glow that elevates both daytime elegance and evening couture.`,
+
+            `A testament to superior craftsmanship, the ${productName} showcases precision stone-setting paired with the warm, enduring allure of premium ${material}. Every curve is sculpted for supreme comfort and breathtaking visual impact, making it an indispensable crown jewel for your collection.`,
+
+            `A poetic embodiment of grace and sophistication, the ${productName} is created for moments you never want to forget. The harmonious blend of fine ${material} and brilliant detailing creates a cherished keepsake that speaks of love, prestige, and timeless beauty.`,
+
+            `Command the room with the bold brilliance of the ${productName}. Sculpted with architectural finesse in ${material}, this show-stopping ${itemType} captures ambient light with breathtaking brilliance, bringing unapologetic glamour to your signature style.`
+        ];
+
+        const chosenAngle = angles[aiDescAngleIndex % angles.length];
+        aiDescAngleIndex++;
+        const currentAngleNum = ((aiDescAngleIndex - 1) % angles.length) + 1;
+
+        isAiTyping = true;
+        if (typingIndicator) typingIndicator.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'Generating... ⚡';
+        if (descTextarea) descTextarea.value = '';
+
+        let charIdx = 0;
+        const typeSpeed = 12;
+
+        function typeNextChar() {
+            if (charIdx < chosenAngle.length) {
+                if (descTextarea) {
+                    descTextarea.value += chosenAngle.charAt(charIdx);
+                    descTextarea.scrollTop = descTextarea.scrollHeight;
+                }
+                charIdx++;
+                setTimeout(typeNextChar, typeSpeed);
+            } else {
+                isAiTyping = false;
+                if (typingIndicator) typingIndicator.classList.add('hidden');
+                if (btnText) btnText.textContent = `✨ Try Another (${currentAngleNum}/${angles.length})`;
+            }
+        }
+
+        typeNextChar();
+    }
+    window.generateProductDescriptionAI = generateProductDescriptionAI;
 
     function handleSource(imageSource) {
         if (!imageSource) return;
@@ -1112,7 +1217,6 @@
                 newH = cropBoxState.startBoxH - actualDy;
             }
 
-            // Maintain Aspect ratio if locked
             if (studioState.cropRatio === '1:1') {
                 const size = Math.min(newW, newH);
                 newW = size;
@@ -1150,7 +1254,6 @@
         const nw = studioImg.naturalWidth || studioImg.width || 800;
         const nh = studioImg.naturalHeight || studioImg.height || 800;
 
-        // 1. Draw Rotated & Filtered Image on master canvas
         const masterCanvas = document.createElement('canvas');
         const masterCtx = masterCanvas.getContext('2d');
 
@@ -1174,7 +1277,6 @@
         masterCtx.drawImage(studioImg, -nw / 2, -nh / 2, nw, nh);
         masterCtx.restore();
 
-        // 2. Crop accurately based on drag box rectangle if crop tab was opened or ratio set
         let finalCanvas = masterCanvas;
         if (stageRect && cropBoxState.w > 0 && cropBoxState.h > 0) {
             const imgLeft = imgRect.left - stageRect.left;

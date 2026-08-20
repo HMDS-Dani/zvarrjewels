@@ -31,10 +31,17 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-2">
-                        Description
-                    </label>
-                    <textarea name="description" rows="2" placeholder="Brief description of this category..."
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">
+                            Description
+                        </label>
+                        <button type="button" onclick="generateCategoryDescAI('add')"
+                            class="px-2.5 py-1 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xs"></i>
+                            <span id="ai-cat-btn-text-add">AI Copy ✨</span>
+                        </button>
+                    </div>
+                    <textarea name="description" id="add-category-description" rows="2" placeholder="Brief description or click 'AI Copy'..."
                         class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none"></textarea>
                 </div>
 
@@ -176,7 +183,14 @@
             </div>
 
             <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-stone-300 mb-1.5">Description</label>
+                <div class="flex items-center justify-between mb-1.5">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-300">Description</label>
+                    <button type="button" onclick="generateCategoryDescAI('edit')"
+                        class="px-2.5 py-1 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[11px] font-bold flex items-center gap-1.5 transition active:scale-95">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-xs"></i>
+                        <span id="ai-cat-btn-text-edit">AI Copy ✨</span>
+                    </button>
+                </div>
                 <textarea name="description" id="edit-description" rows="2"
                     class="w-full px-4 py-2.5 bg-[#0a0a10] border border-white/10 rounded-2xl text-xs sm:text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition resize-none"></textarea>
             </div>
@@ -210,6 +224,45 @@
 </div>
 
 <script>
+    let aiCatAngleIndex = 0;
+
+    function generateCategoryDescAI(mode) {
+        const isEdit = mode === 'edit';
+        const nameInput = isEdit ? document.getElementById('edit-name') : document.querySelector('input[name="name"]');
+        const descTextarea = isEdit ? document.getElementById('edit-description') : document.getElementById('add-category-description');
+        const btnText = document.getElementById(isEdit ? 'ai-cat-btn-text-edit' : 'ai-cat-btn-text-add');
+
+        const catName = nameInput ? nameInput.value.trim() : '';
+        if (!catName) {
+            if (nameInput) nameInput.focus();
+            alert('Please enter a Category Name first!');
+            return;
+        }
+
+        const lower = catName.toLowerCase();
+        let itemType = 'jewellery creations';
+        if (lower.includes('ring')) itemType = 'statement rings and bands';
+        else if (lower.includes('necklace') || lower.includes('choker') || lower.includes('pendant')) itemType = 'necklaces and opulent chokers';
+        else if (lower.includes('earring') || lower.includes('jhumk') || lower.includes('stud')) itemType = 'earrings and heirloom jhumkas';
+        else if (lower.includes('bracelet') || lower.includes('bangle')) itemType = 'bracelets and handcrafted bangles';
+        else if (lower.includes('bridal') || lower.includes('set')) itemType = 'bridal sets and grand celebrations';
+
+        const categoryAngles = [
+            `Discover our exclusive collection of ${catName}, where timeless craftmanship meets contemporary radiance in every bespoke piece.`,
+            `Curated for connoisseurs of luxury, this signature range of ${catName} showcases luminous stones and mastercrafted ${itemType}.`,
+            `Elevate your jewellery wardrobe with ${catName}, designed to bring majestic glamour and understated grace to every occasion.`,
+            `An exquisite curation of ${catName}, celebrating authentic artisanal heritage, luminous brilliance, and heirloom sophistication.`
+        ];
+
+        const chosen = categoryAngles[aiCatAngleIndex % categoryAngles.length];
+        aiCatAngleIndex++;
+        const currentAngle = ((aiCatAngleIndex - 1) % categoryAngles.length) + 1;
+
+        if (descTextarea) descTextarea.value = chosen;
+        if (btnText) btnText.textContent = `✨ Next (${currentAngle}/${categoryAngles.length})`;
+    }
+    window.generateCategoryDescAI = generateCategoryDescAI;
+
     function previewAddImage(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
