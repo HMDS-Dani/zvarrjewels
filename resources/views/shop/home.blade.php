@@ -301,14 +301,14 @@
                             <!-- Main Floating Jewel -->
                             <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800' }}" 
                                 alt="{{ $product->name }}" 
-                                crossorigin="anonymous"
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';"
                                 class="auto-remove-bg mirelle-jewel-img">
 
                             <!-- Exact Glass Floor Reflection -->
                             <div class="mirelle-reflection-layer">
                                 <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800' }}" 
                                     alt="" 
-                                    crossorigin="anonymous"
+                                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';"
                                     class="auto-remove-bg mirelle-reflection-img">
                             </div>
                         </div>
@@ -366,6 +366,7 @@
                     class="group relative h-64 rounded-2xl overflow-hidden glass-card-3d block border border-white/10 hover:border-amber-400/40">
                     <img src="{{ $category->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600' }}" 
                         alt="{{ $category->name }}" 
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
                         class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700 opacity-60 group-hover:opacity-80">
                     
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>

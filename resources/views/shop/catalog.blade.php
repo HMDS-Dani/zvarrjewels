@@ -259,14 +259,14 @@
                                 <!-- Main Floating Jewel -->
                                 <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800' }}" 
                                     alt="{{ $product->name }}" 
-                                    crossorigin="anonymous"
+                                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';"
                                     class="auto-remove-bg mirelle-jewel-img">
 
                                 <!-- Exact Glass Floor Reflection -->
                                 <div class="mirelle-reflection-layer">
                                     <img src="{{ $product->image ?? 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800' }}" 
                                         alt="" 
-                                        crossorigin="anonymous"
+                                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800';"
                                         class="auto-remove-bg mirelle-reflection-img">
                                 </div>
 

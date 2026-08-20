@@ -66,7 +66,9 @@
                     <!-- Fixed Dimensions Thumbnail -->
                     <div class="w-16 h-16 min-w-[64px] min-h-[64px] max-w-[64px] max-h-[64px] rounded-2xl bg-[#0e0e14] border border-amber-400/20 flex items-center justify-center p-1 flex-shrink-0 relative overflow-hidden shadow-md">
                         @if($product->image)
-                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover rounded-xl">
+                            <img src="{{ $product->image }}" alt="{{ $product->name }}" 
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
+                                class="w-full h-full object-cover rounded-xl">
                         @else
                             <i class="fa-solid fa-gem text-stone-500 text-xl"></i>
                         @endif
@@ -167,7 +169,9 @@
                                 <div class="flex items-center gap-3.5">
                                     <div class="w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-xl bg-[#0e0e14] border border-amber-400/20 flex items-center justify-center p-1 flex-shrink-0 relative overflow-hidden shadow-md">
                                         @if($product->image)
-                                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover rounded-lg">
+                                            <img src="{{ $product->image }}" alt="{{ $product->name }}" 
+                                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600';"
+                                                class="w-full h-full object-cover rounded-lg">
                                         @else
                                             <i class="fa-solid fa-gem text-stone-500 text-sm"></i>
                                         @endif

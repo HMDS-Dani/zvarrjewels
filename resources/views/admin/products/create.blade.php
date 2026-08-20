@@ -461,13 +461,19 @@
 
         if (!isAiMode) {
             loadingBar.classList.add('hidden');
-            hiddenBase64Input.value = '';
             if (typeof imageSource === 'string') {
                 previewImg.src = imageSource;
+                hiddenBase64Input.value = '';
             } else {
-                previewImg.src = URL.createObjectURL(imageSource);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    hiddenBase64Input.value = e.target.result;
+                    previewImg.src = e.target.result;
+                };
+                reader.readAsDataURL(imageSource);
             }
             previewWrapper.classList.remove('hidden');
+            if (submitBtn) submitBtn.disabled = false;
             return;
         }
 

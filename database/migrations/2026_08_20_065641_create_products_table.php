@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('discount_price', 10, 2)->nullable();
             $table->integer('stock')->default(10);
             $table->string('material')->default('Gold'); // Gold 24K, 18K, Diamond, Silver, Platinum
-            $table->string('image')->nullable();
+            $table->longText('image')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->timestamps();
         });

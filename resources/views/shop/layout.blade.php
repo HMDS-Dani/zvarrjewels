@@ -643,7 +643,10 @@
         function autoRemoveWhiteBackgrounds() {
             const images = document.querySelectorAll('img.auto-remove-bg');
             images.forEach(img => {
-                if (img.dataset.bgProcessed) return;
+                if (img.dataset.bgProcessed || (img.src && img.src.startsWith('data:'))) {
+                    img.dataset.bgProcessed = 'true';
+                    return;
+                }
 
                 const process = () => {
                     if (img.dataset.bgProcessed) return;

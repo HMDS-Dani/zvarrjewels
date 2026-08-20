@@ -27,7 +27,9 @@ class AdminCategoryController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image_file')) {
-            $imagePath = '/storage/'.$request->file('image_file')->store('categories', 'public');
+            $file = $request->file('image_file');
+            $mime = $file->getMimeType() ?: 'image/jpeg';
+            $imagePath = 'data:'.$mime.';base64,'.base64_encode(file_get_contents($file->getRealPath()));
         } elseif ($request->filled('image')) {
             $imagePath = $request->image;
         }
@@ -57,13 +59,15 @@ class AdminCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
             'image' => 'nullable|url',
         ]);
 
         $imagePath = $category->image;
         if ($request->hasFile('image_file')) {
-            $imagePath = '/storage/'.$request->file('image_file')->store('categories', 'public');
+            $file = $request->file('image_file');
+            $mime = $file->getMimeType() ?: 'image/jpeg';
+            $imagePath = 'data:'.$mime.';base64,'.base64_encode(file_get_contents($file->getRealPath()));
         } elseif ($request->filled('image')) {
             $imagePath = $request->image;
         }
