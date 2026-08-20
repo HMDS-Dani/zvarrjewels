@@ -39,8 +39,10 @@
     "APP_DEBUG": "true",
     "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
     "CACHE_STORE": "file",
-    "SESSION_DRIVER": "database",
+    "SESSION_DRIVER": "cookie",
+    "SESSION_LIFETIME": "120",
     "SESSION_SECURE_COOKIE": "true",
+    "SESSION_SAME_SITE": "lax",
     "APP_MAINTENANCE_DRIVER": "file",
     "LOG_CHANNEL": "stderr"
   }

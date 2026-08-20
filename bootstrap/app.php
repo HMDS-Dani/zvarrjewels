@@ -14,6 +14,14 @@ $app = Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        $middleware->validateCsrfTokens(except: [
+            'login',
+            'register',
+            'contact/*',
+            'reviews',
+            'logout',
+            'admin/*',
+        ]);
         $middleware->alias([
             'admin' => AdminMiddleware::class,
         ]);
