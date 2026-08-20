@@ -41,6 +41,12 @@ $_ENV['APP_SERVICES_CACHE'] = "{$bootstrapCache}/services.php";
 putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['VIEW_COMPILED_PATH'] = '/tmp/storage/framework/views';
 
+putenv('SESSION_DRIVER=file');
+$_ENV['SESSION_DRIVER'] = 'file';
+
+putenv('CACHE_STORE=file');
+$_ENV['CACHE_STORE'] = 'file';
+
 // Ensure default fallback APP_KEY if environment variable wasn't injected by Vercel
 if (! getenv('APP_KEY') && ! isset($_ENV['APP_KEY'])) {
     putenv('APP_KEY=base64:H9WwMWCk1nLWN1+8QKMeZ5JGzVpCALfVKzWM9myh33E=');
