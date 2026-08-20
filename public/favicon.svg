@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBF5DF" />
+      <stop offset="30%" stop-color="#D4AF37" />
+      <stop offset="70%" stop-color="#AA7C11" />
+      <stop offset="100%" stop-color="#F5E6B4" />
+    </linearGradient>
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141419" />
+      <stop offset="100%" stop-color="#050507" />
+    </linearGradient>
+  </defs>
+  <!-- Dark Luxury Background -->
+  <rect width="64" height="64" rx="16" fill="url(#darkGrad)" stroke="url(#goldGrad)" stroke-width="2" />
+  
+  <!-- Diamond & Crown Silhouette -->
+  <path d="M32 12 L48 24 L32 52 L16 24 Z" stroke="url(#goldGrad)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+  <path d="M16 24 L48 24" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 24 L32 52 L40 24" stroke="url(#goldGrad)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+  <path d="M24 24 L32 12 L40 24" stroke="url(#goldGrad)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+  <circle cx="32" cy="12" r="2.2" fill="#FBF5DF"/>
+</svg>
