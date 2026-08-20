@@ -15,10 +15,10 @@
     </div>
 
     <!-- Main Form Card -->
-    <div class="glass-card-luxury p-5 sm:p-8 rounded-3xl space-y-6">
-        <div class="mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-white/5">
-            <h2 class="font-cinzel font-bold text-lg sm:text-xl text-white">Create New Jewellery Product</h2>
-            <p class="text-xs text-stone-400 mt-1">Upload a high quality product with automatic transparent background generator.</p>
+    <div class="glass-card-luxury p-4 sm:p-8 rounded-3xl space-y-6">
+        <div class="mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-white/5">
+            <h2 class="font-cinzel font-bold text-base sm:text-xl text-white">Create New Jewellery Product</h2>
+            <p class="text-xs text-stone-400 mt-0.5 sm:mt-1">Upload a high quality product with automatic transparent background generator.</p>
         </div>
 
         <form id="product-form" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5 sm:space-y-6">
@@ -45,7 +45,6 @@
 
                     <!-- Custom Luxury Dark Dropdown -->
                     <div class="relative" id="custom-category-dropdown">
-                        <!-- Hidden select for form submit / validation -->
                         <select name="category_id" id="real_category_select" class="hidden" required>
                             <option value="">Select Category</option>
                             @foreach($categories as $cat)
@@ -55,7 +54,6 @@
                             @endforeach
                         </select>
 
-                        <!-- Custom Trigger Button -->
                         <button type="button" id="category-trigger-btn" onclick="toggleCategoryMenu()"
                             class="w-full px-4 py-3 bg-[#0a0a10] border border-white/10 hover:border-amber-400/40 rounded-2xl text-xs sm:text-sm text-left flex items-center justify-between transition group focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400">
                             <span id="category-selected-label" class="text-stone-400 flex items-center gap-2 truncate">
@@ -65,7 +63,6 @@
                             <i id="category-chevron" class="fa-solid fa-chevron-down text-stone-500 group-hover:text-amber-400 text-xs transition transform duration-200"></i>
                         </button>
 
-                        <!-- Custom Dark Luxury Dropdown Menu -->
                         <div id="category-options-menu" class="hidden absolute left-0 right-0 top-full mt-2 z-50 bg-[#0d0d14] border border-amber-400/30 rounded-2xl p-1.5 shadow-2xl shadow-black/95 backdrop-blur-2xl max-h-64 overflow-y-auto space-y-1 divide-y divide-white/5">
                             @foreach($categories as $cat)
                                 <div onclick="selectCategoryOption('{{ $cat->id }}', '{{ addslashes($cat->name) }}')"
@@ -141,7 +138,7 @@
             </div>
 
             <!-- 5. UPLOAD OPTIONS & AI REMOVAL SELECTION -->
-            <div class="p-5 sm:p-6 rounded-3xl bg-[#08080d] border border-amber-400/15 space-y-5">
+            <div class="p-4 sm:p-6 rounded-3xl bg-[#08080d] border border-amber-400/15 space-y-4 sm:space-y-5">
                 <div class="flex items-center justify-between">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-camera-retro"></i>
@@ -246,60 +243,82 @@
 </div>
 
 <!-- INTERACTIVE IMAGE EDIT STUDIO MODAL -->
-<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-xl z-50 items-center justify-center p-3 sm:p-4 overflow-y-auto">
-    <div class="glass-card-luxury p-5 sm:p-7 rounded-3xl max-w-3xl w-full shadow-2xl relative space-y-4 border border-amber-400/30 my-auto">
+<div id="studio-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-xl z-50 items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="glass-card-luxury p-4 sm:p-7 rounded-3xl max-w-3xl w-full shadow-2xl relative space-y-4 border border-amber-400/30 my-auto max-h-[94vh] flex flex-col justify-between overflow-y-auto">
         
         <!-- Header -->
-        <div class="flex items-center justify-between border-b border-white/10 pb-3.5">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
             <div>
                 <h3 class="text-base sm:text-lg font-bold text-white font-cinzel flex items-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-sm sm:text-base"></i>
                     <span>Photo Edit & Studio Tools</span>
                 </h3>
-                <p class="text-xs text-stone-400 mt-0.5">Fine-tune lighting, apply luxury filters, crop and rotate image.</p>
+                <p class="text-[11px] sm:text-xs text-stone-400 mt-0.5">Drag to crop like WhatsApp/DP, apply filters, and tune brilliance.</p>
             </div>
-            <button type="button" onclick="closeStudioModal()" class="w-8 h-8 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10 transition">
+            <button type="button" onclick="closeStudioModal()" class="w-8 h-8 rounded-xl bg-white/5 text-stone-400 hover:text-white flex items-center justify-center text-sm border border-white/10 transition flex-shrink-0">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
 
         <!-- Studio Body Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-5 items-start">
             
-            <!-- Left: Live Canvas Viewport (6 cols) -->
-            <div class="md:col-span-6 flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] min-h-[240px] sm:min-h-[280px] relative overflow-hidden w-full">
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
-                    <i class="fa-solid fa-gem text-7xl text-amber-400"></i>
-                </div>
+            <!-- Left: Interactive Canvas & WhatsApp-Style Drag Crop Viewport (6 cols) -->
+            <div class="md:col-span-6 flex flex-col items-center justify-center p-3 sm:p-5 rounded-2xl border border-white/10 bg-gradient-to-b from-[#141218] via-[#09080c] to-[#040406] min-h-[220px] sm:min-h-[280px] relative overflow-hidden w-full select-none">
                 
-                <div id="studio-crop-box" class="relative max-w-full flex items-center justify-center overflow-hidden rounded-xl border border-amber-400/20 transition-all duration-300">
-                    <img id="studio-preview-img" src="" alt="Editing" 
-                        class="max-h-52 sm:max-h-60 max-w-full object-contain relative z-10 drop-shadow-[0_15px_30px_rgba(0,0,0,0.95)] transition-all duration-200">
+                <!-- Stage Container with fixed relative viewport -->
+                <div id="crop-stage" class="relative max-w-full flex items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/40 touch-none select-none" style="min-height: 200px; max-height: 280px;">
+                    <!-- Image -->
+                    <img id="studio-preview-img" src="" alt="Editing" draggable="false"
+                        class="max-h-48 sm:max-h-60 max-w-full object-contain relative z-0 transition-filter duration-150 pointer-events-none select-none">
+
+                    <!-- Interactive Drag/Resize Crop Overlay Box (Visible in Crop Tab) -->
+                    <div id="interactive-crop-box" class="hidden absolute border-2 border-amber-400 shadow-[0_0_0_9999px_rgba(0,0,0,0.65)] z-20 cursor-move transition-border">
+                        <!-- 3x3 Rule of Thirds Grid -->
+                        <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none">
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div></div>
+                        </div>
+
+                        <!-- 4 Corner Drag Handles -->
+                        <div data-handle="tl" class="crop-corner -top-2 -left-2 cursor-nwse-resize"></div>
+                        <div data-handle="tr" class="crop-corner -top-2 -right-2 cursor-nesw-resize"></div>
+                        <div data-handle="bl" class="crop-corner -bottom-2 -left-2 cursor-nesw-resize"></div>
+                        <div data-handle="br" class="crop-corner -bottom-2 -right-2 cursor-nwse-resize"></div>
+                    </div>
                 </div>
 
-                <div class="mt-3 flex items-center gap-2 text-[10px] text-stone-400">
-                    <span id="studio-crop-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">Original Ratio</span>
+                <!-- Status Labels -->
+                <div class="mt-2.5 flex items-center gap-2 text-[10px] text-stone-400">
+                    <span id="studio-crop-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">Freeform / 1:1 Crop</span>
                     <span id="studio-rotation-label" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono">0°</span>
                 </div>
             </div>
 
             <!-- Right: Tabs & Controls (6 cols) -->
-            <div class="md:col-span-6 space-y-3.5">
+            <div class="md:col-span-6 space-y-3">
                 
                 <!-- Tool Tabs Navigation -->
-                <div class="flex items-center gap-1.5 p-1 bg-black/50 rounded-2xl border border-white/10 text-xs">
+                <div class="flex items-center gap-1 p-1 bg-black/60 rounded-2xl border border-white/10 text-xs">
                     <button type="button" id="tab-btn-adjust" onclick="switchStudioTab('adjust')" 
-                        class="flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow">
+                        class="flex-1 py-2 px-2 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow text-[11px] sm:text-xs">
                         <i class="fa-solid fa-sliders"></i>
                         <span>Adjust</span>
                     </button>
                     <button type="button" id="tab-btn-filters" onclick="switchStudioTab('filters')" 
-                        class="flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white">
+                        class="flex-1 py-2 px-2 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white text-[11px] sm:text-xs">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <span>Filters</span>
                     </button>
                     <button type="button" id="tab-btn-crop" onclick="switchStudioTab('crop')" 
-                        class="flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white">
+                        class="flex-1 py-2 px-2 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white text-[11px] sm:text-xs">
                         <i class="fa-solid fa-crop"></i>
                         <span>Crop & Rotate</span>
                     </button>
@@ -356,7 +375,6 @@
 
                 <!-- TAB 2: LUXURY FILTER PRESETS -->
                 <div id="tab-panel-filters" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                    <!-- Filter Cards -->
                     <button type="button" onclick="applyPresetFilter('normal')" id="filter-card-normal"
                         class="filter-preset-card p-2 rounded-xl border-2 border-amber-400 bg-amber-400/10 text-center flex flex-col items-center gap-1 transition">
                         <span class="text-base">✨</span>
@@ -406,35 +424,34 @@
                     </button>
                 </div>
 
-                <!-- TAB 3: CROP & ROTATE TOOLS -->
-                <div id="tab-panel-crop" class="hidden space-y-3.5 text-xs">
+                <!-- TAB 3: WHATSAPP-STYLE DRAG CROP & ROTATE TOOLS -->
+                <div id="tab-panel-crop" class="hidden space-y-3 text-xs">
                     <!-- Aspect Ratio Presets -->
                     <div>
-                        <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1.5 tracking-wider">Crop Aspect Ratio:</label>
-                        <div class="grid grid-cols-3 gap-1.5">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-[10px] uppercase font-bold text-stone-400 tracking-wider">Crop Presets (Touch & Drag on Image):</label>
+                            <span class="text-[10px] text-amber-400 font-semibold">👆 Drag to frame</span>
+                        </div>
+                        <div class="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
                             <button type="button" onclick="setCropRatio('original')" id="crop-ratio-original"
-                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]">
-                                Original
+                                class="crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]">
+                                Freeform
                             </button>
                             <button type="button" onclick="setCropRatio('1:1')" id="crop-ratio-1-1"
-                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                class="crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
                                 1:1 Square
                             </button>
                             <button type="button" onclick="setCropRatio('4:5')" id="crop-ratio-4-5"
-                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                class="crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
                                 4:5 Portrait
                             </button>
                             <button type="button" onclick="setCropRatio('4:3')" id="crop-ratio-4-3"
-                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                class="crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
                                 4:3 Standard
                             </button>
                             <button type="button" onclick="setCropRatio('16:9')" id="crop-ratio-16-9"
-                                class="crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
+                                class="crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]">
                                 16:9 Banner
-                            </button>
-                            <button type="button" onclick="resetCropOrientation()"
-                                class="py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-400 hover:text-rose-300 border border-white/10 transition text-[11px]">
-                                Reset All
                             </button>
                         </div>
                     </div>
@@ -442,19 +459,19 @@
                     <!-- Rotation & Flip Controls -->
                     <div class="pt-2 border-t border-white/10">
                         <label class="block text-[10px] uppercase font-bold text-stone-400 mb-1.5 tracking-wider">Orientation & Flip:</label>
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
                             <button type="button" onclick="rotateStudioImage(-90)" 
-                                class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95">
+                                class="py-2 px-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95 text-[11px] sm:text-xs">
                                 <i class="fa-solid fa-rotate-left text-amber-400"></i>
                                 <span>-90° Left</span>
                             </button>
                             <button type="button" onclick="rotateStudioImage(90)" 
-                                class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95">
+                                class="py-2 px-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95 text-[11px] sm:text-xs">
                                 <i class="fa-solid fa-rotate-right text-amber-400"></i>
                                 <span>+90° Right</span>
                             </button>
                             <button type="button" onclick="flipStudioImage()" 
-                                class="py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95">
+                                class="py-2 px-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-stone-200 border border-white/10 flex items-center justify-center gap-1.5 transition active:scale-95 text-[11px] sm:text-xs">
                                 <i class="fa-solid fa-arrows-left-right text-amber-400"></i>
                                 <span>Flip H</span>
                             </button>
@@ -466,17 +483,20 @@
 
         </div>
 
-        <!-- Footer Actions -->
-        <div class="flex items-center justify-between gap-3 pt-3.5 border-t border-white/10">
-            <button type="button" onclick="resetStudioComplete()" class="px-4 py-2.5 rounded-xl text-stone-400 hover:text-rose-300 text-xs font-semibold flex items-center gap-1.5 transition">
+        <!-- Footer Actions (Responsive Mobile First Layout) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 pt-3 border-t border-white/10">
+            <button type="button" onclick="resetStudioComplete()" 
+                class="px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-stone-400 hover:text-rose-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition bg-white/5 sm:bg-transparent border border-white/10 sm:border-0 order-2 sm:order-1">
                 <i class="fa-solid fa-arrow-rotate-left text-xs"></i>
-                <span>Reset Original</span>
+                <span>Reset All</span>
             </button>
-            <div class="flex items-center gap-2.5">
-                <button type="button" onclick="closeStudioModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition">
+            <div class="flex items-center gap-2 order-1 sm:order-2 w-full sm:w-auto">
+                <button type="button" onclick="closeStudioModal()" 
+                    class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition text-center">
                     Cancel
                 </button>
-                <button type="button" onclick="applyBakeAdjustments()" class="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-600 hover:opacity-95 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20 transition transform active:scale-95 flex items-center gap-1.5">
+                <button type="button" onclick="applyBakeAdjustments()" 
+                    class="flex-1 sm:flex-initial px-5 py-2.5 bg-gradient-to-r from-amber-400 to-yellow-600 hover:opacity-95 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-amber-500/20 transition transform active:scale-95 flex items-center justify-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-check text-xs"></i>
                     <span>Apply & Save</span>
                 </button>
@@ -485,6 +505,21 @@
 
     </div>
 </div>
+
+<style>
+/* Corner Handles for WhatsApp Crop Box */
+.crop-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #f59e0b;
+    border: 2px solid #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    z-index: 30;
+    touch-action: none;
+}
+</style>
 
 <!-- SINGLE UNIFIED CLIENT ENGINE SCRIPT -->
 <script>
@@ -735,7 +770,7 @@
     }
     window.restoreOriginalPhoto = restoreOriginalPhoto;
 
-    // STUDIO PHOTO EDITOR LOGIC
+    // STUDIO PHOTO EDITOR & WHATSAPP DRAG-CROP ENGINE
     let studioState = {
         brightness: 100,
         contrast: 100,
@@ -745,7 +780,23 @@
         rotation: 0,
         flipH: 1,
         cropRatio: 'original',
+        currentTab: 'adjust',
         originalSrc: ''
+    };
+
+    let cropBoxState = {
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 100,
+        active: false,
+        dragType: null,
+        startX: 0,
+        startY: 0,
+        startBoxX: 0,
+        startBoxY: 0,
+        startBoxW: 0,
+        startBoxH: 0
     };
 
     const filterPresets = {
@@ -760,21 +811,30 @@
     };
 
     function switchStudioTab(tab) {
+        studioState.currentTab = tab;
         ['adjust', 'filters', 'crop'].forEach(t => {
             const btn = document.getElementById(`tab-btn-${t}`);
             const panel = document.getElementById(`tab-panel-${t}`);
             if (t === tab) {
                 if (btn) {
-                    btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow';
+                    btn.className = 'flex-1 py-2 px-2 rounded-xl font-bold transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow text-[11px] sm:text-xs';
                 }
                 if (panel) panel.classList.remove('hidden');
             } else {
                 if (btn) {
-                    btn.className = 'flex-1 py-2 px-2.5 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white';
+                    btn.className = 'flex-1 py-2 px-2 rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-stone-400 hover:text-white text-[11px] sm:text-xs';
                 }
                 if (panel) panel.classList.add('hidden');
             }
         });
+
+        const cropBox = document.getElementById('interactive-crop-box');
+        if (tab === 'crop') {
+            if (cropBox) cropBox.classList.remove('hidden');
+            initCropBoxOverlay();
+        } else {
+            if (cropBox) cropBox.classList.add('hidden');
+        }
     }
 
     function openStudioModal() {
@@ -789,6 +849,12 @@
         document.getElementById('studio-modal').classList.add('flex');
         
         applyStudioLiveFilters();
+
+        studioPreview.onload = () => {
+            if (studioState.currentTab === 'crop') {
+                initCropBoxOverlay();
+            }
+        };
     }
 
     function closeStudioModal() {
@@ -857,47 +923,80 @@
         applyStudioLiveFilters();
     }
 
+    // WHATSAPP DRAG-CROP OVERLAY INITIALIZER & INTERACTION
+    function initCropBoxOverlay() {
+        const stage = document.getElementById('crop-stage');
+        const img = document.getElementById('studio-preview-img');
+        const cropBox = document.getElementById('interactive-crop-box');
+        if (!stage || !img || !cropBox) return;
+
+        const stageRect = stage.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+
+        const imgLeft = imgRect.left - stageRect.left;
+        const imgTop = imgRect.top - stageRect.top;
+        const imgW = imgRect.width;
+        const imgH = imgRect.height;
+
+        let boxW = imgW * 0.85;
+        let boxH = imgH * 0.85;
+
+        if (studioState.cropRatio === '1:1') {
+            const minDim = Math.min(imgW, imgH) * 0.85;
+            boxW = minDim;
+            boxH = minDim;
+        } else if (studioState.cropRatio === '4:5') {
+            boxW = Math.min(imgW * 0.85, (imgH * 0.85) * (4/5));
+            boxH = boxW * (5/4);
+        } else if (studioState.cropRatio === '4:3') {
+            boxW = Math.min(imgW * 0.85, (imgH * 0.85) * (4/3));
+            boxH = boxW * (3/4);
+        } else if (studioState.cropRatio === '16:9') {
+            boxW = Math.min(imgW * 0.85, (imgH * 0.85) * (16/9));
+            boxH = boxW * (9/16);
+        }
+
+        cropBoxState.w = Math.max(50, Math.min(imgW, boxW));
+        cropBoxState.h = Math.max(50, Math.min(imgH, boxH));
+        cropBoxState.x = imgLeft + (imgW - cropBoxState.w) / 2;
+        cropBoxState.y = imgTop + (imgH - cropBoxState.h) / 2;
+
+        renderCropBox();
+    }
+
+    function renderCropBox() {
+        const cropBox = document.getElementById('interactive-crop-box');
+        if (!cropBox) return;
+        cropBox.style.left = `${cropBoxState.x}px`;
+        cropBox.style.top = `${cropBoxState.y}px`;
+        cropBox.style.width = `${cropBoxState.w}px`;
+        cropBox.style.height = `${cropBoxState.h}px`;
+    }
+
     function setCropRatio(ratio) {
         studioState.cropRatio = ratio;
-        const cropBox = document.getElementById('studio-crop-box');
         const label = document.getElementById('studio-crop-label');
 
         document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
-            btn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]';
+            btn.className = 'crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-white/5 text-stone-300 hover:text-white border border-white/10 transition text-[11px]';
         });
 
         const activeBtn = document.getElementById(`crop-ratio-${ratio.replace(':', '-')}`);
         if (activeBtn) {
-            activeBtn.className = 'crop-ratio-btn py-2 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]';
+            activeBtn.className = 'crop-ratio-btn py-1.5 px-2 rounded-xl font-bold bg-amber-400 text-slate-950 border border-amber-400 transition text-[11px]';
         }
 
         if (label) {
-            label.textContent = ratio === 'original' ? 'Original Ratio' : `${ratio} Ratio`;
+            label.textContent = ratio === 'original' ? 'Freeform Crop' : `${ratio} Locked Crop`;
         }
 
-        if (cropBox) {
-            if (ratio === '1:1') {
-                cropBox.style.aspectRatio = '1 / 1';
-                cropBox.style.width = '200px';
-            } else if (ratio === '4:5') {
-                cropBox.style.aspectRatio = '4 / 5';
-                cropBox.style.width = '180px';
-            } else if (ratio === '4:3') {
-                cropBox.style.aspectRatio = '4 / 3';
-                cropBox.style.width = '240px';
-            } else if (ratio === '16:9') {
-                cropBox.style.aspectRatio = '16 / 9';
-                cropBox.style.width = '260px';
-            } else {
-                cropBox.style.aspectRatio = 'auto';
-                cropBox.style.width = 'auto';
-            }
-        }
+        initCropBoxOverlay();
     }
 
     function rotateStudioImage(deg) {
         studioState.rotation = (studioState.rotation + deg + 360) % 360;
         applyStudioLiveFilters();
+        setTimeout(initCropBoxOverlay, 50);
     }
 
     function flipStudioImage() {
@@ -917,94 +1016,190 @@
         applyStudioLiveFilters();
     }
 
-    function resetCropOrientation() {
+    function resetStudioComplete() {
+        applyPresetFilter('normal');
+        resetStudioSliders();
         studioState.rotation = 0;
         studioState.flipH = 1;
         setCropRatio('original');
         applyStudioLiveFilters();
-    }
-
-    function resetStudioComplete() {
-        applyPresetFilter('normal');
-        resetStudioSliders();
-        resetCropOrientation();
         const studioPreview = document.getElementById('studio-preview-img');
         if (studioState.originalSrc && studioPreview) {
             studioPreview.src = studioState.originalSrc;
         }
     }
 
+    // INTERACTIVE TOUCH & MOUSE DRAG CROP EVENT LISTENERS
+    function getPointerPos(e) {
+        if (e.touches && e.touches.length > 0) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+        return { x: e.clientX, y: e.clientY };
+    }
+
+    function startCropDrag(e) {
+        const target = e.target;
+        const handle = target.getAttribute('data-handle');
+        cropBoxState.active = true;
+        cropBoxState.dragType = handle || 'move';
+
+        const pos = getPointerPos(e);
+        cropBoxState.startX = pos.x;
+        cropBoxState.startY = pos.y;
+        cropBoxState.startBoxX = cropBoxState.x;
+        cropBoxState.startBoxY = cropBoxState.y;
+        cropBoxState.startBoxW = cropBoxState.w;
+        cropBoxState.startBoxH = cropBoxState.h;
+
+        e.preventDefault();
+    }
+
+    function moveCropDrag(e) {
+        if (!cropBoxState.active) return;
+        const stage = document.getElementById('crop-stage');
+        const img = document.getElementById('studio-preview-img');
+        if (!stage || !img) return;
+
+        const stageRect = stage.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+        const imgLeft = imgRect.left - stageRect.left;
+        const imgTop = imgRect.top - stageRect.top;
+        const imgRight = imgLeft + imgRect.width;
+        const imgBottom = imgTop + imgRect.height;
+
+        const pos = getPointerPos(e);
+        const dx = pos.x - cropBoxState.startX;
+        const dy = pos.y - cropBoxState.startY;
+
+        if (cropBoxState.dragType === 'move') {
+            let newX = cropBoxState.startBoxX + dx;
+            let newY = cropBoxState.startBoxY + dy;
+
+            newX = Math.max(imgLeft, Math.min(imgRight - cropBoxState.w, newX));
+            newY = Math.max(imgTop, Math.min(imgBottom - cropBoxState.h, newY));
+
+            cropBoxState.x = newX;
+            cropBoxState.y = newY;
+        } else {
+            let newX = cropBoxState.startBoxX;
+            let newY = cropBoxState.startBoxY;
+            let newW = cropBoxState.startBoxW;
+            let newH = cropBoxState.startBoxH;
+
+            if (cropBoxState.dragType === 'br') {
+                newW = Math.max(40, Math.min(imgRight - newX, cropBoxState.startBoxW + dx));
+                newH = Math.max(40, Math.min(imgBottom - newY, cropBoxState.startBoxH + dy));
+            } else if (cropBoxState.dragType === 'bl') {
+                const maxDx = cropBoxState.startBoxW - 40;
+                const actualDx = Math.min(maxDx, Math.max(imgLeft - cropBoxState.startBoxX, dx));
+                newX = cropBoxState.startBoxX + actualDx;
+                newW = cropBoxState.startBoxW - actualDx;
+                newH = Math.max(40, Math.min(imgBottom - newY, cropBoxState.startBoxH + dy));
+            } else if (cropBoxState.dragType === 'tr') {
+                const maxDy = cropBoxState.startBoxH - 40;
+                const actualDy = Math.min(maxDy, Math.max(imgTop - cropBoxState.startBoxY, dy));
+                newY = cropBoxState.startBoxY + actualDy;
+                newH = cropBoxState.startBoxH - actualDy;
+                newW = Math.max(40, Math.min(imgRight - newX, cropBoxState.startBoxW + dx));
+            } else if (cropBoxState.dragType === 'tl') {
+                const maxDx = cropBoxState.startBoxW - 40;
+                const maxDy = cropBoxState.startBoxH - 40;
+                const actualDx = Math.min(maxDx, Math.max(imgLeft - cropBoxState.startBoxX, dx));
+                const actualDy = Math.min(maxDy, Math.max(imgTop - cropBoxState.startBoxY, dy));
+                newX = cropBoxState.startBoxX + actualDx;
+                newY = cropBoxState.startBoxY + actualDy;
+                newW = cropBoxState.startBoxW - actualDx;
+                newH = cropBoxState.startBoxH - actualDy;
+            }
+
+            // Maintain Aspect ratio if locked
+            if (studioState.cropRatio === '1:1') {
+                const size = Math.min(newW, newH);
+                newW = size;
+                newH = size;
+            } else if (studioState.cropRatio === '4:5') {
+                newH = newW * (5/4);
+            } else if (studioState.cropRatio === '4:3') {
+                newH = newW * (3/4);
+            } else if (studioState.cropRatio === '16:9') {
+                newH = newW * (9/16);
+            }
+
+            cropBoxState.x = newX;
+            cropBoxState.y = newY;
+            cropBoxState.w = newW;
+            cropBoxState.h = newH;
+        }
+
+        renderCropBox();
+        e.preventDefault();
+    }
+
+    function endCropDrag() {
+        cropBoxState.active = false;
+    }
+
     function applyBakeAdjustments() {
         const studioImg = document.getElementById('studio-preview-img');
         if (!studioImg) return;
 
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const stage = document.getElementById('crop-stage');
+        const imgRect = studioImg.getBoundingClientRect();
+        const stageRect = stage ? stage.getBoundingClientRect() : null;
 
         const nw = studioImg.naturalWidth || studioImg.width || 800;
         const nh = studioImg.naturalHeight || studioImg.height || 800;
 
+        // 1. Draw Rotated & Filtered Image on master canvas
+        const masterCanvas = document.createElement('canvas');
+        const masterCtx = masterCanvas.getContext('2d');
+
         const isRotated90 = studioState.rotation === 90 || studioState.rotation === 270;
-        const baseW = isRotated90 ? nh : nw;
-        const baseH = isRotated90 ? nw : nh;
+        const rW = isRotated90 ? nh : nw;
+        const rH = isRotated90 ? nw : nh;
 
-        let targetW = baseW;
-        let targetH = baseH;
+        masterCanvas.width = rW;
+        masterCanvas.height = rH;
 
-        if (studioState.cropRatio === '1:1') {
-            const minDim = Math.min(baseW, baseH);
-            targetW = minDim;
-            targetH = minDim;
-        } else if (studioState.cropRatio === '4:5') {
-            if (baseW / baseH > 4 / 5) {
-                targetW = Math.round(baseH * (4 / 5));
-                targetH = baseH;
-            } else {
-                targetW = baseW;
-                targetH = Math.round(baseW * (5 / 4));
-            }
-        } else if (studioState.cropRatio === '4:3') {
-            if (baseW / baseH > 4 / 3) {
-                targetW = Math.round(baseH * (4 / 3));
-                targetH = baseH;
-            } else {
-                targetW = baseW;
-                targetH = Math.round(baseW * (3 / 4));
-            }
-        } else if (studioState.cropRatio === '16:9') {
-            if (baseW / baseH > 16 / 9) {
-                targetW = Math.round(baseH * (16 / 9));
-                targetH = baseH;
-            } else {
-                targetW = baseW;
-                targetH = Math.round(baseW * (9 / 16));
-            }
-        }
-
-        canvas.width = targetW;
-        canvas.height = targetH;
-
-        ctx.save();
-        
+        masterCtx.save();
         const preset = filterPresets[studioState.activeFilter] || filterPresets.normal;
         let filterString = `brightness(${studioState.brightness}%) contrast(${studioState.contrast}%) saturate(${studioState.saturation}%)`;
-        if (studioState.warmth > 0) {
-            filterString += ` sepia(${studioState.warmth}%)`;
+        if (studioState.warmth > 0) filterString += ` sepia(${studioState.warmth}%)`;
+        if (preset.extra) filterString += ` ${preset.extra}`;
+        masterCtx.filter = filterString;
+
+        masterCtx.translate(rW / 2, rH / 2);
+        masterCtx.rotate((studioState.rotation * Math.PI) / 180);
+        masterCtx.scale(studioState.flipH, 1);
+        masterCtx.drawImage(studioImg, -nw / 2, -nh / 2, nw, nh);
+        masterCtx.restore();
+
+        // 2. Crop accurately based on drag box rectangle if crop tab was opened or ratio set
+        let finalCanvas = masterCanvas;
+        if (stageRect && cropBoxState.w > 0 && cropBoxState.h > 0) {
+            const imgLeft = imgRect.left - stageRect.left;
+            const imgTop = imgRect.top - stageRect.top;
+            const dispW = imgRect.width;
+            const dispH = imgRect.height;
+
+            const scaleX = rW / dispW;
+            const scaleY = rH / dispH;
+
+            const cropX = Math.max(0, (cropBoxState.x - imgLeft) * scaleX);
+            const cropY = Math.max(0, (cropBoxState.y - imgTop) * scaleY);
+            const cropW = Math.min(rW - cropX, cropBoxState.w * scaleX);
+            const cropH = Math.min(rH - cropY, cropBoxState.h * scaleY);
+
+            if (cropW > 20 && cropH > 20 && (cropW < rW || cropH < rH)) {
+                finalCanvas = document.createElement('canvas');
+                finalCanvas.width = Math.round(cropW);
+                finalCanvas.height = Math.round(cropH);
+                const fCtx = finalCanvas.getContext('2d');
+                fCtx.drawImage(masterCanvas, cropX, cropY, cropW, cropH, 0, 0, finalCanvas.width, finalCanvas.height);
+            }
         }
-        if (preset.extra) {
-            filterString += ` ${preset.extra}`;
-        }
-        ctx.filter = filterString;
 
-        ctx.translate(targetW / 2, targetH / 2);
-        ctx.rotate((studioState.rotation * Math.PI) / 180);
-        ctx.scale(studioState.flipH, 1);
-
-        ctx.drawImage(studioImg, -nw / 2, -nh / 2, nw, nh);
-        ctx.restore();
-
-        const bakedPng = canvas.toDataURL('image/png');
-        
+        const bakedPng = finalCanvas.toDataURL('image/png');
         const hiddenBase64Input = document.getElementById('transparent_image_base64');
         const livePreview = document.getElementById('live-transparent-preview');
         
@@ -1089,6 +1284,17 @@
         ['slider-brightness', 'slider-contrast', 'slider-saturation', 'slider-warmth'].forEach(id => {
             document.getElementById(id)?.addEventListener('input', applyStudioLiveFilters);
         });
+
+        // Crop drag listeners
+        const cropBox = document.getElementById('interactive-crop-box');
+        if (cropBox) {
+            cropBox.addEventListener('mousedown', startCropDrag);
+            cropBox.addEventListener('touchstart', startCropDrag, { passive: false });
+        }
+        window.addEventListener('mousemove', moveCropDrag);
+        window.addEventListener('touchmove', moveCropDrag, { passive: false });
+        window.addEventListener('mouseup', endCropDrag);
+        window.addEventListener('touchend', endCropDrag);
 
         const select = document.getElementById('real_category_select');
         if (select && select.value) {
