@@ -25,15 +25,32 @@ if (! getenv('APP_KEY') && ! isset($_ENV['APP_KEY'])) {
     $_ENV['APP_KEY'] = 'base64:H9WwMWCk1nLWN1+8QKMeZ5JGzVpCALfVKzWM9myh33E=';
 }
 
+// Database setup for serverless: if no external DB configured or localhost, fallback to SQLite
+$dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? '');
+if (empty($dbHost) || in_array($dbHost, ['127.0.0.1', 'localhost', '::1'])) {
+    $sqliteDb = '/tmp/database.sqlite';
+    $bundledDb = __DIR__.'/../database/database.sqlite';
+    if (! file_exists($sqliteDb)) {
+        if (file_exists($bundledDb)) {
+            @copy($bundledDb, $sqliteDb);
+        } else {
+            @touch($sqliteDb);
+        }
+    }
+    putenv('DB_CONNECTION=sqlite');
+    $_ENV['DB_CONNECTION'] = 'sqlite';
+    putenv("DB_DATABASE={$sqliteDb}");
+    $_ENV['DB_DATABASE'] = $sqliteDb;
+}
+
 try {
     // Forward all incoming Vercel Serverless requests to the Laravel public entrypoint
     require __DIR__.'/../public/index.php';
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     http_response_code(500);
     header('Content-Type: text/plain; charset=utf-8');
     echo "ZVARR Vercel Serverless Error Diagnostics:\n\n";
-    echo "Message: ".$e->getMessage()."\n";
-    echo "File: ".$e->getFile().":".$e->getLine()."\n\n";
+    echo 'Message: '.$e->getMessage()."\n";
+    echo 'File: '.$e->getFile().':'.$e->getLine()."\n\n";
     echo "Stack Trace:\n".$e->getTraceAsString();
 }
-
